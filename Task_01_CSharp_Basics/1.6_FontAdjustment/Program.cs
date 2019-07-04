@@ -18,7 +18,8 @@ namespace _16_FontAdjustment
                     bool isTrue = int.TryParse(Console.ReadLine(), out value);
                     if (isTrue && value > 0 && value < 4)
                         break;
-                    Console.WriteLine("Некорректный ввод. Введите номер шрифта.\nВведите:");
+                    Console.WriteLine("Некорректный ввод. Введите номер шрифта." +
+                        Environment.NewLine +"Введите:");
                 }
 
                 switch (value)

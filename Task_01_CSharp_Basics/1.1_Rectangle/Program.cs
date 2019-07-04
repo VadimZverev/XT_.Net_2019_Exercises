@@ -13,11 +13,16 @@ namespace _11_Rectangle
                 InputValue('B', out int b);
 
                 Console.WriteLine($"Площадь прямоугольника равна: {a * b}");
-                Console.WriteLine("Повторить ввод? 1 - Да, 2 - Выход из программы");
+                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
 
-            } while (isContinue());
+            } while (IsContinue());
         }
 
+        /// <summary>
+        /// Ввод значения стороны прямоугольника.
+        /// </summary>
+        /// <param name="sideName">Имя стороны.</param>
+        /// <param name="side">Размер стороны.</param>
         static void InputValue(char sideName, out int side)
         {
             while (true)
@@ -28,11 +33,15 @@ namespace _11_Rectangle
                 if (isParse && side > 0)
                     break;
                 else
-                    Console.WriteLine("\nОтрицательные числа и 0 недопустимы.");
+                    Console.WriteLine($"{Environment.NewLine}Отрицательные числа и 0 недопустимы.");
             }
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Обрабатывает ввод данных, игнорируя ввод знаков препинания и букв.
+        /// </summary>
+        /// <returns>Возвращает строковое значение, введёное с консоли.</returns>
         static string GetIntFromConsole()
         {
             bool isFinished = false;
@@ -41,9 +50,9 @@ namespace _11_Rectangle
 
             while (!isFinished)
             {
-                ConsoleKeyInfo key = Console.ReadKey(true);
+                ConsoleKeyInfo btnPress = Console.ReadKey(true);
 
-                switch (key.Key)
+                switch (btnPress.Key)
                 {
                     case ConsoleKey.Enter:
                         isFinished = true;
@@ -58,15 +67,15 @@ namespace _11_Rectangle
                     case ConsoleKey.OemMinus:
                         if (sb.Length == 0)
                         {
-                            sb.Append(key.KeyChar);
-                            Console.Write(key.KeyChar);
+                            sb.Append(btnPress.KeyChar);
+                            Console.Write(btnPress.KeyChar);
                         }
                         break;
                     default:
-                        if (char.IsDigit(key.KeyChar))
+                        if (char.IsDigit(btnPress.KeyChar))
                         {
-                            sb.Append(key.KeyChar);
-                            Console.Write(key.KeyChar);
+                            sb.Append(btnPress.KeyChar);
+                            Console.Write(btnPress.KeyChar);
                         }
                         break;
                 }
@@ -75,14 +84,22 @@ namespace _11_Rectangle
             return sb.ToString();
         }
 
-        static bool isContinue()
+        /// <summary>
+        /// Осуществляет выбор на повторение ввода.
+        /// </summary>
+        /// <returns>Возвращает bool-значение.</returns>
+        static bool IsContinue()
         {
             while (true)
             {
                 Console.Write("Ваш ввод: ");
                 bool isParse = int.TryParse(Console.ReadLine(), out int value);
 
-                if (isParse && value == 1) return true;
+                if (isParse && value == 1)
+                {
+                    Console.Clear();
+                    return true;
+                }
                 else if (isParse && value == 2) return false;
                 else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }

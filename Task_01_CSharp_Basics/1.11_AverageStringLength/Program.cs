@@ -8,14 +8,23 @@ namespace _111_AverageStringLength
         {
             Console.InputEncoding = System.Text.Encoding.Unicode;
 
-            Console.Write("Введите строку: ");
-            string str = Console.ReadLine();
+            do
+            {
+                Console.Write("Введите строку: ");
+                string str = Console.ReadLine();
 
-            int averageLength = AverageStringLength(str);
+                int averageLength = AverageStringLength(str);
 
-            Console.WriteLine($"Средняя длина слов равна {averageLength}");
+                Console.WriteLine($"Средняя длина слов равна {averageLength}");
+                Console.WriteLine("Повторить ввод? 1 - Да, 2 - Выход из программы");
+            } while (IsContinue());
         }
 
+        /// <summary>
+        /// Вычисляет среднее значение слов в предложении.
+        /// </summary>
+        /// <param name="str">проверяемая строка.</param>
+        /// <returns></returns>
         static int AverageStringLength(string str)
         {
             int sum = 0;
@@ -31,5 +40,27 @@ namespace _111_AverageStringLength
 
             return sum;
         }
+
+        /// <summary>
+        /// Осуществляет выбор на повторение ввода.
+        /// </summary>
+        /// <returns>Возвращает bool-значение.</returns>
+        static bool IsContinue()
+        {
+            while (true)
+            {
+                Console.Write("Ваш ввод: ");
+                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+
+                if (isParse && value == 1)
+                {
+                    Console.Clear();
+                    return true;
+                }
+                else if (isParse && value == 2) return false;
+                else Console.WriteLine("Некорректный ввод, повторите ввод.");
+            }
+        }
+
     }
 }

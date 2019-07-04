@@ -6,10 +6,10 @@ namespace _15_SumOfNumbers
     {
         static void Main()
         {
-            Sum();
+            Console.WriteLine($"Сумма целых чисел, делимая на 3 и 5 без остатка равна: {Sum()}");
         }
 
-        private static void Sum()
+        private static int Sum()
         {
             int result = 0;
 
@@ -21,7 +21,7 @@ namespace _15_SumOfNumbers
                 }
             }
 
-            Console.WriteLine($"Сумма целых чисел, делимая на 3 и 5 без остатка равна: {result}");
+            return result;
         }
     }
 }

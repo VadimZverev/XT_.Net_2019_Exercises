@@ -6,34 +6,60 @@ namespace _12_Triangle
     {
         static void Main(string[] args)
         {
+            do
+            {
+                int number = InputPositiveValue();
+                DrawTriangle(number);
+
+                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
+            } while (IsContinue());
+        }
+
+        /// <summary>
+        /// Возвращает положительное целое число.
+        /// </summary>
+        static int InputPositiveValue()
+        {
             while (true)
             {
                 Console.Write("Введите положительное число: ");
-
                 bool isParse = int.TryParse(Console.ReadLine(), out int number);
 
-                if (isParse && number > 0)
-                    Triangle(number);
+                if (isParse && number > 0) return number;
                 else
                 {
                     Console.WriteLine("Некорректный ввод(символы, отрицательные, 0 недопустимы)");
                     continue;
                 }
-
-                Console.WriteLine("Повторить ввод? 1 - Да, 2 - Выход из программы");
-                while (true)
-                {
-                    Console.Write("Ваш ввод: ");
-                    isParse = int.TryParse(Console.ReadLine(), out number);
-
-                    if (isParse && number == 1) break;
-                    else if (isParse && number == 2) return;
-                    else Console.WriteLine("Некорректный ввод, повторите ввод.");
-                }
             }
         }
 
-        static void Triangle(int value)
+        /// <summary>
+        /// Осуществляет выбор на повторение ввода.
+        /// </summary>
+        /// <returns>Возвращает bool-значение.</returns>
+        static bool IsContinue()
+        {
+            while (true)
+            {
+                Console.Write("Ваш ввод: ");
+                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+
+                if (isParse && value == 1)
+                {
+                    Console.Clear();
+                    return true;
+                }
+                else if (isParse && value == 2) return false;
+                else Console.WriteLine("Некорректный ввод, повторите ввод.");
+            }
+        }
+
+        /// <summary>
+        /// Отрисовывает треугольник.
+        /// </summary>
+        /// <param name="value">высота треугольника.</param>
+        static void DrawTriangle(int value)
         {
             for (int i = 1; i <= value; i++)
             {

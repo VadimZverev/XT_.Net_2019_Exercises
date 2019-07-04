@@ -4,62 +4,63 @@ namespace _19_NonNegativeSum
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             int[] array;
-            int sizeArray, minValue, maxValue, value;
+            int sizeArray, minValue, maxValue;
 
-            Console.Write("Введите число элементов в массиве: ");
-            InputValue(out sizeArray, true);
-
-            while (true)
+            do
             {
-                Console.WriteLine("Параметры ввода:\n\t1: Ввод минимума и максимума;" +
-                    "\n\t2: Только минимум;\n\t3: Только максимум;\n\t4: По умолчанию;");
-                Console.Write("Ваш выбор: ");
-                if (int.TryParse(Console.ReadLine(), out value)
-                    && value > 0 && value <= 4)
-                    break;
-                else
-                    Console.WriteLine("Выберете из списка значений");
-            }
+                Console.Write("Введите число элементов в массиве: ");
+                InputValue(out sizeArray, true);
 
-            if (value == 1)
-            {
-                Console.Write("Введите минимальное значение элемента в массиве: ");
-                InputValue(out minValue);
+                ChoiceOptions(out int value);
 
-                Console.Write("Введите максимальное значение элемента в массиве: ");
-                InputValue(out maxValue);
+                switch (value)
+                {
+                    case 1:
+                        Console.Write("Введите минимальное значение элемента в массиве: ");
+                        InputValue(out minValue);
 
-                array = CreateArray(sizeArray, minValue, maxValue);
-            }
-            else if (value == 2)
-            {
-                Console.Write("Введите минимальное значение элемента в массиве: ");
-                InputValue(out minValue);
+                        Console.Write("Введите максимальное значение элемента в массиве: ");
+                        InputValue(out maxValue);
 
-                array = CreateArray(sizeArray, minValue);
-            }
-            else if (value == 3)
-            {
-                Console.Write("Введите максимальное значение элемента в массиве: ");
-                InputValue(out maxValue);
+                        array = ArrayCreate(sizeArray, minValue, maxValue);
+                        break;
+                    case 2:
+                        Console.Write("Введите минимальное значение элемента в массиве: ");
+                        InputValue(out minValue);
 
-                array = CreateArray(sizeArray, maxValue: maxValue);
-            }
-            else
-            {
-                array = CreateArray(sizeArray);
-            }
+                        array = ArrayCreate(sizeArray, minValue);
+                        break;
+                    case 3:
+                        Console.Write("Введите максимальное значение элемента в массиве: ");
+                        InputValue(out maxValue);
 
-            Console.Write("Массив: ");
-            Show(array);
+                        array = ArrayCreate(sizeArray, maxValue: maxValue);
+                        break;
+                    default:
+                        array = ArrayCreate(sizeArray);
+                        break;
+                }
 
-            Console.Write($"Сумма неотрицательных элементов в массиве: {NonNegativSum(array)}\n");
+                Console.Write("Массив: ");
+                ArrayShow(array);
+
+                Console.WriteLine($"Сумма неотрицательных элементов в массиве: {NonNegativSum(array)}");
+
+                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
+            } while (IsContinue());
         }
 
-        static int[] CreateArray(int sizeArray, int minValue = int.MinValue, int maxValue = int.MaxValue)
+        /// <summary>
+        /// Создаёт одномерный массив.
+        /// </summary>
+        /// <param name="sizeArray">размер массива.</param>
+        /// <param name="minValue">минимальное число диапозона значений внутри каждой ячейки массива.</param>
+        /// <param name="maxValue">максимальное число диапозона значений внутри каждой ячейки массива.</param>
+        /// <returns>Возвращает объект одномерного массива.</returns>
+        static int[] ArrayCreate(int sizeArray, int minValue = int.MinValue, int maxValue = int.MaxValue)
         {
             int[] array = new int[sizeArray];
             Random random = new Random();
@@ -71,7 +72,46 @@ namespace _19_NonNegativeSum
 
             return array;
         }
+        
+        /// <summary>
+        /// Отображение массива в консоль.
+        /// </summary>
+        /// <param name="array">отображаемый массив.</param>
+        static void ArrayShow(int[] array)
+        {
+            foreach (var item in array)
+            {
+                Console.Write(item + " ");
+            }
 
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Выбор варианта ввода данных для создания массива.
+        /// </summary>
+        /// <param name="value">вводимое значение.</param>
+        static void ChoiceOptions(out int value)
+        {
+            while (true)
+            {
+                Console.WriteLine("Параметры ввода:\n\t1: Ввод минимума и максимума;" +
+                    "\n\t2: Только минимум;\n\t3: Только максимум;\n\t4: По умолчанию;");
+                Console.Write("Ваш выбор: ");
+                if (int.TryParse(Console.ReadLine(), out value)
+                    && value > 0 && value <= 4)
+                    break;
+                else
+                    Console.WriteLine("Выберете из списка значений");
+            }
+        }
+        
+        /// <summary>
+        /// Ввод числовых данных с проверкой на корректность данных. Если вводимое число является размером массива, осуществляется проверка
+        /// на положительное и натуральное число. Иначе только на натуральное число.
+        /// </summary>
+        /// <param name="size">вводимое значение данных.</param>
+        /// <param name="isSizeArray">явяется ли вводимое значение размером массива. По умолчанию false.</param>
         static void InputValue(out int size, bool isSizeArray = false)
         {
             while (true)
@@ -97,6 +137,32 @@ namespace _19_NonNegativeSum
             }
         }
 
+        /// <summary>
+        /// Осуществляет выбор на повторение ввода.
+        /// </summary>
+        /// <returns>Возвращает bool-значение.</returns>
+        static bool IsContinue()
+        {
+            while (true)
+            {
+                Console.Write("Ваш ввод: ");
+                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+
+                if (isParse && value == 1)
+                {
+                    Console.Clear();
+                    return true;
+                }
+                else if (isParse && value == 2) return false;
+                else Console.WriteLine("Некорректный ввод, повторите ввод.");
+            }
+        }
+
+        /// <summary>
+        /// Вычисляет сумму не отрицальных значений в массиве.
+        /// </summary>
+        /// <param name="array">массив для вычисления суммы.</param>
+        /// <returns></returns>
         static int NonNegativSum(int[] array)
         {
             int sum = 0;
@@ -110,16 +176,6 @@ namespace _19_NonNegativeSum
             }
 
             return sum;
-        }
-
-        static void Show(int[] array)
-        {
-            foreach (var item in array)
-            {
-                Console.Write(item + " ");
-            }
-
-            Console.WriteLine();
         }
     }
 }
