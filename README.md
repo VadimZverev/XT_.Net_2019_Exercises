@@ -17,8 +17,9 @@
    * 1.10_2DArray
    * 1.11_AverageStringLength
    * 1.12_CharDoubler
-3. Task_02_OOP
+3. Task_02_OOP - 3-е задание.
    * 2.1_Round
    * 2.2_Triangle
    * 2.3_User
+   * 2.4_MyString
    * 2.5_Employee
