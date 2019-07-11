@@ -86,8 +86,8 @@ namespace _24_MyString
         }
 
         static void ShowMyStringFromCharArray()
-        {   
-            char[] temp = { 'A', 'B', 'd', ' ', '\\', '/'};
+        {
+            char[] temp = { 'A', 'B', 'd', ' ', '\\', '/' };
 
             Console.WriteLine("Массив символов до преобразования: ");
             foreach (char ch in temp)
@@ -96,7 +96,7 @@ namespace _24_MyString
             }
             Console.WriteLine("\b\b.");
 
-            Console.Write($"После преобразования в строку: {MyString.ToString(temp)}" 
+            Console.Write($"После преобразования в строку: {MyString.ToString(temp)}"
                 + Environment.NewLine);
         }
 
