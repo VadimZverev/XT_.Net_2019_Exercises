@@ -24,3 +24,4 @@
    * 2.4_MyString
    * 2.5_Employee
    * 2.6_Ring
+   * 2.7_Vector_Graphics_Editor
