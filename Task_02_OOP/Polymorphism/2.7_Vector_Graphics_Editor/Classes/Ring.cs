@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace _27_Vector_Graphics_Editor
+namespace _27_Vector_Graphics_Editor.Classes
 {
     class Ring : Figure, IDrawable
     {

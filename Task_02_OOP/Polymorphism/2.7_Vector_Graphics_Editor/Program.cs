@@ -1,4 +1,5 @@
 ﻿using System;
+using _27_Vector_Graphics_Editor.Classes;
 
 namespace _27_Vector_Graphics_Editor
 {

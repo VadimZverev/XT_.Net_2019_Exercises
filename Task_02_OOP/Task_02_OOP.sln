@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2.6_Ring", "Inheritance\2.6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Polymorphism", "Polymorphism", "{571514A8-F103-4356-AA0D-BA0990CFA1F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2.7_Vector_Graphics_Editor", "Polymorphism\2.7_Vector_Graphics_Editor\2.7_Vector_Graphics_Editor.csproj", "{F7C7D02E-A694-4315-9C03-6C682DD1EB1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "2.7_Vector_Graphics_Editor", "Polymorphism\2.7_Vector_Graphics_Editor\2.7_Vector_Graphics_Editor.csproj", "{F7C7D02E-A694-4315-9C03-6C682DD1EB1F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "2.8_Game", "Polymorphism\2.8_Game\2.8_Game.csproj", "{F27864DC-E85B-4B03-BB93-F8574154D78F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{F7C7D02E-A694-4315-9C03-6C682DD1EB1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F7C7D02E-A694-4315-9C03-6C682DD1EB1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F7C7D02E-A694-4315-9C03-6C682DD1EB1F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F27864DC-E85B-4B03-BB93-F8574154D78F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F27864DC-E85B-4B03-BB93-F8574154D78F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F27864DC-E85B-4B03-BB93-F8574154D78F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F27864DC-E85B-4B03-BB93-F8574154D78F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{CB9FC874-E53D-420B-B088-535650563EF7} = {90F1DF4C-AE69-4A66-A2A5-D3B5FE0EDE66}
 		{4AAF9DC7-693F-4975-AC06-FB5DF1C54707} = {90F1DF4C-AE69-4A66-A2A5-D3B5FE0EDE66}
 		{F7C7D02E-A694-4315-9C03-6C682DD1EB1F} = {571514A8-F103-4356-AA0D-BA0990CFA1F5}
+		{F27864DC-E85B-4B03-BB93-F8574154D78F} = {571514A8-F103-4356-AA0D-BA0990CFA1F5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3EB66E7D-28EB-4089-9681-E5F8EA53AC18}

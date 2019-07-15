@@ -1,22 +1,22 @@
 ﻿using System;
 
-namespace _27_Vector_Graphics_Editor
+namespace _27_Vector_Graphics_Editor.Classes
 {
-    class Circle : Figure, IDrawable
+    class Round : Figure, IDrawable
     {
         private double radius;
 
         /// <summary>
         /// Инициализирует новый экземпляр точки в начале координат.
         /// </summary>
-        public Circle() : base() { }
+        public Round() : base() { }
 
         /// <summary>
         /// Инициализирует новый экземпляр в заданных координатах.
         /// </summary>
         /// <param name="x">ось X</param>
         /// <param name="y">ось Y</param>
-        public Circle(double x, double y) : base(x, y) { }
+        public Round(int x, int y) : base(x, y) { }
 
         public double Radius
         {
@@ -30,19 +30,22 @@ namespace _27_Vector_Graphics_Editor
             }
         }
 
+        public double Area => Math.PI * Radius * Radius;
         public double Circumference => 2 * Math.PI * Radius;
 
         public void Draw()
         {
-            Console.WriteLine("Нарисовать окружность.");
+            Console.WriteLine("Нарисовать круг.");
             Console.WriteLine(this);
+
         }
 
         public override string ToString()
         {
-            return $"Тип: {typeof(Circle).Name}{Environment.NewLine}" +
+            return $"Тип: {typeof(Round).Name}{Environment.NewLine}" +
                     $"Центр: {CentrePoint}{Environment.NewLine}" +
                     $"Радиус: {Radius}{Environment.NewLine}" +
+                    $"Площадь: {Area:#.###}{Environment.NewLine}" +
                     $"Длина: {Circumference:#.###}";
         }
     }
