@@ -4,7 +4,7 @@
     {
         #region Поля
 
-        char[] chars;
+        private char[] chars;
 
         #endregion
 
@@ -53,57 +53,35 @@
 
         public static bool operator ==(MyString firstStr, MyString secondStr)
         {
-            if (firstStr.Length != secondStr.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < firstStr.Length; i++)
-            {
-                if (firstStr[i] != secondStr[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return firstStr.Equals(secondStr);
         }
 
         public static bool operator !=(MyString firstStr, MyString secondStr)
         {
-            if (firstStr.Length != secondStr.Length)
-            {
-                return true;
-            }
-
-            for (int i = 0; i < firstStr.Length; i++)
-            {
-                if (firstStr[i] != secondStr[i])
-                    return true;
-            }
-
-            return false;
+            return !firstStr.Equals(secondStr);
         }
 
         public static MyString operator +(MyString firstStr, MyString secondStr)
         {
-            int tempIndex = firstStr.Length + secondStr.Length;
-            MyString tempStr = new MyString
-            {
-                chars = new char[tempIndex]
-            };
+            int temp = firstStr.Length + secondStr.Length;
+            char[] chars = new char[temp];
 
-            for (int i = 0; i < firstStr.Length; i++)
+            temp = firstStr.Length > secondStr.Length ? firstStr.Length : secondStr.Length;
+
+            for (int i = 0; i < temp; i++)
             {
-                tempStr[i] = firstStr[i];
+                if (i < firstStr.Length)
+                {
+                    chars[i] = firstStr[i];
+                }
+
+                if (i < secondStr.Length)
+                {
+                    chars[firstStr.Length + i] = secondStr[i];
+                }
             }
 
-            for (int i = 0, j = firstStr.Length; j < tempIndex; i++, j++)
-            {
-                tempStr[j] = secondStr[i];
-            }
-
-            return tempStr;
+            return new MyString(chars);
         }
 
         #endregion
@@ -113,24 +91,34 @@
         /// <summary>
         /// Возвращает индекс первого вхождения символа в строке.
         /// </summary>
-        /// <param name="ch">Искомый символ.</param>
-        public int FindFirst(char ch)
+        /// <param name="symbol">Искомый символ.</param>
+        public int FindFirst(char symbol)
         {
             for (int i = 0; i < chars.Length; i++)
-                if (chars[i] == ch)
+            {
+                if (chars[i] == symbol)
+                {
                     return i;
+                }
+            }
+
             return -1;
         }
 
         /// <summary>
         /// Возвращает индекс вхождения символа с конца.
         /// </summary>
-        /// <param name="ch">Искомый символ.</param>
-        public int FindLast(char ch)
+        /// <param name="symbol">Искомый символ.</param>
+        public int FindLast(char symbol)
         {
             for (int i = chars.Length - 1; i >= 0; i--)
-                if (chars[i] == ch)
+            {
+                if (chars[i] == symbol)
+                {
                     return i;
+                }
+            }
+
             return -1;
         }
 
@@ -145,9 +133,52 @@
         public override string ToString() => new string(chars);
 
         /// <summary>
-        /// Возвращает кастомную строку из массива символов.
+        /// Возвращает строку из массива символов.
         /// </summary>
-        public static MyString ToString(char[] charsArray) => new MyString(charsArray);
+        public static MyString ToMyString(char[] charsArray) => new MyString(charsArray);
+
+        public override bool Equals(object obj)
+        {
+            if (obj is MyString myStr)
+            {
+                return Equals(myStr);
+            }
+
+            return false;
+        }
+
+        public bool Equals(MyString value)
+        {
+            if (this.Length == value.Length)
+            {
+
+                return GetHashCode() == value.GetHashCode();
+
+                #region Альтернатива
+                //for (int i = 0; i < this.Length; i++)
+                //{
+                //    if (chars[i] != value.chars[i])
+                //    {
+                //        return false;
+                //    }
+                //} 
+                #endregion
+            }
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            int n = 0;
+
+            foreach (int item in chars)
+            {
+                n += item;
+            }
+
+            return n;
+        }
 
         #endregion
     }
