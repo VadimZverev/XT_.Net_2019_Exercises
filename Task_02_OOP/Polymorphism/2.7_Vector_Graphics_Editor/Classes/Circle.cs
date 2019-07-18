@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace _27_Vector_Graphics_Editor.Classes
+namespace Vector_Graphics_Editor.Classes
 {
+    /// <summary>
+    /// Окружность
+    /// </summary>
     class Circle : Figure, IDrawable
     {
         private double radius;
@@ -35,15 +38,10 @@ namespace _27_Vector_Graphics_Editor.Classes
         public void Draw()
         {
             Console.WriteLine("Нарисовать окружность.");
-            Console.WriteLine(this);
-        }
-
-        public override string ToString()
-        {
-            return $"Тип: {typeof(Circle).Name}{Environment.NewLine}" +
-                    $"Центр: {CentrePoint}{Environment.NewLine}" +
-                    $"Радиус: {Radius}{Environment.NewLine}" +
-                    $"Длина: {Circumference:#.###}";
+            Console.WriteLine($"Тип: {nameof(Circle)}{Environment.NewLine}"
+                              + $"Центр: {CentrePoint}{Environment.NewLine}"
+                              + $"Радиус: {Radius}{Environment.NewLine}"
+                              + $"Длина: {Circumference:#.###}");
         }
     }
 }

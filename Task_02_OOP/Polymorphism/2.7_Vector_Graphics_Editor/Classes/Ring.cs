@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace _27_Vector_Graphics_Editor.Classes
+namespace Vector_Graphics_Editor.Classes
 {
+    /// <summary>
+    /// Кольцо
+    /// </summary>
     class Ring : Figure, IDrawable
     {
         private Round inner; //внутренний круг
@@ -38,15 +41,10 @@ namespace _27_Vector_Graphics_Editor.Classes
         public void Draw()
         {
             Console.WriteLine("Нарисовать кольцо.");
-            Console.WriteLine(this);
-        }
-
-        public override string ToString()
-        {
-            return $"Тип: {typeof(Ring).Name}{Environment.NewLine}" +
-                    $"Центр: {CentrePoint}{Environment.NewLine}" +
-                    $"Площадь: {Area:#.###}{Environment.NewLine}" +
-                    $"Суммарная длина окружностей: {Circumference:#.###}";
+            Console.WriteLine($"Тип: {typeof(Ring).Name}{Environment.NewLine}"
+                              + $"Центр: {CentrePoint}{Environment.NewLine}"
+                              + $"Площадь: {Area:#.###}{Environment.NewLine}"
+                              + $"Суммарная длина окружностей: {Circumference:#.###}");
         }
     }
 }

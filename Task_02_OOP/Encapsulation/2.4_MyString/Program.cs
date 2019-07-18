@@ -30,78 +30,94 @@ namespace _24_MyString
                     {
                         case ConsoleKey.D1:
                         case ConsoleKey.NumPad1:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            str = firstStr == secondStr ? "да" : "нет";
-                            Console.WriteLine($"1 строка равна 2 строке? Ответ: {str}"
-                                              + Environment.NewLine);
+                                str = firstStr == secondStr ? "да" : "нет";
+                                Console.WriteLine($"1 строка равна 2 строке? Ответ: {str}"
+                                                  + Environment.NewLine);
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D2:
                         case ConsoleKey.NumPad2:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            str = firstStr != secondStr ? "да" : "нет";
-                            Console.WriteLine($"1 строка не равна 2 строке? Ответ: {str}"
-                                              + Environment.NewLine);
+                                str = firstStr != secondStr ? "да" : "нет";
+                                Console.WriteLine($"1 строка не равна 2 строке? Ответ: {str}"
+                                                  + Environment.NewLine);
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D3:
                         case ConsoleKey.NumPad3:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            str = firstStr > secondStr ? "да" : "нет";
-                            Console.WriteLine($"1 строка больше 2 строки? Ответ: {str}"
-                                              + Environment.NewLine);
+                                str = firstStr > secondStr ? "да" : "нет";
+                                Console.WriteLine($"1 строка больше 2 строки? Ответ: {str}"
+                                                  + Environment.NewLine);
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D4:
                         case ConsoleKey.NumPad4:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            str = firstStr < secondStr ? "да" : "нет";
-                            Console.WriteLine($"1 строка меньше 2 строки? Ответ: {str}"
-                                              + Environment.NewLine);
+                                str = firstStr < secondStr ? "да" : "нет";
+                                Console.WriteLine($"1 строка меньше 2 строки? Ответ: {str}"
+                                                  + Environment.NewLine);
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D5:
                         case ConsoleKey.NumPad5:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            Console.WriteLine($"Результат конкатенации: {firstStr + secondStr}"
-                                              + Environment.NewLine);
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.WriteLine($"Результат конкатенации: {firstStr + secondStr}"
+                                                  + Environment.NewLine);
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D6:
                         case ConsoleKey.NumPad6:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            myString = ChooseString(firstStr, secondStr);
-                            ShowIndex(myString);
+                                myString = ChooseString(firstStr, secondStr);
+                                ShowIndex(myString);
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D7:
                         case ConsoleKey.NumPad7:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            myString = ChooseString(firstStr, secondStr);
-                            ShowCharArray(myString);
+                                myString = ChooseString(firstStr, secondStr);
+                                ShowCharArray(myString);
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D8:
                         case ConsoleKey.NumPad8:
-                            Console.WriteLine(opts.KeyChar);
+                            {
+                                Console.WriteLine(opts.KeyChar);
 
-                            ShowMyStringFromCharArray();
+                                ShowMyStringFromCharArray();
 
-                            Console.Write("Ваш выбор: ");
-                            continue;
+                                Console.Write("Ваш выбор: ");
+                                continue;
+                            }
                         case ConsoleKey.D9:
                         case ConsoleKey.NumPad9:
                             Console.Clear();

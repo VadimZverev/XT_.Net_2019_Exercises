@@ -32,7 +32,6 @@ namespace _23_User
                 Console.WriteLine($"Дата рождения: {user.DateOfBirth: d MMMM yyyy}");
                 Console.WriteLine($"Возраст: {user.Age}");
 
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Завершить программу.");
             } while (IsContinue());
         }
 
@@ -105,18 +104,22 @@ namespace _23_User
         /// </summary>
         static bool IsContinue()
         {
+            Console.WriteLine("Начать заново? 1 - Да, 2 - Завершить программу.");
+
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (isParse && value == 1)
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
     }

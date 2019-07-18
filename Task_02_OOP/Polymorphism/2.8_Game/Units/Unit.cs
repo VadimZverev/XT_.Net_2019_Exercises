@@ -2,6 +2,10 @@
 
 namespace _28_Game.Units
 {
+    /// <summary>
+    /// Абстрактный класс Юнит. Является базовым классом, 
+    /// для подвижных объектов на игровом поле.
+    /// </summary>
     abstract class Unit : GameObject
     {
         public Unit(int x, int y) : base(x, y) { }

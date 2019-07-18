@@ -14,6 +14,11 @@ namespace _26_Ring
 
         public int X { get; set; }
         public int Y { get; set; }
+
+        /// <summary>
+        /// Радиус. Не может быть меньше либо равен нулю.
+        /// </summary>
+        /// <exception cref="ArgumentException">Если равен либо меньше 0.</exception>
         public int Radius
         {
             get => radius;
@@ -28,6 +33,5 @@ namespace _26_Ring
 
         public double Area => Math.PI * Radius * Radius;
         public double Circumference => 2 * Math.PI * Radius;
-
     }
 }

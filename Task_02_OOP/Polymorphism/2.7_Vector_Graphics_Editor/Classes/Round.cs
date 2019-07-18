@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace _27_Vector_Graphics_Editor.Classes
+namespace Vector_Graphics_Editor.Classes
 {
+    /// <summary>
+    /// Круг
+    /// </summary>
     class Round : Figure, IDrawable
     {
         private double radius;
@@ -18,6 +21,10 @@ namespace _27_Vector_Graphics_Editor.Classes
         /// <param name="y">ось Y</param>
         public Round(int x, int y) : base(x, y) { }
 
+        public double Area => Math.PI * Radius * Radius;
+
+        public double Circumference => 2 * Math.PI * Radius;
+
         public double Radius
         {
             get => radius;
@@ -30,23 +37,15 @@ namespace _27_Vector_Graphics_Editor.Classes
             }
         }
 
-        public double Area => Math.PI * Radius * Radius;
-        public double Circumference => 2 * Math.PI * Radius;
-
         public void Draw()
         {
             Console.WriteLine("Нарисовать круг.");
-            Console.WriteLine(this);
+            Console.WriteLine($"Тип: {typeof(Round).Name}{Environment.NewLine}"
+                              + $"Центр: {CentrePoint}{Environment.NewLine}"
+                              + $"Радиус: {Radius}{Environment.NewLine}"
+                              + $"Площадь: {Area:#.###}{Environment.NewLine}"
+                              + $"Длина: {Circumference:#.###}");
 
-        }
-
-        public override string ToString()
-        {
-            return $"Тип: {typeof(Round).Name}{Environment.NewLine}" +
-                    $"Центр: {CentrePoint}{Environment.NewLine}" +
-                    $"Радиус: {Radius}{Environment.NewLine}" +
-                    $"Площадь: {Area:#.###}{Environment.NewLine}" +
-                    $"Длина: {Circumference:#.###}";
         }
     }
 }

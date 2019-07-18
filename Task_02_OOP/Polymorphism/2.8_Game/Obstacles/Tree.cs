@@ -2,6 +2,9 @@
 
 namespace _28_Game.Obstacles
 {
+    /// <summary>
+    /// Дерево, занимает две точки на поле по горизонтали.
+    /// </summary>
     class Tree : GameObject
     {
         public Point OptPosiotion { get; }

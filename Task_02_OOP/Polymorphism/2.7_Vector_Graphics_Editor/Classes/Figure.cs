@@ -1,5 +1,8 @@
-﻿namespace _27_Vector_Graphics_Editor.Classes
+﻿namespace Vector_Graphics_Editor.Classes
 {
+    /// <summary>
+    /// Абстрактный класс Фигура
+    /// </summary>
     abstract class Figure
     {
         /// <summary>
@@ -17,6 +20,6 @@
             CentrePoint = new Point(x, y);
         }
 
-        public Point CentrePoint { get; set; }
+        public virtual Point CentrePoint { get; }
     }
 }

@@ -23,6 +23,9 @@ namespace _28_Game.General
             obtacles = AddObtacles(3, 2);
         }
 
+        /// <summary>
+        /// Стартует начало игры.
+        /// </summary>
         public void StartGame()
         {
             while (true)
@@ -48,6 +51,13 @@ namespace _28_Game.General
             }
         }
 
+        /// <summary>
+        /// Добавление бонусов
+        /// </summary>
+        /// <param name="numApple">количество яблок</param>
+        /// <param name="numCherry">количество вишен</param>
+        /// <param name="numSword">количество мечей</param>
+        /// <returns>Возвращает коллекцию бонусов</returns>
         private List<Bonus> AddBonus(int numApple, int numCherry, int numSword)
         {
             Random r = new Random();
@@ -72,6 +82,12 @@ namespace _28_Game.General
 
         }
 
+        /// <summary>
+        /// Добавление препятствий
+        /// </summary>
+        /// <param name="numStone">количество камней</param>
+        /// <param name="numTree">количество деревьев</param>
+        /// <returns>Возвращает коллекцию препятствий</returns>
         private List<GameObject> AddObtacles(int numStone, int numTree)
         {
             Random r = new Random();
@@ -90,6 +106,12 @@ namespace _28_Game.General
             return obtacles;
         }
 
+        /// <summary>
+        /// Добавление врагов.
+        /// </summary>
+        /// <param name="numberWolf">количество волков</param>
+        /// <param name="numberBear">количество медведей</param>
+        /// <returns>Возвращает коллекцию врагов</returns>
         private List<Unit> AddEnemy(int numberWolf, int numberBear)
         {
             Random r = new Random();
@@ -108,6 +130,9 @@ namespace _28_Game.General
             return enemy;
         }
 
+        /// <summary>
+        /// Отображение списка меню
+        /// </summary>
         private void Options()
         {
             string str = string.Empty;
@@ -142,6 +167,9 @@ namespace _28_Game.General
             }
         }
 
+        /// <summary>
+        /// Запуск игры с установленными настройками.
+        /// </summary>
         public void Play()
         {
             string text = "It has begun!!! To Be Continue...";
@@ -161,6 +189,10 @@ namespace _28_Game.General
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Установка уровня сложности.
+        /// </summary>
+        /// <param name="str">какой будет выбран уровень сложности</param>
         private void SelectDifficultyLevel(out string str)
         {
             Console.WriteLine("Уровень сложности:" + Environment.NewLine
@@ -204,6 +236,10 @@ namespace _28_Game.General
             }
         }
 
+        /// <summary>
+        /// Установка размера игрового поля.
+        /// </summary>
+        /// <param name="str">какой размер будет выбран</param>
         private void SelectFieldSize(out string str)
         {
             Console.WriteLine("Размер поля:" + Environment.NewLine
@@ -247,6 +283,9 @@ namespace _28_Game.General
             }
         }
 
+        /// <summary>
+        /// Показать стартовое меню
+        /// </summary>
         private void ShowMenu()
         {
             int width = Console.WindowWidth;

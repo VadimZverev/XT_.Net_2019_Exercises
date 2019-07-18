@@ -2,9 +2,13 @@
 
 namespace _21_Round
 {
+    /// <summary>
+    /// Является пользовательским кругом.
+    /// </summary>
     class Round
     {
         private int radius;
+        private Point point;
 
         public Round()
         {
@@ -12,7 +16,18 @@ namespace _21_Round
             Y = 0;
         }
 
-        public int X { get; set; }
+        /// <summary>
+        /// Ось Х.
+        /// </summary>
+        public int X
+        {
+            get => point.x;
+            set => point.x = value;
+        }
+
+        /// <summary>
+        /// Ось У.
+        /// </summary>
         public int Y { get; set; }
         public int Radius
         {
@@ -22,11 +37,32 @@ namespace _21_Round
                 if (value > 0)
                     radius = value;
                 else
-                    throw new ArgumentException("Назначаемое значение не может быть меньше, либо равно нулю.");
+                    throw new ArgumentException("Радиус не может быть меньше, либо равно нулю.");
             }
         }
 
+        /// <summary>
+        /// Возвращает площадь круга.
+        /// </summary>
         public double Area => Math.PI * Radius * Radius;
+
+        /// <summary>
+        /// Возвращает длину описанной окружности.
+        /// </summary>
         public double Circumference => 2 * Math.PI * Radius;
+
+        /// <summary>
+        /// Точка центра круга.
+        /// </summary>
+        private struct Point
+        {
+            public int x, y;
+
+            public Point(int x, int y)
+            {
+                this.x = x;
+                this.y = y;
+            }
+        }
     }
 }

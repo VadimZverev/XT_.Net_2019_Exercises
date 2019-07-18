@@ -1,5 +1,8 @@
-﻿namespace _27_Vector_Graphics_Editor.Classes
+﻿namespace Vector_Graphics_Editor.Classes
 {
+    /// <summary>
+    /// Определяет способ отображения фигуры.
+    /// </summary>
     interface IDrawable
     {
         void Draw();

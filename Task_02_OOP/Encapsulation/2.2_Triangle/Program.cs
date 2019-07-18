@@ -17,14 +17,14 @@ namespace _22_Triangle
                     InputValue("Введите сторону B: ", out b);
                     InputValue("Введите сторону С: ", out c);
 
-                    triangle = new Triangle(a, b, c);
-                } while (triangle.IsNotCorrect());
+                } while (!Triangle.IsCorrect(a, b, c));
+
+                triangle = new Triangle(a, b, c);
 
                 Console.WriteLine($"Стороны треугольника: A = {triangle.A}, B = {triangle.B}, C = {triangle.C}");
                 Console.WriteLine($"Периметр треугольника равен: {triangle.Perimeter: #.###}");
                 Console.WriteLine($"Площадь треугольника равна: {triangle.HeronArea: #.###}");
 
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Завершить программу.");
             } while (IsContinue());
         }
 
@@ -32,27 +32,31 @@ namespace _22_Triangle
         /// <summary>
         /// Осуществляет выбор на повторение ввода.
         /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
         static bool IsContinue()
         {
+            Console.WriteLine("Начать заново? 1 - Да, 2 - Завершить программу.");
+
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (isParse && value == 1)
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
 
         /// <summary>
         /// Ввод числовых данных с проверкой на корректность данных. 
         /// </summary>
+        /// <param name="line">какая сторона вводится.</param>
         /// <param name="value">вводимое значение данных.</param>
         static void InputValue(string line, out int value)
         {

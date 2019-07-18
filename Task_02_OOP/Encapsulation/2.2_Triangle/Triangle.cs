@@ -2,6 +2,9 @@
 
 namespace _22_Triangle
 {
+    /// <summary>
+    /// Пользовательская реализация треугольника
+    /// </summary>
     class Triangle
     {
         public Triangle(int a, int b, int c)
@@ -15,7 +18,8 @@ namespace _22_Triangle
         public int B { get; }
         public int C { get; }
 
-        // Площадь Герона: S = Sqrt(p(p-a)(p-b)(p-c)), где p - полупериметр p = 1/2 * (a + b + c).
+        // Площадь Герона: S = Sqrt(p(p-a)(p-b)(p-c)),
+        //  где p - полу периметр p = 1/2 * (a + b + c).
         public double HeronArea
         {
             get
@@ -27,15 +31,34 @@ namespace _22_Triangle
 
         public double Perimeter => A + B + C;
 
-        public bool IsNotCorrect()
+        /// <summary>
+        /// Проверяет на корректность введённых сторон.
+        /// </summary>
+        /// <remarks>
+        /// Если каждая из сторон не больше, чем сумма 2х других,
+        /// то ввод корректен, иначе треугольник невозможно построить.
+        /// </remarks>
+        public bool IsCorrect()
         {
-            if (A >= B + C || B >= A + C || C >= A + B)
+            return IsCorrect(A, B, C);
+        }
+
+        /// <summary>
+        /// Проверяет на корректность введённых сторон.
+        /// </summary>
+        /// <remarks>
+        /// Если каждая из сторон не больше, чем сумма 2х других,
+        /// то ввод корректен, иначе треугольник невозможно построить.
+        /// </remarks>
+        public static bool IsCorrect(int a, int b, int c)
+        {
+            if (a >= b + c || b >= a + c || c >= a + b)
             {
                 Console.WriteLine("Невозможно построить треугольник с текущими сторонами. Введите заново стороны.");
-                return true;
+                return false;
             }
             else
-                return false;
+                return true;
         }
     }
 }

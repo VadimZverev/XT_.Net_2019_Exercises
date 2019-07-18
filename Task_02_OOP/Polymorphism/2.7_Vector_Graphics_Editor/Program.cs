@@ -1,7 +1,7 @@
 ﻿using System;
-using _27_Vector_Graphics_Editor.Classes;
+using Vector_Graphics_Editor.Classes;
 
-namespace _27_Vector_Graphics_Editor
+namespace Vector_Graphics_Editor
 {
     class Program
     {
@@ -31,16 +31,17 @@ namespace _27_Vector_Graphics_Editor
                         break;
                 }
 
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Завершить программу.");
             } while (IsContinue());
         }
 
+        /// <summary>
+        /// Возвращает выбранный вариант ввода координат.
+        /// </summary>
         static int ChooseCoordinates()
         {
             while (true)
             {
                 Console.WriteLine("Параметры ввода координат: 1 - По умолчанию 2 - Вручную");
-
                 Console.Write("Ваш ввод: ");
 
                 if (int.TryParse(Console.ReadLine(), out int value))
@@ -49,20 +50,24 @@ namespace _27_Vector_Graphics_Editor
                 }
 
                 Console.WriteLine("Ввод некорректен, выберете параметр.");
+                Console.WriteLine();
             }
         }
 
+        /// <summary>
+        /// Возвращает, какую фигуру необходимо отобразить.
+        /// </summary>
         static int ChooseFigure()
         {
-            while (true)
-            {
-                Console.WriteLine("Параметры:" + Environment.NewLine
+            Console.WriteLine("Параметры:" + Environment.NewLine
                                   + "\t1 - Линия" + Environment.NewLine
                                   + "\t2 - Окружность" + Environment.NewLine
                                   + "\t3 - Прямоугольник" + Environment.NewLine
                                   + "\t4 - Круг" + Environment.NewLine
                                   + "\t5 - Кольцо" + Environment.NewLine);
 
+            while (true)
+            {
                 Console.Write("Ваш выбор: ");
 
                 if (int.TryParse(Console.ReadLine(), out int value))
@@ -84,32 +89,59 @@ namespace _27_Vector_Graphics_Editor
         /// Возвращает число с проверкой на корректность данных.
         /// </summary>
         /// <param name="line">Информирующая строка.</param>
-        /// <param name="isNotNegative">запрещен ли ввод отрицательных значений. По умолчанию false</param>
-        static int InputValue(string line, bool isNotNegative = false)
+        /// <param name="isRadius"><c>true</c>, если вводимое число является радиусом.
+        /// По умолчанию <c>false</c></param>
+        static int InputValue(string line, bool isRadius = false)
         {
-            int value;
-
             while (true)
             {
                 Console.Write(line);
 
-                try
+                if (int.TryParse(Console.ReadLine(), out int value))
                 {
-                    value = int.Parse(Console.ReadLine());
-
-                    if (isNotNegative && value <= 0)
+                    if (!isRadius)
                     {
-                        Console.WriteLine("Значение не может быть меньше либо равен 0.");
+                        return value;
+                    }
+                    else
+                    {
+                        if (value > 0) return value;
+
+                        Console.WriteLine("Радиус не может быть меньше, либо равен 0.");
+                        Console.WriteLine();
                         continue;
                     }
                 }
-                catch (FormatException)
-                {
-                    Console.WriteLine("Вводимое должно быть натуральное целое число.");
-                    continue;
-                }
 
-                return value;
+                Console.WriteLine("Вводимое должно быть натуральное целое число.");
+                Console.WriteLine();
+            }
+        }
+
+        /// <summary>
+        /// Ввод внутреннего и внешнего радиуса кольца.
+        /// </summary>
+        /// <param name="inR">внутренний радиус</param>
+        /// <param name="outR">внешний радиус</param>
+        static void InputRingRadiuses(out int inR, out int outR)
+        {
+            Console.WriteLine();
+
+            while (true)
+            {
+                inR = InputValue("Введите внутренний радиус: ", true);
+
+                while (true)
+                {
+                    outR = InputValue("Введите внешний радиус: ", true);
+
+                    if (!(inR >= outR)) break;
+
+                    Console.WriteLine("Внутренняя окружность не может быть "
+                                + "больше, либо равно внешней окружности");
+                    Console.WriteLine();
+                }
+                break;
             }
         }
 
@@ -118,18 +150,23 @@ namespace _27_Vector_Graphics_Editor
         /// </summary>
         static bool IsContinue()
         {
+            Console.WriteLine(Environment.NewLine
+                              + "Начать заново? 1 - Да, 2 - Завершить программу.");
+
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (isParse && value == 1)
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
 
@@ -154,21 +191,40 @@ namespace _27_Vector_Graphics_Editor
                 };
             }
 
+            Console.WriteLine();
+
             figure.Draw();
         }
 
         static void ShowLine()
         {
-            Console.WriteLine("Ввод начальной точки.");
+            Console.WriteLine(Environment.NewLine + "Ввод начальной точки.");
             InputCoordinate(out int x, out int y);
             Point start = new Point(x, y);
 
-            Console.WriteLine("Ввод конечной точки.");
-            InputCoordinate(out x, out y);
-            Point end = new Point(x, y);
+            Console.WriteLine();
 
-            IDrawable figure = new Line(start, end);
-            figure.Draw();
+            while (true)
+            {
+                Console.WriteLine("Ввод конечной точки.");
+                InputCoordinate(out x, out y);
+                Point end = new Point(x, y);
+
+                if (!(start.X == end.X && start.Y == end.Y))
+                {
+                    IDrawable figure = new Line(start, end);
+
+                    Console.WriteLine();
+
+                    figure.Draw();
+                    return;
+                }
+
+                Console.WriteLine("Две точки не могут находиться в одних и тех же"
+                                  + " координатах, повторите ввод конечной точки."
+                                  + Environment.NewLine);
+            }
+
         }
 
         static void ShowRectangle()
@@ -194,6 +250,8 @@ namespace _27_Vector_Graphics_Editor
                 figure = new Rectangle(height, width, x, y);
             }
 
+            Console.WriteLine();
+
             figure.Draw();
         }
 
@@ -204,48 +262,22 @@ namespace _27_Vector_Graphics_Editor
 
             int opts = ChooseCoordinates();
 
-            if (opts == 1)
+            switch (opts)
             {
-                while (true)
-                {
-                    try
-                    {
-                        inR = InputValue("Введите внутренний радиус: ", true);
-                        outR = InputValue("Введите внешний радиус: ", true);
-                        figure = new Ring(inR, outR);
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        Console.WriteLine(exc.Message);
-                        continue;
-                    }
-
+                case 1:
+                    InputRingRadiuses(out inR, out outR);
+                    figure = new Ring(inR, outR);
+                    Console.WriteLine();
+                    figure.Draw();
                     break;
-                }
-            }
-            else
-            {
-                InputCoordinate(out int x, out int y);
-
-                while (true)
-                {
-                    try
-                    {
-                        inR = InputValue("Введите внутренний радиус: ", true);
-                        outR = InputValue("Введите внешний радиус: ", true);
-                        figure = new Ring(inR, outR, x, y);
-                    }
-                    catch (ArgumentException exc)
-                    {
-                        Console.WriteLine(exc.Message);
-                        continue;
-                    }
-
+                case 2:
+                    InputCoordinate(out int x, out int y);
+                    InputRingRadiuses(out inR, out outR);
+                    figure = new Ring(inR, outR, x, y);
+                    Console.WriteLine();
+                    figure.Draw();
                     break;
-                }
             }
-
-            figure.Draw();
         }
 
         static void ShowRound()
@@ -269,6 +301,8 @@ namespace _27_Vector_Graphics_Editor
                     Radius = InputValue("Введите радиус: ", true)
                 };
             }
+
+            Console.WriteLine();
 
             figure.Draw();
         }

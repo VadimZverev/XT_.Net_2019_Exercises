@@ -3,6 +3,9 @@ using System;
 
 namespace _28_Game.Units
 {
+    /// <summary>
+    /// Игрок.
+    /// </summary>
     class Player : Unit
     {
         public Player() : this(0, 0) { }
@@ -13,6 +16,10 @@ namespace _28_Game.Units
         public Player(int x, int y, int health, int attack)
             : base(x, y, health, attack) { }
 
+        /// <summary>
+        /// Повышение характеристик.
+        /// </summary>
+        /// <param name="bonus">повышаемая характеристика</param>
         public void UpAbility(Bonus bonus)
         {
             switch (bonus)
@@ -27,6 +34,10 @@ namespace _28_Game.Units
             }
         }
 
+        /// <summary>
+        /// Передвижение игрока по полю.
+        /// </summary>
+        /// <param name="motion">клавиша передвижения</param>
         public void Move(ConsoleKey motion)
         {
             switch (motion)

@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace _27_Vector_Graphics_Editor.Classes
+namespace Vector_Graphics_Editor.Classes
 {
+    /// <summary>
+    /// Прямоугольник
+    /// </summary>
     class Rectangle : Figure, IDrawable
     {
         private double height;
@@ -24,9 +27,14 @@ namespace _27_Vector_Graphics_Editor.Classes
             : base(x, y)
         {
             Height = height;
-            Whidth = width;
+            Width = width;
         }
 
+        #region Свойства
+
+        public double Area => height * width;
+        public double Diagonal
+            => Math.Sqrt(Math.Pow(height, 2) + Math.Pow(width, 2));
         public double Height
         {
             get => height;
@@ -38,12 +46,15 @@ namespace _27_Vector_Graphics_Editor.Classes
                 }
                 else
                 {
-                    throw new ArgumentException("Назначаемое значение не может быть меньше, либо равно нулю.");
+                    throw new ArgumentException("Назначаемое значение не может "
+                                                + "быть меньше, либо равно нулю.");
                 }
             }
         }
 
-        public double Whidth
+        public double Perimeter => 2 * (height + width);
+
+        public double Width
         {
             get => width;
             set
@@ -54,31 +65,24 @@ namespace _27_Vector_Graphics_Editor.Classes
                 }
                 else
                 {
-                    throw new ArgumentException("Назначаемое значение не может быть меньше, либо равно нулю.");
+                    throw new ArgumentException("Назначаемое значение не может "
+                                                + "быть меньше, либо равно нулю.");
                 }
             }
         }
 
-        public double Area => height * width;
-        public double Diagonal 
-            => Math.Sqrt(Math.Pow(height, 2) + Math.Pow(width, 2));
-        public double Perimeter => 2 * (height + width);
+        #endregion
 
         public void Draw()
         {
             Console.WriteLine("Нарисовать прямоугольник.");
-            Console.WriteLine(this);
-        }
-
-        public override string ToString()
-        {
-            return $"Тип: {typeof(Rectangle).Name}{Environment.NewLine}" + 
-                    $"Центр: {CentrePoint}{Environment.NewLine}" +
-                    $"Высота: {Height}{Environment.NewLine}" +
-                    $"Ширина: {Whidth}{Environment.NewLine}" +
-                    $"Площадь: {Area:#.###}{Environment.NewLine}" +
-                    $"Диагональ: {Diagonal:#.###}{Environment.NewLine}" +
-                    $"Периметр: {Perimeter:#.###}";
+            Console.WriteLine($"Тип: {typeof(Rectangle).Name}{Environment.NewLine}"
+                              + $"Центр: {CentrePoint}{Environment.NewLine}"
+                              + $"Высота: {Height}{Environment.NewLine}"
+                              + $"Ширина: {Width}{Environment.NewLine}"
+                              + $"Площадь: {Area:#.###}{Environment.NewLine}"
+                              + $"Диагональ: {Diagonal:#.###}{Environment.NewLine}"
+                              + $"Периметр: {Perimeter:#.###}");
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace _28_Game.General
 {
+    /// <summary>
+    /// Игровое поле.
+    /// </summary>
     class GameField
     {
         public GameField() : this(height: 150, width: 300) { }

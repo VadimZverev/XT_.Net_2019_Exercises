@@ -1,10 +1,7 @@
-﻿namespace _27_Vector_Graphics_Editor.Classes
+﻿namespace Vector_Graphics_Editor.Classes
 {
     class Point
     {
-        public double X { get; set; }
-        public double Y { get; set; }
-
         /// <summary>
         /// Инициализирует новый экземпляр точки в начале координат.
         /// </summary>
@@ -24,6 +21,9 @@
             X = x;
             Y = y;
         }
+
+        public double X { get; }
+        public double Y { get; }
 
         public override string ToString()
         {
