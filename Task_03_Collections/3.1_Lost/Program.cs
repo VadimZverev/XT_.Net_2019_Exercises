@@ -65,7 +65,7 @@ namespace _31_Lost
             int count; // кол-во строк в списке.
             List<int> people;
 
-            if (isRandom())
+            if (IsRandom())
             {
                 people = GetRandomCircleOfPeople();
 
@@ -124,7 +124,7 @@ namespace _31_Lost
         /// <summary>
         /// Выбор будет ли список заполнятся случайно.
         /// </summary>
-        static bool isRandom()
+        static bool IsRandom()
         {
             Console.WriteLine("Как заполнить список нумерации людей?"
                               + " 1 - Случайно, 2 - Последовательно");
