@@ -9,10 +9,13 @@ namespace _32_Word_Frequency
         static void Main()
         {
             string temp;
-            Dictionary<string, int> words = new Dictionary<string, int>();
+            Dictionary<string, int> words;
 
             do
             {
+                words = new Dictionary<string, int>();
+                temp = string.Empty;
+
                 if (IsManyally())
                 {
                     Console.WriteLine("Введите предложение на английском языке:");
@@ -23,7 +26,8 @@ namespace _32_Word_Frequency
                 else
                     temp = ReadFromFile();
 
-                string[] strings = temp.Split(new char[] { ' ', '.' }, StringSplitOptions.RemoveEmptyEntries);
+                char[] separators = { ',', '.', '!', '?', ';', ':', ' ' };
+                string[] strings = temp.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (string str in strings)
                 {

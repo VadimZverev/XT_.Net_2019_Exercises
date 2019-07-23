@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="text.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="text.txt">
+    <None Update="text.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
   </ItemGroup>
 
 </Project>
