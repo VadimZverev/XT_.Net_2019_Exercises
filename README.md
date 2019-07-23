@@ -26,3 +26,7 @@
    * 2.6_Ring
    * 2.7_Vector_Graphics_Editor
    * 2.8_Game
+4. Task_03_Collections - 4-е задание.
+   * 3.1_Lost
+   * 3.2_Word_Frequency
+   * 3.3_Dynamic_Array
