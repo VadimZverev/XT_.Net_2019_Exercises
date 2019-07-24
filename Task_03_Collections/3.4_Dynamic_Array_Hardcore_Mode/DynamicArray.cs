@@ -2,14 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace _33_Dynamic_Array
+namespace _34_Dynamic_Array_Hardcore_Mode
 {
-    class DynamicArray<T> : IEnumerable<T>, IEnumerable
+    class DynamicArray<T> : IEnumerable<T>, IEnumerable, ICloneable
     {
         #region Поля
 
-        private const int _defaultCapacity = 8;
-        private T[] _array;
+        protected const int _defaultCapacity = 8;
+        protected T[] _array;
+        private int capacity;
 
         #endregion
 
@@ -44,6 +45,11 @@ namespace _33_Dynamic_Array
         {
             get
             {
+                if (index < 0)
+                {
+                    index = Length + index;
+                }
+
                 if (IsOutOfRange(index))
                 {
                     throw new ArgumentOutOfRangeException();
@@ -67,7 +73,22 @@ namespace _33_Dynamic_Array
 
         #region Свойства
 
-        public int Capacity { get; private set; }
+        public int Capacity
+        {
+            get => capacity;
+            set
+            {
+                if (capacity > value)
+                {
+                    T[] tempArray = new T[value];
+                    Array.Copy(_array, 0, tempArray, 0, value);
+                    _array = tempArray;
+                    Length = value;
+                }
+
+                capacity = value;
+            }
+        }
 
         public int Length { get; private set; } = 0;
 
@@ -114,6 +135,34 @@ namespace _33_Dynamic_Array
                 _array[Length] = item;
                 Length++;
             }
+        }
+
+        public object Clone()
+        {
+            return new DynamicArray<T>(capacity)
+            {
+                _array = _array.Clone() as T[],
+                Length = Length
+            };
+        }
+
+        /// <summary>
+        /// Возвращает содержимое коллекции.
+        /// </summary>
+        public virtual IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                yield return _array[i];
+            }
+        }
+
+        /// <summary>
+        /// Возвращает содержимое коллекции.
+        /// </summary>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         /// <summary>
@@ -193,15 +242,33 @@ namespace _33_Dynamic_Array
             _array[Length] = default;
         }
 
-        /// <summary>
-        /// Возвращает содержимое коллекции.
-        /// </summary>
-        public IEnumerator<T> GetEnumerator()
+        public T[] ToArray()
         {
+            T[] tempArray = new T[Length];
+
             for (int i = 0; i < Length; i++)
             {
-                yield return _array[i];
+                tempArray[i] = _array[i];
             }
+
+            return tempArray;
+        }
+
+        /// <summary>
+        /// Подсчёт длины перечислимой коллекции.
+        /// </summary>
+        /// <param name="collection">передаваемая коллекция.</param>
+        /// <returns>Возвращает количество элементов в коллекции.</returns>
+        private int GetLength(IEnumerable<T> collection)
+        {
+            int count = 0;
+
+            foreach (T item in collection)
+            {
+                count++;
+            }
+
+            return count;
         }
 
         /// <summary>
@@ -231,31 +298,6 @@ namespace _33_Dynamic_Array
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Подсчёт длины перечислимой коллекции.
-        /// </summary>
-        /// <param name="collection">передаваемая коллекция.</param>
-        /// <returns>Возвращает количество элементов в коллекции.</returns>
-        private int GetLength(IEnumerable<T> collection)
-        {
-            int count = 0;
-
-            foreach (T item in collection)
-            {
-                count++;
-            }
-
-            return count;
-        }
-
-        /// <summary>
-        /// Возвращает содержимое коллекции.
-        /// </summary>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
 
         /// <summary>
