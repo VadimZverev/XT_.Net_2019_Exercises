@@ -15,11 +15,11 @@ namespace _31_Lost
         }
 
         /// <summary>
-        /// Возвращает список людей в кругу.
+        /// Returns a list of people in the circle.
         /// </summary>
         static List<int> GetCircleOfPeople()
         {
-            int peopleCount = InputValue("Введите кол-во людей в кругу: ");
+            int peopleCount = InputValue("Enter the number of people in the circle: ");
 
             List<int> tempList = new List<int>();
 
@@ -32,14 +32,14 @@ namespace _31_Lost
         }
 
         /// <summary>
-        /// Возвращает список случайно пронумерованных людей в кругу.
+        /// Returns a list of randomly numbered people in a circle..
         /// </summary>
         static List<int> GetRandomCircleOfPeople()
         {
             int randomNum;
             Random r = new Random();
 
-            int peopleCount = InputValue("Введите кол-во людей в кругу: ");
+            int peopleCount = InputValue("Enter the number of people in the circle: ");
 
             List<int> tempList = new List<int>();
 
@@ -58,11 +58,11 @@ namespace _31_Lost
         }
 
         /// <summary>
-        /// Возвращает последнего человека в кругу.
+        /// Returns the last person in the circle.
         /// </summary>
         static int GetWinner()
         {
-            int count; // кол-во строк в списке.
+            int count; // number of people
             List<int> people;
 
             if (IsRandom())
@@ -75,7 +75,6 @@ namespace _31_Lost
                 people = GetCircleOfPeople();
             }
 
-
             do
             {
                 count = people.Count;
@@ -84,7 +83,7 @@ namespace _31_Lost
                 {
                     if ((i + 1) % 2 == 0)
                     {
-                        Console.WriteLine($"Вышел из круга человек под номером {people[i]}");
+                        Console.WriteLine($"Out of the circle of people under the number {people[i]}");
                         people[i] = 0;
                     }
                 }
@@ -97,12 +96,12 @@ namespace _31_Lost
         }
 
         /// <summary>
-        /// Осуществляет выбор на повторение ввода.
+        /// Select to repeat input.
         /// </summary>
         static bool IsContinue()
         {
             Console.WriteLine(Environment.NewLine
-                              + "Начать заново? 1 - Да, 2 - Завершить программу.");
+                              + "Start over? 1 - Yes, 2 - Complete program.");
 
             while (true)
             {
@@ -122,12 +121,12 @@ namespace _31_Lost
         }
 
         /// <summary>
-        /// Выбор будет ли список заполнятся случайно.
+        /// Choose whether the list will be filled randomly.
         /// </summary>
         static bool IsRandom()
         {
-            Console.WriteLine("Как заполнить список нумерации людей?"
-                              + " 1 - Случайно, 2 - Последовательно");
+            Console.WriteLine("How to fill the list of people numbering?"
+                              + " 1 - Random, 2 - Consistently");
 
             while (true)
             {
@@ -146,9 +145,9 @@ namespace _31_Lost
         }
 
         /// <summary>
-        /// Возвращает число с проверкой на корректность данных.
+        /// Returns a number with data validation.
         /// </summary>
-        /// <param name="line">Информирующая строка.</param>
+        /// <param name="line">Informative line</param>
         static int InputValue(string line)
         {
             while (true)
@@ -160,9 +159,8 @@ namespace _31_Lost
                     return value;
                 }
 
-                Console.WriteLine("Вводимое должно быть натуральное целое положительное "
-                                  + "число и не равно 0.");
-                Console.WriteLine();
+                Console.WriteLine("The input must be a positive integer and not zero."
+                                    + Environment.NewLine);
             }
         }
     }

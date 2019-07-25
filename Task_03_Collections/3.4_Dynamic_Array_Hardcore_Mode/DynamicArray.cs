@@ -6,7 +6,7 @@ namespace _34_Dynamic_Array_Hardcore_Mode
 {
     class DynamicArray<T> : IEnumerable<T>, IEnumerable, ICloneable
     {
-        #region Поля
+        #region Fields
 
         protected const int _defaultCapacity = 8;
         protected T[] _array;
@@ -14,23 +14,27 @@ namespace _34_Dynamic_Array_Hardcore_Mode
 
         #endregion
 
-        #region Конструкторы
+        #region Constructors
 
         /// <summary>
-        /// Инициализирует экземпляр с ёмкостью равно 8.
+        /// Initializes an instance with a capacity of 8.
         /// </summary>
         public DynamicArray() : this(_defaultCapacity) { }
 
         /// <summary>
-        /// Инициализирует экземпляр с устанавливаемой ёмкостью.
+        /// Initializes an instance with installed capacity.
         /// </summary>
-        /// <param name="capacity">ёмкость динамического массива</param>
+        /// <param name="capacity">dynamic array capacity</param>
         public DynamicArray(int capacity)
         {
             Capacity = capacity;
             _array = new T[capacity];
         }
 
+        /// <summary>
+        /// Initializes an instance with the passed collection.
+        /// </summary>
+        /// <param name="collection">passed collection</param>
         public DynamicArray(IEnumerable<T> collection)
             : this(_defaultCapacity)
         {
@@ -39,7 +43,7 @@ namespace _34_Dynamic_Array_Hardcore_Mode
 
         #endregion
 
-        #region Индексатор
+        #region Indexer
 
         public T this[int index]
         {
@@ -71,7 +75,7 @@ namespace _34_Dynamic_Array_Hardcore_Mode
 
         #endregion
 
-        #region Свойства
+        #region Properties
 
         public int Capacity
         {
@@ -89,17 +93,16 @@ namespace _34_Dynamic_Array_Hardcore_Mode
                 capacity = value;
             }
         }
-
-        public int Length { get; private set; } = 0;
+        public int Length { get; private set; }
 
         #endregion
 
-        #region Методы
+        #region Methods
 
         /// <summary>
-        /// Добавление объекта в конец массива.
+        /// Adding an object to the end of the array.
         /// </summary>
-        /// <param name="item">передаваемый объект</param>
+        /// <param name="item">transmitted item</param>
         public void Add(T item)
         {
             if (UpCapacity(Length + 1))
@@ -115,9 +118,9 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// добавляет коллекцию в конец массива.
+        /// Adds a collection to the end of the array.
         /// </summary>
-        /// <param name="collection">передаваемая коллекция.</param>
+        /// <param name="collection">passed collection</param>
         public void AddRange(IEnumerable<T> collection)
         {
             int tempLength = GetLength(collection);
@@ -137,6 +140,10 @@ namespace _34_Dynamic_Array_Hardcore_Mode
             }
         }
 
+        /// <summary>
+        /// Creates a new object that is a copy of the current instance.
+        /// </summary>
+        /// <returns>A new object that is a copy of this instance.</returns>
         public object Clone()
         {
             return new DynamicArray<T>(capacity)
@@ -147,7 +154,7 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Возвращает содержимое коллекции.
+        ///  Returns the contents of the collection.
         /// </summary>
         public virtual IEnumerator<T> GetEnumerator()
         {
@@ -158,7 +165,7 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Возвращает содержимое коллекции.
+        ///  Returns the contents of the collection.
         /// </summary>
         IEnumerator IEnumerable.GetEnumerator()
         {
@@ -166,12 +173,12 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Вставляет объект в указанное место.
+        /// Inserts an object at the specified location.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="index">индекс вставки</param>
-        /// <param name="item">передаваемый объект</param>
-        /// <returns>Возвращает true, если объект вставлен, иначе false</returns>
+        /// <param name="index">insert index</param>
+        /// <param name="item">transmitted item</param>
+        /// <returns>Returns true if the object is inserted; false otherwise.</returns>
         public bool Insert(int index, T item)
         {
             if (index > Length)
@@ -201,10 +208,10 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Удаляет указываемый объект.
+        /// Deletes the specified object.
         /// </summary>
-        /// <param name="item">передаваемый объект</param>
-        /// <returns>Возвращает true, если объект удалён, иначе false.</returns>
+        /// <param name="item">transmitted item</param>
+        /// <returns>Returns true if the object is deleted; false otherwise.</returns>
         public bool Remove(T item)
         {
             for (int i = 0; i < Length; i++)
@@ -221,10 +228,10 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Удаляет объект по указанному массиву.
+        /// Removes the object at the specified index.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="index">передаваемый индекс</param>
+        /// <param name="index">transmitted index</param>
         public void RemoveAt(int index)
         {
             if (index >= Length)
@@ -242,6 +249,10 @@ namespace _34_Dynamic_Array_Hardcore_Mode
             _array[Length] = default;
         }
 
+        /// <summary>
+        /// Converts to a regular array of the specified type.
+        /// </summary>
+        /// <returns>Returns an array of the specified type.</returns>
         public T[] ToArray()
         {
             T[] tempArray = new T[Length];
@@ -255,10 +266,10 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Подсчёт длины перечислимой коллекции.
+        /// Counting the length of the enumerated collection.
         /// </summary>
-        /// <param name="collection">передаваемая коллекция.</param>
-        /// <returns>Возвращает количество элементов в коллекции.</returns>
+        /// <param name="collection">passed collection</param>
+        /// <returns>Returns the number of items in the collection.</returns>
         private int GetLength(IEnumerable<T> collection)
         {
             int count = 0;
@@ -272,11 +283,26 @@ namespace _34_Dynamic_Array_Hardcore_Mode
         }
 
         /// <summary>
-        /// Осуществляет сравнение ёмкости с передаваемым значением.
-        /// Увеличивает, если ёмкость меньше значения.
+        /// Check if the index is outside the range of the array.
         /// </summary>
-        /// <param name="value">сравниваемое значение</param>
-        /// <returns>Возвращает true, если увеличивает, иначе false</returns>
+        /// <param name="index">verifiable index</param>
+        /// <returns>Returns true if the index is out of range; false otherwise.</returns>
+        private bool IsOutOfRange(int index)
+        {
+            if (index >= Length || index < 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// Performs a comparison of capacity with the transmitted value. 
+        /// Increases if capacity is less than value.
+        /// </summary>
+        /// <param name="value">compared value</param>
+        /// <returns>Returns true if increments; false otherwise</returns>
         private bool UpCapacity(int value)
         {
             if (Capacity < value)
@@ -294,21 +320,6 @@ namespace _34_Dynamic_Array_Hardcore_Mode
 
                 Capacity = num;
 
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Проверка, выходит ли индекс за диапазон массива.
-        /// </summary>
-        /// <param name="index">проверяемый индекс</param>
-        /// <returns>Возвращает true, если индекс выходит за пределы, иначе false.</returns>
-        private bool IsOutOfRange(int index)
-        {
-            if (index >= Length || index < 0)
-            {
                 return true;
             }
 

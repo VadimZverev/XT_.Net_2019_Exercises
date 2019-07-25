@@ -18,8 +18,7 @@ namespace _32_Word_Frequency
 
                 if (IsManyally())
                 {
-                    Console.WriteLine("Введите предложение на английском языке:");
-                    Console.WriteLine();
+                    Console.WriteLine("Enter sentence in English:" + Environment.NewLine);
 
                     temp = Console.ReadLine();
                 }
@@ -43,24 +42,24 @@ namespace _32_Word_Frequency
                     }
                 }
 
-                Console.WriteLine("Количество повторяющихся слов:");
+                Console.WriteLine("Number of duplicate words:");
                 Console.WriteLine();
 
                 foreach (var word in words)
                 {
-                    Console.WriteLine($"{word.Key}: {word.Value} раз.");
+                    Console.WriteLine($"{word.Key}: {word.Value} times.");
                 }
 
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Осуществляет выбор на повторение ввода.
+        /// Select to repeat input.
         /// </summary>
         static bool IsContinue()
         {
             Console.WriteLine(Environment.NewLine
-                              + "Начать заново? 1 - Да, 2 - Завершить программу.");
+                              + "Start over? 1 - Yes, 2 - Complete program.");
 
             while (true)
             {
@@ -79,9 +78,13 @@ namespace _32_Word_Frequency
             }
         }
 
+        /// <summary>
+        /// Whether will manual input.
+        /// </summary>
+        /// <returns>Returns true if input will be done manually; otherwise false</returns>
         static bool IsManyally()
         {
-            Console.WriteLine("Ввести вручную? 1 - Да, 2 - считать из файла.");
+            Console.WriteLine("Enter manually? 1 - Yes, 2 - read from file.");
 
             while (true)
             {
@@ -100,8 +103,9 @@ namespace _32_Word_Frequency
         }
 
         /// <summary>
-        /// Чтение из файла.
+        /// Read from file.
         /// </summary>
+        /// <returns>Returns the string read from the file.</returns>
         static string ReadFromFile()
         {
             string temp;
