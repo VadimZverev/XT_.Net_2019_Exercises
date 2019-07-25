@@ -31,3 +31,7 @@ Project Structure:
    * 3.2_Word_Frequency
    * 3.3_Dynamic_Array
    * 3.4_Dynamic_Array_Hardcore_Mode
+4. Task_03_Collections - Task 4 is Done.
+   * 4.1_Custom_Sort
+   * 4.2_Custom_Sort_Demo
+   * 4.3_Sorting_Unit
