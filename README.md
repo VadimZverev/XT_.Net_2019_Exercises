@@ -35,3 +35,4 @@ Project Structure:
    * 4.1_Custom_Sort
    * 4.2_Custom_Sort_Demo
    * 4.3_Sorting_Unit
+   * 4.4_Number_Array_Sum
