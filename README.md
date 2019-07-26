@@ -36,3 +36,4 @@ Project Structure:
    * 4.2_Custom_Sort_Demo
    * 4.3_Sorting_Unit
    * 4.4_Number_Array_Sum
+   * 4.5_To_Int_Or_Not_To_Int
