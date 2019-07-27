@@ -31,9 +31,10 @@ Project Structure:
    * 3.2_Word_Frequency
    * 3.3_Dynamic_Array
    * 3.4_Dynamic_Array_Hardcore_Mode
-4. Task_04_Delegates_And_Extensions
+5. Task_04_Delegates_And_Extensions - Task 5 is Done.
    * 4.1_Custom_Sort
    * 4.2_Custom_Sort_Demo
    * 4.3_Sorting_Unit
    * 4.4_Number_Array_Sum
    * 4.5_To_Int_Or_Not_To_Int
+   * 4.6_I_Seek_You

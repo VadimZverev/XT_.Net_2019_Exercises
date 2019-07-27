@@ -9,9 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4.2_Custom_Sort_Demo", "4.2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4.3_Sorting_Unit", "4.3_Sorting_Unit\4.3_Sorting_Unit.csproj", "{A06033DF-72C1-47CF-B2CF-2608C4903068}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.4_Number_Array_Sum", "4.4_Number_Array_Sum\4.4_Number_Array_Sum.csproj", "{91DA65F2-BE38-4B85-843B-C4CF813ACED8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4.4_Number_Array_Sum", "4.4_Number_Array_Sum\4.4_Number_Array_Sum.csproj", "{91DA65F2-BE38-4B85-843B-C4CF813ACED8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.5_To_Int_Or_Not_To_Int", "4.5_To_Int_Or_Not_To_Int\4.5_To_Int_Or_Not_To_Int.csproj", "{C00F5849-FCBB-4F84-8D03-8391F9CBA720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "4.5_To_Int_Or_Not_To_Int", "4.5_To_Int_Or_Not_To_Int\4.5_To_Int_Or_Not_To_Int.csproj", "{C00F5849-FCBB-4F84-8D03-8391F9CBA720}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "4.6_I_Seek_You", "4.6_I_Seek_You\4.6_I_Seek_You.csproj", "{0BD1C1A0-DE8E-43B0-9D4D-949ADF42509C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{C00F5849-FCBB-4F84-8D03-8391F9CBA720}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C00F5849-FCBB-4F84-8D03-8391F9CBA720}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C00F5849-FCBB-4F84-8D03-8391F9CBA720}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0BD1C1A0-DE8E-43B0-9D4D-949ADF42509C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0BD1C1A0-DE8E-43B0-9D4D-949ADF42509C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0BD1C1A0-DE8E-43B0-9D4D-949ADF42509C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0BD1C1A0-DE8E-43B0-9D4D-949ADF42509C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
