@@ -8,51 +8,59 @@ namespace _46_I_Seek_You
     {
         static void Main()
         {
-            int[] posElements;
-            int[] array = CreateRandomArray();
-
-            Console.Write($"Array of numbers: ");
-            ShowElements(array);
-
-            Console.WriteLine("The method that directly implements the search:");
-            posElements = GetPositiveElement(array);
-
-            Console.Write($"Positive number is: ");
-            ShowElements(posElements);
-
-            Console.WriteLine("The method to which the search condition is passed "
-                              + "through the delegate instance:");
-            Predicate<int> condition = new Predicate<int>(IsPositiveNumber);
-            posElements = GetElementsViaCondition(array, condition);
-
-            Console.Write($"Positive number is: ");
-            ShowElements(posElements);
-
-            Console.WriteLine("The method to which the search condition is passed "
-                              + "through the delegate as an anonymous method:");
-
-            GetElementsViaCondition(array, delegate (int item)
+            do
             {
-                return item > 0;
-            });
+                int[] posElements;
+                int[] array = CreateRandomArray();
 
-            Console.Write($"Positive number is: ");
-            ShowElements(posElements);
+                Console.Write($"Array of numbers: ");
+                ShowElements(array);
 
-            Console.WriteLine("The method to which the search condition is passed "
-                              + "through the delegate as a lambda expression:");
-            posElements = GetElementsViaCondition(array, item => item > 0);
+                posElements = GetPositiveElements(array);
 
-            Console.Write($"Positive number is: ");
-            ShowElements(posElements);
+                if (posElements.Length == 0)
+                {
+                    Console.WriteLine("No positive number(s).");
+                    continue;
+                }
 
-            Console.WriteLine("LINQ expression:");
-            posElements = array.Where(x => x > 0).ToArray();
+                Console.WriteLine("The method that directly implements the search:");
+                Console.Write($"Positive number(s) is: ");
+                ShowElements(posElements);
 
-            Console.Write($"Positive number is: ");
-            ShowElements(posElements);
+                Console.WriteLine("The method to which the search condition is passed "
+                                  + "through the delegate instance:");
+                Predicate<int> condition = new Predicate<int>(IsPositiveNumber);
+                posElements = GetElementsViaCondition(array, condition);
 
-            Console.ReadKey();
+                Console.Write($"Positive number(s) is: ");
+                ShowElements(posElements);
+
+                Console.WriteLine("The method to which the search condition is passed "
+                                  + "through the delegate as an anonymous method:");
+
+                GetElementsViaCondition(array, delegate (int item)
+                {
+                    return item > 0;
+                });
+
+                Console.Write($"Positive number(s) is: ");
+                ShowElements(posElements);
+
+                Console.WriteLine("The method to which the search condition is passed "
+                                  + "through the delegate as a lambda expression:");
+                posElements = GetElementsViaCondition(array, item => item > 0);
+
+                Console.Write($"Positive number(s) is: ");
+                ShowElements(posElements);
+
+                Console.WriteLine("LINQ expression:");
+                posElements = array.Where(x => x > 0).ToArray();
+
+                Console.Write($"Positive number(s) is: ");
+                ShowElements(posElements);
+
+            } while (IsContinue());
         }
 
         public static int[] CreateRandomArray()
@@ -75,7 +83,7 @@ namespace _46_I_Seek_You
         /// are extracted.</param>
         /// <returns>Returns true if the number is greater than zero, 
         /// otherwise false.</returns>
-        public static int[] GetPositiveElement(int[] array)
+        public static int[] GetPositiveElements(int[] array)
         {
             List<int> temp = new List<int>();
 
@@ -120,6 +128,30 @@ namespace _46_I_Seek_You
             return temp.ToArray();
         }
 
+        /// <summary>
+        /// Select to repeat demonstration.
+        /// </summary>
+        public static bool IsContinue()
+        {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
+                }
+            }
+        }
         /// <summary>
         /// Checks if a passed item is positive.
         /// </summary>
