@@ -13,6 +13,8 @@ namespace _45_To_Int_Or_Not_To_Int
                 "24test5",
                 "245",
                 "987",
+                "0",
+                "002",
                 "2 4 - 5",
                 "24.5",
                 "24,5",
@@ -51,7 +53,7 @@ namespace _45_To_Int_Or_Not_To_Int
             if (string.IsNullOrWhiteSpace(str))
                 return false;
 
-            if (str[0] == '-') return false;
+            if (str.StartsWith('-') || str == "0") return false;
 
             for (int i = 0; i < str.Length; i++)
             {

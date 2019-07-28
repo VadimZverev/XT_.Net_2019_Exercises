@@ -55,7 +55,9 @@ namespace _46_I_Seek_You
                 ShowElements(posElements);
 
                 Console.WriteLine("LINQ expression:");
-                posElements = array.Where(x => x > 0).ToArray();
+                posElements = (from item in array
+                               where item > 0
+                               select item).ToArray();
 
                 Console.Write($"Positive number(s) is: ");
                 ShowElements(posElements);
@@ -79,20 +81,41 @@ namespace _46_I_Seek_You
         /// <summary>
         /// Returns an array of positive integer elements.
         /// </summary>
+        /// <typeparam name="T">type array</typeparam>
         /// <param name="array">An array from which only positive elements 
         /// are extracted.</param>
         /// <returns>Returns true if the number is greater than zero, 
         /// otherwise false.</returns>
-        public static int[] GetPositiveElements(int[] array)
+        public static T[] GetPositiveElements<T>(T[] array)
         {
-            List<int> temp = new List<int>();
+            bool isPositive = true;
+            List<T> temp = new List<T>();
 
             foreach (var item in array)
             {
-                if (item > 0)
+                switch (item)
                 {
-                    temp.Add(item);
+                    case double d:
+                        isPositive = d > 0.0d;
+                        break;
+                    case float f:
+                        isPositive = f > 0.0f;
+                        break;
+                    case decimal m:
+                        isPositive = m > 0.0m;
+                        break;
                 }
+
+                if (!isPositive) continue;
+
+                string tempStr = item.ToString();
+
+                if (tempStr.StartsWith('-') || tempStr == "0")
+                {
+                    continue;
+                }
+
+                temp.Add(item);
             }
 
             return temp.ToArray();
@@ -102,22 +125,23 @@ namespace _46_I_Seek_You
         /// An array from which only elements that match the passed condition
         /// are extracted.
         /// </summary>
+        /// <typeparam name="T">type array</typeparam>
         /// <param name="array">An array from which only positive elements
         /// are extracted.</param>
         /// <param name="condition">The delegate, through which is passed a 
         /// condition extraction elements.</param>
         /// <returns>An array from which only elements that match the passed 
         /// condition are extracted.</returns>
-        public static int[] GetElementsViaCondition(int[] array, Predicate<int> condition)
+        public static T[] GetElementsViaCondition<T>(T[] array, Predicate<T> condition)
         {
             if (condition == null)
             {
                 throw new ArgumentException("Empty condition delegate.");
             }
 
-            List<int> temp = new List<int>();
+            List<T> temp = new List<T>();
 
-            foreach (int item in array)
+            foreach (T item in array)
             {
                 if (condition.Invoke(item))
                 {
@@ -163,10 +187,11 @@ namespace _46_I_Seek_You
         /// <summary>
         /// Shows array elements.
         /// </summary>
+        /// <typeparam name="T">type array</typeparam>
         /// <param name="array">array to extract elements</param>
-        public static void ShowElements(int[] array)
+        public static void ShowElements<T>(T[] array)
         {
-            foreach (int item in array)
+            foreach (T item in array)
             {
                 Console.Write(item + ", ");
             }
