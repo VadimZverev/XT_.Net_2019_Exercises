@@ -12,36 +12,15 @@ namespace _11_Rectangle
                 InputValue('A', out int a);
                 InputValue('B', out int b);
 
-                Console.WriteLine($"Площадь прямоугольника равна: {a * b}");
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
+                Console.WriteLine($"The area of the rectangle is: {a * b}");
 
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Ввод значения стороны прямоугольника.
+        /// Processes data entry, ignoring input punctuation and letters.
         /// </summary>
-        /// <param name="sideName">Имя стороны.</param>
-        /// <param name="side">Размер стороны.</param>
-        static void InputValue(char sideName, out int side)
-        {
-            while (true)
-            {
-                Console.Write($"Введите сторону {sideName}: ");
-                bool isParse = int.TryParse(GetIntFromConsole(), out side);
-
-                if (isParse && side > 0)
-                    break;
-                else
-                    Console.WriteLine($"{Environment.NewLine}Отрицательные числа и 0 недопустимы.");
-            }
-            Console.WriteLine();
-        }
-
-        /// <summary>
-        /// Обрабатывает ввод данных, игнорируя ввод знаков препинания и букв.
-        /// </summary>
-        /// <returns>Возвращает строковое значение, введёное с консоли.</returns>
+        /// <returns>Returns the string value entered from the console.</returns>
         static string GetIntFromConsole()
         {
             bool isFinished = false;
@@ -85,23 +64,47 @@ namespace _11_Rectangle
         }
 
         /// <summary>
-        /// Осуществляет выбор на повторение ввода.
+        /// Enter the value of the side of the rectangle.
         /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
-        static bool IsContinue()
+        /// <param name="sideName">Side name</param>
+        /// <param name="side">Side size</param>
+        static void InputValue(char sideName, out int side)
         {
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                Console.Write($"Enter side {sideName}: ");
+                bool isParse = int.TryParse(GetIntFromConsole(), out side);
 
-                if (isParse && value == 1)
+                if (isParse && side > 0)
+                    break;
+                else
+                    Console.WriteLine($"{Environment.NewLine}Negative numbers and 0 are not allowed.");
+            }
+            Console.WriteLine();
+        }
+
+        /// <summary>
+        /// Select to repeat demonstration.
+        /// </summary>
+        static bool IsContinue()
+        {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
     }

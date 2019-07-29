@@ -4,73 +4,94 @@ namespace _18_NoPositive
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             int[,,] array3D;
-            int demension, rows, columns, minValue, maxValue, value;
+            int dimension, rows, columns, minValue, maxValue, value;
 
             do
             {
-                Console.WriteLine("Введите число элементов в 3-х мерном массиве. ");
-                InputArray3DSize(out demension, out rows, out columns);
+                Console.WriteLine("Enter the number of elements in a 3-dimensional array.");
+                InputArray3DSize(out dimension, out rows, out columns);
 
                 ChoiceOptions(out value);
 
                 switch (value)
                 {
                     case 1:
-                        Console.Write("Введите минимальное значение элемента в массиве: ");
+                        Console.Write("Enter the minimum value of the element in the array: ");
                         InputValue(out minValue);
 
-                        Console.Write("Введите максимальное значение элемента в массиве: ");
+                        Console.Write("Enter the maximum value of the element in the array: ");
                         InputValue(out maxValue);
 
-                        array3D = Array3DCreate(demension, rows, columns, minValue, maxValue);
+                        array3D = CreateArray3D(dimension, rows, columns, minValue, maxValue);
                         break;
                     case 2:
-                        Console.Write("Введите минимальное значение элемента в массиве: ");
+                        Console.Write("Enter the minimum value of the element in the array: ");
                         InputValue(out minValue);
 
-                        array3D = Array3DCreate(demension, rows, columns, minValue);
+                        array3D = CreateArray3D(dimension, rows, columns, minValue);
                         break;
                     case 3:
-                        Console.Write("Введите максимальное значение элемента в массиве: ");
+                        Console.Write("Enter the maximum value of the element in the array: ");
                         InputValue(out maxValue);
 
-                        array3D = Array3DCreate(demension, rows, columns, maxValue: maxValue);
+                        array3D = CreateArray3D(dimension, rows, columns, maxValue: maxValue);
                         break;
                     default:
-                        array3D = Array3DCreate(demension, rows, columns);
+                        array3D = CreateArray3D(dimension, rows, columns);
                         break;
                 }
 
-                Console.WriteLine($"{Environment.NewLine}Массив до замены:");
-                Array3DShow(array3D);
+                Console.WriteLine($"{Environment.NewLine}Array before replacement:");
+                ShowArray3D(array3D);
 
-                Console.WriteLine("Массив после замены:");
+                Console.WriteLine("Array after replacement:");
 
                 SetZeroForPositiveValues(array3D);
-                Array3DShow(array3D);
+                ShowArray3D(array3D);
 
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Создаёт трёхмерный массив.
+        /// Selection of data entry options for creating an array.
         /// </summary>
-        /// <param name="demension">сколько измерений будет в массиве.</param>
-        /// <param name="rows">сколько строк будет в массиве.</param>
-        /// <param name="columns">сколько столбцов будет в массиве.</param>
-        /// <param name="minValue">минимальное число диапозона значений внутри каждой ячейки массива.</param>
-        /// <param name="maxValue">максимальное число диапозона значений внутри каждой ячейки массива.</param>
-        /// <returns>Возвращает объект трёхмерного массива.</returns>
-        static int[,,] Array3DCreate(int demension, int rows, int columns, int minValue = int.MinValue, int maxValue = int.MaxValue)
+        /// <param name="value">input value</param>
+        static void ChoiceOptions(out int value)
         {
-            int[,,] array = new int[demension, rows, columns];
+            while (true)
+            {
+                Console.WriteLine($"Input parameters:{Environment.NewLine}"
+                                  + $"\t1: Entering the minimum and maximum;{Environment.NewLine}"
+                                  + $"\t2: Only minimum;{Environment.NewLine}"
+                                  + $"\t3: Only maximum;{Environment.NewLine}"
+                                  + $"\t4: Default;");
+                Console.Write("Your choice: ");
+                if (int.TryParse(Console.ReadLine(), out value)
+                    && value > 0 && value <= 4)
+                    break;
+                else
+                    Console.WriteLine("Choose from the list of values.");
+            }
+        }
+
+        /// <summary>
+        /// Creates a three-dimensional array.
+        /// </summary>
+        /// <param name="dimension">how many dimensions will be in the array.</param>
+        /// <param name="rows">how many rows will be in the array.</param>
+        /// <param name="columns">how many columns will be in the array.</param>
+        /// <param name="minValue">the minimum number of a range of values within each cell of the array.</param>
+        /// <param name="maxValue">the maximum number of a range of values within each cell of the array.</param>
+        /// <returns>Returns a three-dimensional array object.</returns>
+        static int[,,] CreateArray3D(int dimension, int rows, int columns, int minValue = int.MinValue, int maxValue = int.MaxValue)
+        {
+            int[,,] array = new int[dimension, rows, columns];
             Random random = new Random();
 
-            for (int i = 0; i < demension; i++)
+            for (int i = 0; i < dimension; i++)
             {
                 for (int j = 0; j < rows; j++)
                 {
@@ -85,124 +106,85 @@ namespace _18_NoPositive
         }
 
         /// <summary>
-        /// Отображение массива в консоль.
+        /// Enter size with a check for a natural number greater than 0.
         /// </summary>
-        /// <param name="array">отображаемый массив.</param>
-        static void Array3DShow(int[,,] array)
+        static int InputSize()
         {
-            int dimension = array.GetUpperBound(0) + 1;
-            int rows = array.GetUpperBound(1) + 1;
-            int columns = array.GetUpperBound(2) + 1;
-
-            for (int i = 0; i < dimension; i++)
+            while (true)
             {
-                for (int j = 0; j < rows; j++)
-                {
-                    for (int k = 0; k < columns; k++)
-                    {
-                        Console.Write($"{array[i, j, k],3} ");
-                    }
-                    Console.WriteLine();
-                }
+                if (int.TryParse(Console.ReadLine(), out int value) && value > 0)
+                    return value;
+                else
+                    Console.WriteLine("Input must be greater than 0 or a positive integer.");
 
-                Console.WriteLine();
+                Console.Write("Enter: ");
             }
         }
 
         /// <summary>
-        /// Выбор варианта ввода данных для создания массива.
+        /// Entering numeric data with validation check for natural number.
         /// </summary>
-        /// <param name="value">вводимое значение.</param>
-        static void ChoiceOptions(out int value)
+        /// <param name="value">input data value</param>
+        static void InputValue(out int value)
         {
             while (true)
             {
-                Console.WriteLine("Параметры ввода:\n\t1: Ввод минимума и максимума;" +
-                    "\n\t2: Только минимум;\n\t3: Только максимум;\n\t4: По умолчанию;");
-                Console.Write("Ваш выбор: ");
-                if (int.TryParse(Console.ReadLine(), out value)
-                    && value > 0 && value <= 4)
+                if (int.TryParse(Console.ReadLine(), out value))
                     break;
                 else
-                    Console.WriteLine("Выберете из списка значений");
+                    Console.WriteLine("The input must be a natural integer.");
+
+                Console.Write("Enter: ");
             }
         }
-        
+
         /// <summary>
-        /// Ввод числовых данных с проверкой на корректность данных. Если вводимое число является размером массива, осуществляется проверка
-        /// на положительное и натуральное число. Иначе только на натуральное число.
+        /// Data entry three-dimensional array.
         /// </summary>
-        /// <param name="value">вводимое значение данных.</param>
-        /// <param name="isSizeArray">явяется ли вводимое значение размером массива. По умолчанию false.</param>
-        static void InputValue(out int value, bool isSizeArray = false)
+        /// <param name="dimension">number of dimension</param>
+        /// <param name="rows">number of rows</param>
+        /// <param name="columns">number of columns</param>
+        static void InputArray3DSize(out int dimension, out int rows, out int columns)
         {
-            while (true)
-            {
-                string str = Console.ReadLine();
+            Console.Write("Enter the number of dimension: ");
+            dimension = InputSize();
 
-                if (isSizeArray)
-                {
-                    if (int.TryParse(str, out value) && value > 0)
-                        break;
-                    else
-                        Console.WriteLine("Ввод должен быть больше 0 либо натуральное положительное целое число.");
-                }
-                else
-                {
-                    if (int.TryParse(str, out value))
-                        break;
-                    else
-                        Console.WriteLine("Вводимое должно быть натуральное целое число.");
-                }
+            Console.Write("Enter the number of rows: ");
+            rows = InputSize();
 
-                Console.Write("Введите: ");
-            }
-
-        }
-        
-        /// <summary>
-        /// Ввод данных трёхмерного массива.
-        /// </summary>
-        /// <param name="demension">число измерений.</param>
-        /// <param name="rows">число строк.</param>
-        /// <param name="columns">число столбцов.</param>
-        static void InputArray3DSize(out int demension, out int rows, out int columns)
-        {
-            Console.Write("Введите число измерений: ");
-            InputValue(out demension, true);
-
-            Console.Write("Введите число строк: ");
-            InputValue(out rows, true);
-
-            Console.Write("Введите число столбцов: ");
-            InputValue(out columns, true);
+            Console.Write("Enter the number of columns: ");
+            columns = InputSize();
         }
 
         /// <summary>
-        /// Осуществляет выбор на повторение ввода.
+        /// Select to repeat demonstration.
         /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
         static bool IsContinue()
         {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (isParse && value == 1)
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
 
         /// <summary>
-        /// Устанавливает все положительные значения в трёхмерном массиве в 0.
+        /// Sets all positive values in a three-dimensional array to zero.
         /// </summary>
-        /// <param name="array">изменяемый массив.</param>
+        /// <param name="array">mutable array</param>
         static void SetZeroForPositiveValues(int[,,] array)
         {
             int dimension = array.GetUpperBound(0) + 1;
@@ -221,6 +203,31 @@ namespace _18_NoPositive
                         }
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Display an array in the console.
+        /// </summary>
+        /// <param name="array">display array</param>
+        static void ShowArray3D(int[,,] array)
+        {
+            int dimension = array.GetUpperBound(0) + 1;
+            int rows = array.GetUpperBound(1) + 1;
+            int columns = array.GetUpperBound(2) + 1;
+
+            for (int i = 0; i < dimension; i++)
+            {
+                for (int j = 0; j < rows; j++)
+                {
+                    for (int k = 0; k < columns; k++)
+                    {
+                        Console.Write($"{array[i, j, k],3} ");
+                    }
+                    Console.WriteLine();
+                }
+
+                Console.WriteLine();
             }
         }
     }

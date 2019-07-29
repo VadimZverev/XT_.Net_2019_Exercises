@@ -6,9 +6,12 @@ namespace _15_SumOfNumbers
     {
         static void Main()
         {
-            Console.WriteLine($"Сумма целых чисел, делимая на 3 и 5 без остатка равна: {Sum()}");
+            Console.WriteLine($"The sum of integers divided by 3 and 5 is equal to: {Sum()}");
         }
 
+        /// <summary>
+        /// Returns the sum of integers divided by 3 and 5.
+        /// </summary>
         private static int Sum()
         {
             int result = 0;

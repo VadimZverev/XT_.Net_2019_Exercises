@@ -11,56 +11,77 @@ namespace _19_NonNegativeSum
 
             do
             {
-                Console.Write("Введите число элементов в массиве: ");
-                InputValue(out sizeArray, true);
+                Console.Write("Enter the number of elements in the array: ");
+                sizeArray = InputSize();
 
                 ChoiceOptions(out int value);
 
                 switch (value)
                 {
                     case 1:
-                        Console.Write("Введите минимальное значение элемента в массиве: ");
+                        Console.Write("Enter the minimum value of the element in the array: ");
                         InputValue(out minValue);
 
-                        Console.Write("Введите максимальное значение элемента в массиве: ");
+                        Console.Write("Enter the maximum value of the element in the array: ");
                         InputValue(out maxValue);
 
-                        array = ArrayCreate(sizeArray, minValue, maxValue);
+                        array = CreateArray(sizeArray, minValue, maxValue);
                         break;
                     case 2:
-                        Console.Write("Введите минимальное значение элемента в массиве: ");
+                        Console.Write("Enter the minimum value of the element in the array: ");
                         InputValue(out minValue);
 
-                        array = ArrayCreate(sizeArray, minValue);
+                        array = CreateArray(sizeArray, minValue);
                         break;
                     case 3:
-                        Console.Write("Введите максимальное значение элемента в массиве: ");
+                        Console.Write("Enter the maximum value of the element in the array: ");
                         InputValue(out maxValue);
 
-                        array = ArrayCreate(sizeArray, maxValue: maxValue);
+                        array = CreateArray(sizeArray, maxValue: maxValue);
                         break;
                     default:
-                        array = ArrayCreate(sizeArray);
+                        array = CreateArray(sizeArray);
                         break;
                 }
 
-                Console.Write("Массив: ");
-                ArrayShow(array);
+                Console.Write("Array: ");
+                ShowArray(array);
 
-                Console.WriteLine($"Сумма неотрицательных элементов в массиве: {NonNegativSum(array)}");
+                Console.WriteLine($"The sum of non-negative elements in the array: {NonNegativSum(array)}");
 
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Создаёт одномерный массив.
+        /// Selection of data entry options for creating an array.
         /// </summary>
-        /// <param name="sizeArray">размер массива.</param>
-        /// <param name="minValue">минимальное число диапозона значений внутри каждой ячейки массива.</param>
-        /// <param name="maxValue">максимальное число диапозона значений внутри каждой ячейки массива.</param>
-        /// <returns>Возвращает объект одномерного массива.</returns>
-        static int[] ArrayCreate(int sizeArray, int minValue = int.MinValue, int maxValue = int.MaxValue)
+        /// <param name="value">input value</param>
+        static void ChoiceOptions(out int value)
+        {
+            while (true)
+            {
+                Console.WriteLine($"Input parameters:{Environment.NewLine}"
+                                  + $"\t1: Entering the minimum and maximum;{Environment.NewLine}"
+                                  + $"\t2: Only minimum;{Environment.NewLine}"
+                                  + $"\t3: Only maximum;{Environment.NewLine}"
+                                  + $"\t4: Default;");
+                Console.Write("Your choice: ");
+                if (int.TryParse(Console.ReadLine(), out value)
+                    && value > 0 && value <= 4)
+                    break;
+                else
+                    Console.WriteLine("Choose from the list of values.");
+            }
+        }
+
+        /// <summary>
+        /// Creates a one-dimensional array.
+        /// </summary>
+        /// <param name="sizeArray">array size</param>
+        /// <param name="minValue">the minimum number of a range of values within each cell of the array.</param>
+        /// <param name="maxValue">maximum number of value ranges within each cell of the array.</param>
+        /// <returns>Returns a one-dimensional array object.</returns>
+        static int[] CreateArray(int sizeArray, int minValue = int.MinValue, int maxValue = int.MaxValue)
         {
             int[] array = new int[sizeArray];
             Random random = new Random();
@@ -72,97 +93,69 @@ namespace _19_NonNegativeSum
 
             return array;
         }
-        
-        /// <summary>
-        /// Отображение массива в консоль.
-        /// </summary>
-        /// <param name="array">отображаемый массив.</param>
-        static void ArrayShow(int[] array)
-        {
-            foreach (var item in array)
-            {
-                Console.Write(item + " ");
-            }
-
-            Console.WriteLine();
-        }
 
         /// <summary>
-        /// Выбор варианта ввода данных для создания массива.
+        /// Enter size with a check for a natural number greater than 0.
         /// </summary>
-        /// <param name="value">вводимое значение.</param>
-        static void ChoiceOptions(out int value)
+        static int InputSize()
         {
             while (true)
             {
-                Console.WriteLine("Параметры ввода:\n\t1: Ввод минимума и максимума;" +
-                    "\n\t2: Только минимум;\n\t3: Только максимум;\n\t4: По умолчанию;");
-                Console.Write("Ваш выбор: ");
-                if (int.TryParse(Console.ReadLine(), out value)
-                    && value > 0 && value <= 4)
+                if (int.TryParse(Console.ReadLine(), out int value) && value > 0)
+                    return value;
+                else
+                    Console.WriteLine("Input must be greater than 0 or a positive integer.");
+
+                Console.Write("Enter: ");
+            }
+        }
+
+        /// <summary>
+        /// Entering numeric data with validation check for natural number.
+        /// </summary>
+        /// <param name="value">input data value</param>
+        static void InputValue(out int value)
+        {
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out value))
                     break;
                 else
-                    Console.WriteLine("Выберете из списка значений");
-            }
-        }
-        
-        /// <summary>
-        /// Ввод числовых данных с проверкой на корректность данных. Если вводимое число является размером массива, осуществляется проверка
-        /// на положительное и натуральное число. Иначе только на натуральное число.
-        /// </summary>
-        /// <param name="size">вводимое значение данных.</param>
-        /// <param name="isSizeArray">явяется ли вводимое значение размером массива. По умолчанию false.</param>
-        static void InputValue(out int size, bool isSizeArray = false)
-        {
-            while (true)
-            {
-                string str = Console.ReadLine();
+                    Console.WriteLine("The input must be a natural integer.");
 
-                if (isSizeArray)
-                {
-                    if (int.TryParse(str, out size) && size > 0)
-                        break;
-                    else
-                        Console.WriteLine("Ввод должен быть больше 0 либо натуральное положительное целое число.");
-                }
-                else
-                {
-                    if (int.TryParse(str, out size))
-                        break;
-                    else
-                        Console.WriteLine("Вводимое должено быть натуральное целое число.");
-                }
-
-                Console.Write("Введите: ");
+                Console.Write("Enter: ");
             }
         }
 
         /// <summary>
-        /// Осуществляет выбор на повторение ввода.
+        /// Select to repeat demonstration.
         /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
         static bool IsContinue()
         {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (isParse && value == 1)
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
 
         /// <summary>
-        /// Вычисляет сумму не отрицальных значений в массиве.
+        /// Calculates the sum of non-negative values in an array.
         /// </summary>
-        /// <param name="array">массив для вычисления суммы.</param>
-        /// <returns></returns>
+        /// <param name="array">array to calculate the sum</param>
         static int NonNegativSum(int[] array)
         {
             int sum = 0;
@@ -176,6 +169,20 @@ namespace _19_NonNegativeSum
             }
 
             return sum;
+        }
+
+        /// <summary>
+        /// Display an array in the console.
+        /// </summary>
+        /// <param name="array">display array</param>
+        static void ShowArray(int[] array)
+        {
+            foreach (var item in array)
+            {
+                Console.Write(item + " ");
+            }
+
+            Console.WriteLine();
         }
     }
 }

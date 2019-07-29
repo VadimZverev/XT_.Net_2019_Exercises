@@ -10,21 +10,19 @@ namespace _111_AverageStringLength
 
             do
             {
-                Console.Write("Введите строку: ");
+                Console.Write("Enter the string: ");
                 string str = Console.ReadLine();
 
                 int averageLength = AverageStringLength(str);
+                Console.WriteLine($"The average words length is equal to {averageLength}");
 
-                Console.WriteLine($"Средняя длина слов равна {averageLength}");
-                Console.WriteLine("Повторить ввод? 1 - Да, 2 - Выход из программы");
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Вычисляет среднее значение слов в предложении.
+        /// Calculates the average value of words in a sentence.
         /// </summary>
-        /// <param name="str">проверяемая строка.</param>
-        /// <returns></returns>
+        /// <param name="str">check string</param>
         static int AverageStringLength(string str)
         {
             int sum = 0;
@@ -42,25 +40,28 @@ namespace _111_AverageStringLength
         }
 
         /// <summary>
-        /// Осуществляет выбор на повторение ввода.
+        /// Select to repeat demonstration.
         /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
         static bool IsContinue()
         {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
             while (true)
             {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
+                ConsoleKeyInfo key = Console.ReadKey(true);
 
-                if (isParse && value == 1)
+                switch (key.Key)
                 {
-                    Console.Clear();
-                    return true;
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
             }
         }
-
     }
 }

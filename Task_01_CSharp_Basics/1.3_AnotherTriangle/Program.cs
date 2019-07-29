@@ -8,70 +8,70 @@ namespace _13_AnotherTriangle
         {
             do
             {
-                int number = InputPositiveValue();
-                DrawAnotherTriangle(number);
+                int height = InputPositiveValue();
+                DrawTriangle(height);
 
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Возвращает положительное целое число.
+        /// Draws a triangle.
         /// </summary>
-        static int InputPositiveValue()
+        /// <param name="height">height</param>
+        static void DrawTriangle(int height)
         {
-            while (true)
+            for (int i = 1; i <= height; i++)
             {
-                Console.Write("Введите положительное число: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int number);
-
-                if (isParse && number > 0) return number;
-                else
+                for (int j = 1; j < height + i; j++)
                 {
-                    Console.WriteLine("Некорректный ввод(символы, отрицательные, 0 недопустимы)");
-                    continue;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Осуществляет выбор на повторение ввода.
-        /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
-        static bool IsContinue()
-        {
-            while (true)
-            {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
-
-                if (isParse && value == 1)
-                {
-                    Console.Clear();
-                    return true;
-                }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
-            }
-        }
-
-        /// <summary>
-        /// Отрисовывает треугольник.
-        /// </summary>
-        /// <param name="value">высота треугольника.</param>
-        static void DrawAnotherTriangle(int value)
-        {
-            for (int i = 1; i <= value; i++)
-            {
-                for (int j = 1; j < value + i; j++)
-                {
-                    if (j <= value - i)
+                    if (j <= height - i)
                         Console.Write(' ');
                     else
                         Console.Write('*');
                 }
 
                 Console.WriteLine();
+            }
+        }
+
+        /// <summary>
+        /// Returns a positive integer.
+        /// </summary>
+        static int InputPositiveValue()
+        {
+            while (true)
+            {
+                Console.Write("Enter a positive number: ");
+                bool isParse = int.TryParse(Console.ReadLine(), out int number);
+
+                if (isParse && number > 0) return number;
+
+                Console.WriteLine("Invalid input (characters, negative, 0 are not allowed)");
+            }
+        }
+
+        /// <summary>
+        /// Select to repeat demonstration.
+        /// </summary>
+        static bool IsContinue()
+        {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
+                }
             }
         }
     }

@@ -10,23 +10,48 @@ namespace _112_CharDoubler
 
             do
             {
-                Console.Write("Введите первую строку: ");
+                Console.Write("Enter the first line: ");
                 string firstStr = Console.ReadLine();
 
-                Console.Write("Введите вторую строку: ");
+                Console.Write("Enter the second line: ");
                 string secondStr = Console.ReadLine();
 
                 string result = ResultString(firstStr, secondStr);
-                Console.Write($"Результирующая строка: {result}");
-                Console.WriteLine("Начать заново? 1 - Да, 2 - Выход из программы");
+                Console.Write($"Result string: {result}");
+
             } while (IsContinue());
         }
 
         /// <summary>
-        /// Удаляет дублирующие символы.
+        /// Select to repeat demonstration.
         /// </summary>
-        /// <param name="changeString">редактируемая строка.</param>
-        /// <returns>Возвращает строку.</returns>
+        static bool IsContinue()
+        {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes duplicate characters.
+        /// </summary>
+        /// <param name="changeString">editable string</param>
+        /// <returns>Returns a string.</returns>
         static string RemoveDuplicateChars(string changeString)
         {
             string result = "";
@@ -37,11 +62,10 @@ namespace _112_CharDoubler
         }
 
         /// <summary>
-        /// Дублирует знаки, присутствующие в проверяемой строке.
+        /// Duplicates characters present in the string to be checked.
         /// </summary>
-        /// <param name="changeString">изменяемая строка.</param>
-        /// <param name="checkString">проверяющая строка.</param>
-        /// <returns></returns>
+        /// <param name="changeString">changeable string</param>
+        /// <param name="checkString">checking line</param>
         static string ResultString(string changeString, string checkString)
         {
             char[] checkChars = RemoveDuplicateChars(checkString).ToCharArray();
@@ -53,27 +77,6 @@ namespace _112_CharDoubler
             }
 
             return changeString;
-        }
-
-        /// <summary>
-        /// Осуществляет выбор на повторение ввода.
-        /// </summary>
-        /// <returns>Возвращает bool-значение.</returns>
-        static bool IsContinue()
-        {
-            while (true)
-            {
-                Console.Write("Ваш ввод: ");
-                bool isParse = int.TryParse(Console.ReadLine(), out int value);
-
-                if (isParse && value == 1)
-                {
-                    Console.Clear();
-                    return true;
-                }
-                else if (isParse && value == 2) return false;
-                else Console.WriteLine("Некорректный ввод, повторите ввод.");
-            }
         }
     }
 }
