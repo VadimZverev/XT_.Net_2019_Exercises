@@ -4,52 +4,75 @@ namespace _02_Simple
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
+        {
+            do
+            {
+                int number = InputValue();
+                ShowSimpleOrComposite(number);
+
+            } while (IsContinue());
+        }
+
+        /// <summary>
+        /// Enter integer value.
+        /// </summary>
+        /// <returns>Returns an integer value.</returns>
+        public static int InputValue()
         {
             while (true)
             {
-                Console.Write("Введите число (от 2 и выше): ");
+                Console.Write("Enter a number (from 2 and up): ");
                 bool isParse = int.TryParse(Console.ReadLine(), out int number);
 
-                if (isParse && number > 0 && number != 1)
-                {
-                    Simple(number);
-                }
-                else
-                {
-                    Console.WriteLine("Некорректный ввод(символы, отрицательные числа, 0 и 1 недопустимы)");
-                    continue;
-                }
+                if (isParse && number > 1)
+                    return number;
 
-                Console.WriteLine("Повторить ввод? 1 - Да, 2 - Выход из программы");
-                while (true)
-                {
-                    Console.Write("Ваш ввод: ");
-                    isParse = int.TryParse(Console.ReadLine(), out number);
+                Console.WriteLine("Invalid input, you must enter an integer number greater than one.");
+            }
+        }
 
-                    if (isParse && number == 1) break;
-                    else if (isParse && number == 2) return;
-                    else Console.WriteLine("Некорректный ввод, повторите ввод.");
+        /// <summary>
+        /// Select to repeat demonstration.
+        /// </summary>
+        public static bool IsContinue()
+        {
+            Console.WriteLine(Environment.NewLine
+                              + "Start over? 1 - Yes, 2 - Complete program.");
+
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(true);
+
+                switch (key.Key)
+                {
+                    case ConsoleKey.D1:
+                    case ConsoleKey.NumPad1:
+                        Console.Clear();
+                        return true;
+                    case ConsoleKey.D2:
+                    case ConsoleKey.NumPad2:
+                        return false;
                 }
             }
         }
 
-        static void Simple(int value)
+        /// <summary>
+        /// Displays whether the number being checked is simple or composite.
+        /// </summary>
+        /// <param name="value">number to be tested</param>
+        static void ShowSimpleOrComposite(int value)
         {
-            int count = 0;
-
-            for (int i = 1; i <= value; i++)
+            for (int i = 2; i < value; i++)
             {
                 if (value % i == 0)
-                    count++;
-
-                if (count > 2) break;
+                {
+                    Console.WriteLine("Number is composite.");
+                    return;
+                }
             }
 
-            if (count > 2)
-                Console.WriteLine("Число является составным");
-            else
-                Console.WriteLine("Число является простым");
+            Console.WriteLine("Number is simple.");
         }
     }
 }
