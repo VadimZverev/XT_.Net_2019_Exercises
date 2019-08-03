@@ -9,14 +9,19 @@ namespace _51_Backup_System
         {
             while (true)
             {
+                ConsoleKeyInfo btnStop;
                 object mode = ChooseMode();
 
                 if (mode is Watcher watcher)
                 {
                     watcher.FSWatcher.EnableRaisingEvents = true;
 
-                    Console.WriteLine("Press any key to stop...");
-                    Console.ReadKey(true);
+                    Console.WriteLine("Press Q to stop tracking changes...");
+
+                    do
+                    {
+                        btnStop = Console.ReadKey(true);
+                    } while (btnStop.Key != ConsoleKey.Q);
 
                     watcher.FSWatcher.EnableRaisingEvents = false;
                 }

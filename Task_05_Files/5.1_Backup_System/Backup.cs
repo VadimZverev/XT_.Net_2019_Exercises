@@ -71,8 +71,7 @@ namespace _51_Backup_System
 
                 var bFiles = backupFInfo
                                     .Where(x => x.DirectoryName == directoryName)
-                                    .OrderByDescending(x => x.Name)
-                                    .ToList();
+                                    .OrderByDescending(x => x.Name);
 
                 foreach (var bFile in bFiles)
                 {
