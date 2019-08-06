@@ -27,9 +27,11 @@ namespace _51_Backup_System
                 }
                 else if (mode is Backup backup)
                 {
-                    backup.DateTime = InputDateTime();
+                    backup.DateTimeRolback = InputDateTime();
                     backup.Run();
-                    Console.WriteLine($"Files for the current date and time {backup.DateTime.ToString("yyyy.MM.dd HH:mm:ss")} have been restored.");
+                    Console.WriteLine($"Files for the current date and time "
+                                      + $"{backup.DateTimeRolback.ToString("yyyy.MM.dd HH:mm:ss")}"
+                                      + $" have been restored.");
                 }
                 else
                     break;

@@ -10,14 +10,20 @@ namespace _51_Backup_System
     /// </summary>
     class Watcher
     {
+        #region Constructors
+
+        static Watcher()
+        {
+            PathBackup = $@"{Environment.CurrentDirectory}\Backup";
+            PathStorage = $@"{Environment.CurrentDirectory}\Storage";
+        }
+
         /// <summary>
         /// Initializes an instance of the tracking file to the default folder.
         /// </summary>
         public Watcher()
         {
-            string pathStorage = $@"{Environment.CurrentDirectory}\Storage";
-
-            FSWatcher = new FileSystemWatcher(pathStorage)
+            FSWatcher = new FileSystemWatcher(PathStorage)
             {
                 Filter = "*.*",
                 NotifyFilter = NotifyFilters.LastAccess
@@ -40,6 +46,7 @@ namespace _51_Backup_System
         public Watcher(string pathStorage, string pathBackup)
         {
             PathBackup = pathBackup;
+            PathStorage = pathStorage;
 
             FSWatcher = new FileSystemWatcher(pathStorage)
             {
@@ -57,14 +64,20 @@ namespace _51_Backup_System
             FSWatcher.Deleted += OnDeleted;
         }
 
+        #endregion
+
+        #region Properties
+
         /// <summary>
         /// Tracks changes in files and folders.
         /// </summary>
         public FileSystemWatcher FSWatcher { get; protected set; }
+        public static string PathBackup { get; private set; }
+        public static string PathStorage { get; private set; }
 
-        private static DirectoryInfo BackupDir => new DirectoryInfo(PathBackup);
+        #endregion
 
-        public static string PathBackup { get; private set; } = $@"{Environment.CurrentDirectory}\Backup";
+        #region Methods
 
         /// <summary>
         /// Creates a backup file.
@@ -82,11 +95,11 @@ namespace _51_Backup_System
 
                 if (subFolder == "")
                 {
-                    directory = $@"{PathBackup}\{fileName}\";
+                    directory = Path.Combine(PathBackup, fileName);
                 }
                 else
                 {
-                    directory = $@"{PathBackup}\{subFolder}\{fileName}\";
+                    directory = Path.Combine(PathBackup, subFolder, fileName);
                 }
 
                 if (!Directory.Exists(directory))
@@ -94,7 +107,7 @@ namespace _51_Backup_System
                     Directory.CreateDirectory(directory);
                 }
 
-                string destFullPath = $@"{directory}\{nameBackup}";
+                string destFullPath = Path.Combine(directory, nameBackup);
 
                 if (!File.Exists(destFullPath))
                     File.Copy(e.FullPath, destFullPath);
@@ -104,23 +117,30 @@ namespace _51_Backup_System
         /// <summary>
         /// Handles a file creation or modification event.
         /// </summary>
-        private static void OnChangedOrCreated(object source, FileSystemEventArgs e)
+        private static void OnChangedOrCreated(object sender, FileSystemEventArgs e)
         {
             if (e != null)
             {
-                var temp = new FileInfo(e.FullPath);
+                string extension = Path.GetExtension(e.FullPath);
 
-                if (temp.Attributes == FileAttributes.Directory)
+                if (extension == "" || extension == ".txt")
                 {
-                    string newPath = $@"{Environment.CurrentDirectory}\Backup\{e.Name}";
+                    (sender as FileSystemWatcher).EnableRaisingEvents = false;
 
-                    if (!Directory.Exists(newPath))
+                    FileInfo temp = new FileInfo(e.FullPath);
+
+                    if (temp.Attributes == FileAttributes.Directory)
                     {
-                        Directory.CreateDirectory(newPath);
+                        string newPath = Path.Combine(PathBackup, e.Name);
+
+                        if (!Directory.Exists(newPath))
+                            Directory.CreateDirectory(newPath);
                     }
+                    else if (temp.Extension == ".txt" && temp.Length != 0)
+                        CreateBackup(e);
+
+                    (sender as FileSystemWatcher).EnableRaisingEvents = true;
                 }
-                else if (temp.Length != 0)
-                    CreateBackup(e);
             }
         }
 
@@ -134,17 +154,23 @@ namespace _51_Backup_System
                 bool isTryAgain = false;
                 string nameFolder = "";
 
-                string backupPath = $@"{PathBackup}\{e.Name}";
+                string backupPath = Path.Combine(PathBackup, e.Name);
+
                 bool isExists = Directory.Exists(backupPath);
 
                 if (!isExists)
                 {
                     isTryAgain = true;
 
-                    nameFolder = e.Name.Substring(0, e.Name.LastIndexOf('.'));
-                    backupPath = $@"{PathBackup}\{nameFolder}";
+                    int lastIndex = e.Name.LastIndexOf('.');
 
-                    isExists = Directory.Exists(backupPath);
+                    if (lastIndex != -1)
+                    {
+                        nameFolder = e.Name.Substring(0, lastIndex);
+                        backupPath = Path.Combine(PathBackup, nameFolder);
+
+                        isExists = Directory.Exists(backupPath);
+                    }
                 }
 
                 if (isExists)
@@ -154,14 +180,14 @@ namespace _51_Backup_System
                     if (isContaintsSub)
                     {
                         string dateTimeRemoved = DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss");
-                        dateTimeRemoved = $@"Removed_{dateTimeRemoved}_";
+                        dateTimeRemoved = $"⚰{dateTimeRemoved}_";
 
                         if (isTryAgain)
                             nameFolder = nameFolder.Insert(nameFolder.LastIndexOf('\\') + 1, dateTimeRemoved);
                         else
                             nameFolder = e.Name.Insert(e.Name.LastIndexOf('\\') + 1, dateTimeRemoved);
 
-                        string newBackupPath = $@"{PathBackup}\{nameFolder}";
+                        string newBackupPath = Path.Combine(PathBackup, nameFolder);
 
                         Directory.Move(backupPath, newBackupPath);
                     }
@@ -174,55 +200,99 @@ namespace _51_Backup_System
         /// <summary>
         /// Handles a file rename event.
         /// </summary>
-        private static void OnRenamed(object source, RenamedEventArgs e)
+        private static void OnRenamed(object sender, RenamedEventArgs e)
         {
             if (e != null)
             {
-                var extension = Path.GetExtension(e.OldName);
+                (sender as FileSystemWatcher).EnableRaisingEvents = false;
 
-                if (extension != "")
+                FileSystemInfo fsInfo = new FileInfo(e.FullPath);
+
+                if (fsInfo.Attributes == FileAttributes.Directory)
                 {
-                    RenameDirectory(e);
+                    WorkWithDirectory(e);
+                }
+                else if (fsInfo.Attributes == FileAttributes.Archive
+                            && fsInfo.Extension == ".txt")
+                {
+                    RenameBackupDirectory(e);
                     CreateBackup(e);
+                }
+
+                (sender as FileSystemWatcher).EnableRaisingEvents = true;
+            }
+        }
+
+
+        private static void WorkWithDirectory(RenamedEventArgs e)
+        {
+            string oldPath = Path.Combine(PathBackup, e.OldName);
+
+            if (Directory.Exists(oldPath))
+            {
+                string newPath = Path.Combine(PathBackup, e.Name);
+
+                if (!Directory.Exists(newPath))
+                {
+                    try
+                    {
+                        Directory.Move(oldPath, newPath);
+                    }
+                    catch
+                    {
+                        Thread.Sleep(TimeSpan.FromSeconds(0.3));
+
+                        // There will be a rollback of changing the name of the original folder.
+                        Directory.Move(e.FullPath, e.OldFullPath);
+                    }
                 }
                 else
                 {
-                    string oldPath = $@"{Environment.CurrentDirectory}\Backup\{e.OldName}\";
+                    DirectoryInfo dInfo = new DirectoryInfo(oldPath);
 
-                    if (Directory.Exists(oldPath))
+                    if (dInfo.GetFileSystemInfos().Any())
                     {
-                        string newPath = $@"{Environment.CurrentDirectory}\Backup\{e.Name}\";
+                        string dest;
 
-                        try
+                        foreach (var item in dInfo.EnumerateFileSystemInfos())
                         {
-                            Directory.Move(oldPath, newPath);
-                        }
-                        catch
-                        {
-                            Thread.Sleep(TimeSpan.FromSeconds(0.3));
-
-                            // There will be a rollback of changing the name of the original folder.
-                            Directory.Move(e.FullPath, e.OldFullPath);
+                            if (item is DirectoryInfo dir)
+                            {
+                                dest = Path.Combine(newPath, dir.Name);
+                                dir.MoveTo(dest);
+                            }
+                            else if (item is FileInfo file)
+                            {
+                                dest = Path.Combine(newPath, file.Name);
+                                file.MoveTo(dest);
+                            }
                         }
                     }
+
+                    dInfo.Delete();
                 }
+            }
+            else
+            {
+                string newPath = Path.Combine(PathBackup, e.Name);
+                Directory.CreateDirectory(newPath);
             }
         }
 
         /// <summary>
         /// Renames a folder.
         /// </summary>
-        private static void RenameDirectory(RenamedEventArgs e)
+        private static void RenameBackupDirectory(RenamedEventArgs e)
         {
             if (e != null)
             {
-                var oldName = e.OldName.Substring(0, e.OldName.LastIndexOf('.'));
-                string oldPath = $@"{PathBackup}\{oldName}";
+                string oldName = e.OldName.Substring(0, e.OldName.LastIndexOf('.'));
+                string oldPath = Path.Combine(PathBackup, oldName);
 
                 if (!Directory.Exists(oldPath))
                 {
-                    var newName = Path.GetFileNameWithoutExtension(e.Name);
-                    string newPath = $@"{PathBackup}\{newName}";
+                    string newName = e.Name.Substring(0, e.Name.LastIndexOf('.'));
+                    string newPath = Path.Combine(PathBackup, newName);
 
                     if (!Directory.Exists(newPath))
                     {
@@ -232,7 +302,7 @@ namespace _51_Backup_System
                 else
                 {
                     string newFullPathDir;
-                    string oldFullPathDir = newFullPathDir = PathBackup;
+                    string oldFullPathDir;
 
                     string newNameFolder = Path.GetFileNameWithoutExtension(e.Name);
                     string oldNameFolder = Path.GetFileNameWithoutExtension(e.OldName);
@@ -241,19 +311,20 @@ namespace _51_Backup_System
 
                     if (subFolder == "")
                     {
-                        newFullPathDir += $@"\{newNameFolder}\";
-                        oldFullPathDir += $@"\{oldNameFolder}\";
+                        newFullPathDir = Path.Combine(PathBackup, newNameFolder);
+                        oldFullPathDir = Path.Combine(PathBackup, oldNameFolder);
                     }
                     else
                     {
-                        newFullPathDir += $@"\{subFolder}\{newNameFolder}\";
-                        oldFullPathDir += $@"\{subFolder}\{oldNameFolder}\";
+                        newFullPathDir = Path.Combine(PathBackup, subFolder, newNameFolder);
+                        oldFullPathDir = Path.Combine(PathBackup, subFolder, oldNameFolder);
                     }
 
                     Directory.Move(oldFullPathDir, newFullPathDir);
                 }
-
             }
         }
+
+        #endregion
     }
 }
