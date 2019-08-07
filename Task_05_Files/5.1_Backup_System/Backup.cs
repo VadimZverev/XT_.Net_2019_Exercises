@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace _51_Backup_System
 {
@@ -11,10 +12,14 @@ namespace _51_Backup_System
     /// </summary>
     class Backup
     {
-        readonly string backupPath;
-        readonly string storagePath;
+        #region Fields
+
+        private readonly string backupPath;
+        private readonly string storagePath;
+        private readonly Regex regex;
         private DirectoryInfo backupDir;
         private DirectoryInfo storageDir;
+        #endregion
 
         #region Constructors
 
@@ -29,6 +34,8 @@ namespace _51_Backup_System
 
             backupDir = new DirectoryInfo(backupPath);
             storageDir = new DirectoryInfo(storagePath);
+
+            regex = new Regex(@"\d{4}\.\d{2}\.\d{2}-\d{2}\.\d{2}\.\d{2}");
         }
 
         /// <summary>
@@ -44,14 +51,22 @@ namespace _51_Backup_System
 
             backupDir = new DirectoryInfo(backupPath);
             storageDir = new DirectoryInfo(storagePath);
+
+            regex = new Regex(@"\d{4}\.\d{2}\.\d{2}-\d{2}\.\d{2}\.\d{2}");
         }
 
         #endregion
+
+        #region Properties
 
         /// <summary>
         /// Date and time for the rollback.
         /// </summary>
         public DateTime DateTimeRolback { get; set; }
+
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// Starting the rollback process.
@@ -63,20 +78,22 @@ namespace _51_Backup_System
 
             foreach (FileInfo sFile in storageFInfo)
             {
-                FindBackupFile(sFile);
+                if (!FindBackupFile(sFile))
+                    sFile.Delete();
             }
 
-            FindRemoveFiles();
+            RecoverDeletedFiles();
         }
 
-        private void FindBackupFile(FileInfo sFile)
+
+        private bool FindBackupFile(FileInfo sFile)
         {
             string directoryName;
             string nameFileFolder = Path.GetFileNameWithoutExtension(sFile.Name);
 
             if (sFile.DirectoryName != storageDir.FullName)
             {
-                string nameFileSubFolders = sFile.Directory.FullName.Replace(storagePath, backupPath);
+                string nameFileSubFolders = sFile.DirectoryName.Replace(storagePath, backupPath);
                 directoryName = Path.Combine(nameFileSubFolders, nameFileFolder);
             }
             else
@@ -91,41 +108,40 @@ namespace _51_Backup_System
 
             foreach (FileInfo bFile in bFiles)
             {
-                string temp = bFile.Name.Substring(0, bFile.Name.LastIndexOf('-'));
-                bool isParse = DateTime.TryParseExact(temp,
-                                       "yyyy.MM.dd-HH.mm.ss",
-                                       null,
-                                       DateTimeStyles.None,
-                                       out DateTime date);
-
-                if (isParse)
+                if (TryGetDateTime(regex.Match(bFile.Name).Value, out DateTime date))
                 {
                     if (date <= DateTimeRolback)
                     {
-                        // reading contents from a backup file and writing to the original file.
-                        temp = File.ReadAllText(bFile.FullName);
-                        File.WriteAllText(sFile.FullName, temp);
+                        File.Copy(bFile.FullName, sFile.FullName, overwrite: true);
 
                         // extract name from backup file.
-                        temp = Path.GetFileNameWithoutExtension(bFile.Name);
-                        temp = temp.Substring(temp.LastIndexOf('-') + 1);
+                        string temp = bFile.Name.Substring(bFile.Name.LastIndexOf("🖬") + 2);
 
-                        directoryName
-                            = Path.Combine(bFile.Directory.Parent.FullName, temp);
+                        if (temp != sFile.Name)
+                        {
+                            temp = Path.GetFileNameWithoutExtension(temp);
 
-                        if (bFile.DirectoryName != directoryName)
-                            Directory.Move(bFile.DirectoryName, directoryName);
+                            directoryName = Path.Combine(bFile.Directory.Parent.FullName, temp);
 
-                        // used to form the full path for changing the file name to the backup file name.
-                        temp = Path.Combine(sFile.DirectoryName, $"{temp}{bFile.Extension}");
-                        sFile.MoveTo(temp);
-                        break;  // exit from the search cycle for a suitable backup and go to the next file.
+                            if (bFile.DirectoryName != directoryName)
+                                Directory.Move(bFile.DirectoryName, directoryName);
+
+                            // used to form the full path for changing the file name to the backup file name.
+                            temp = Path.Combine(sFile.DirectoryName, $"{temp}{bFile.Extension}");
+
+                            if (sFile.FullName != temp)
+                                sFile.MoveTo(temp);
+                        }
+
+                        return true;  // exit from the search cycle for a suitable backup and go to the next file.
                     }
                 }
             }
+
+            return false;
         }
 
-        private void FindRemoveFiles()
+        private void RecoverDeletedFiles()
         {
             List<string> lastViewDirectories = new List<string>();
             DirectoryInfo dInfo;
@@ -133,30 +149,28 @@ namespace _51_Backup_System
             do
             {
                 dInfo = backupDir.GetDirectories("⚰*", SearchOption.AllDirectories)
-                                    .OrderBy(x => x.FullName).FirstOrDefault(x =>
-                                    {
-                                        foreach (var item in lastViewDirectories)
-                                        {
-                                            if (x.FullName == item)
-                                                return false;
-                                        }
-                                        return true;
-                                    });
-
-                if (dInfo != null)
-                    lastViewDirectories.Add(dInfo.FullName);
+                                 .OrderBy(x => x.FullName)
+                                 .FirstOrDefault(x =>
+                                 {
+                                     foreach (var handledDirectory in lastViewDirectories)
+                                     {
+                                         if (x.FullName == handledDirectory)
+                                             return false;
+                                     }
+                                     return true;
+                                 });
 
                 if (dInfo != null)
                 {
-                    string str = dInfo.Name.Substring(1, dInfo.Name.LastIndexOf('_') - 1);
+                    lastViewDirectories.Add(dInfo.FullName);
 
-                    if (DateTime.TryParseExact(str, "yyyy.MM.dd-HH.mm.ss", null, DateTimeStyles.None, out DateTime dtRIP))
+                    if (TryGetDateTime(regex.Match(dInfo.Name).Value, out DateTime dtRIP))
                     {
                         if (dtRIP >= DateTimeRolback)
                         {
                             if (!dInfo.GetFiles("*.txt").Any())
                             {
-                                str = dInfo.Name.Substring(dInfo.Name.LastIndexOf('_') + 1);
+                                string str = dInfo.Name.Substring(dInfo.Name.LastIndexOf('_') + 1);
                                 string newPath = $@"{dInfo.Parent.FullName}\{str}";
 
                                 if (Directory.Exists(newPath))
@@ -200,28 +214,21 @@ namespace _51_Backup_System
 
                                 foreach (var bFile in bFiles)
                                 {
-                                    string temp = bFile.Name.Substring(0, bFile.Name.LastIndexOf('-'));
-                                    bool isParse = DateTime.TryParseExact(temp,
-                                                           "yyyy.MM.dd-HH.mm.ss",
-                                                           null,
-                                                           DateTimeStyles.None,
-                                                           out DateTime date);
-
-                                    if (isParse)
+                                    if (TryGetDateTime(regex.Match(bFile.Name).Value, out DateTime date))
                                     {
                                         if (date <= DateTimeRolback)
                                         {
                                             // extract name from backup file.
-                                            temp = Path.GetFileNameWithoutExtension(bFile.Name);
-                                            temp = temp.Substring(temp.LastIndexOf('-') + 1);
+                                            string temp = Path.GetFileNameWithoutExtension(bFile.Name);
+                                            temp = temp.Substring(bFile.Name.LastIndexOf("🖬") + 2);
 
-                                            string newFilePath = $@"{dInfo.Parent.FullName}\{temp}";
+                                            string newFilePath = Path.Combine(dInfo.Parent.FullName, temp);
 
                                             dInfo.MoveTo(newFilePath);
 
                                             string sourceFileName = Path.Combine(newFilePath, bFile.Name);
                                             string destFileName = newFilePath + ".txt";
-                                            
+
                                             destFileName = destFileName.Replace(backupPath, storagePath);
                                             File.Copy(sourceFileName, destFileName, true);
 
@@ -236,5 +243,14 @@ namespace _51_Backup_System
             }
             while (dInfo != null);
         }
+
+        /// <summary>
+        /// Pattern wrapper for extracting date and time: "yyyy.MM.dd-HH.mm.ss" .
+        /// </summary>
+        private bool TryGetDateTime(string dateTimeBackup, out DateTime result) =>
+            DateTime.TryParseExact(dateTimeBackup, "yyyy.MM.dd-HH.mm.ss",
+                                null, DateTimeStyles.None, out result);
+
+        #endregion
     }
 }

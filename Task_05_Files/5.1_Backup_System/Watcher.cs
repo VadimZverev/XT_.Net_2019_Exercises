@@ -12,10 +12,13 @@ namespace _51_Backup_System
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes static monitoring and backup paths.
+        /// </summary>
         static Watcher()
         {
-            PathBackup = $@"{Environment.CurrentDirectory}\Backup";
-            PathStorage = $@"{Environment.CurrentDirectory}\Storage";
+            PathBackup = Path.Combine(Environment.CurrentDirectory, "Backup");
+            PathStorage = Path.Combine(Environment.CurrentDirectory, "Storage");
         }
 
         /// <summary>
@@ -30,7 +33,8 @@ namespace _51_Backup_System
                                  | NotifyFilters.LastWrite
                                  | NotifyFilters.FileName
                                  | NotifyFilters.DirectoryName,
-                IncludeSubdirectories = true
+                IncludeSubdirectories = true,
+                InternalBufferSize = 65536
             };
 
             FSWatcher.Changed += OnChangedOrCreated;
@@ -55,7 +59,8 @@ namespace _51_Backup_System
                                  | NotifyFilters.LastWrite
                                  | NotifyFilters.FileName
                                  | NotifyFilters.DirectoryName,
-                IncludeSubdirectories = true
+                IncludeSubdirectories = true,
+                InternalBufferSize = 65536
             };
 
             FSWatcher.Changed += OnChangedOrCreated;
@@ -72,7 +77,15 @@ namespace _51_Backup_System
         /// Tracks changes in files and folders.
         /// </summary>
         public FileSystemWatcher FSWatcher { get; protected set; }
+
+        /// <summary>
+        /// Backup storage path.
+        /// </summary>
         public static string PathBackup { get; private set; }
+
+        /// <summary>
+        /// Folder monitoring path
+        /// </summary>
         public static string PathStorage { get; private set; }
 
         #endregion
@@ -89,28 +102,44 @@ namespace _51_Backup_System
                 string directory;
                 string dateTime = DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss");
                 string fileName = Path.GetFileNameWithoutExtension(e.Name);
-                string nameBackup = $"{dateTime}-{fileName}.txt";
+                string nameBackup = $"🖬{dateTime}🖬{fileName}.txt";
 
                 string subFolder = Path.GetDirectoryName(e.Name);
 
                 if (subFolder == "")
-                {
                     directory = Path.Combine(PathBackup, fileName);
-                }
                 else
-                {
                     directory = Path.Combine(PathBackup, subFolder, fileName);
-                }
 
                 if (!Directory.Exists(directory))
-                {
                     Directory.CreateDirectory(directory);
-                }
 
                 string destFullPath = Path.Combine(directory, nameBackup);
 
                 if (!File.Exists(destFullPath))
                     File.Copy(e.FullPath, destFullPath);
+            }
+        }
+
+        /// <summary>
+        /// Checks the file for readiness to open.
+        /// </summary>
+        /// <exception cref="IOException"></exception>
+        /// <param name="path">path of the checked file</param>
+        /// <returns>Returns true if the file is available; otherwise false.</returns>
+        private static bool IsFileReady(string path)
+        {
+            try
+            {
+                // If we can't open the file, it's still copying
+                using (var file = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+                {
+                    return true;
+                }
+            }
+            catch (IOException)
+            {
+                return false;
             }
         }
 
@@ -125,7 +154,6 @@ namespace _51_Backup_System
 
                 if (extension == "" || extension == ".txt")
                 {
-                    (sender as FileSystemWatcher).EnableRaisingEvents = false;
 
                     FileInfo temp = new FileInfo(e.FullPath);
 
@@ -137,9 +165,14 @@ namespace _51_Backup_System
                             Directory.CreateDirectory(newPath);
                     }
                     else if (temp.Extension == ".txt" && temp.Length != 0)
-                        CreateBackup(e);
+                    {
+                        (sender as FileSystemWatcher).EnableRaisingEvents = false;
 
-                    (sender as FileSystemWatcher).EnableRaisingEvents = true;
+                        if (IsFileReady(e.FullPath))
+                            CreateBackup(e);
+
+                        (sender as FileSystemWatcher).EnableRaisingEvents = true;
+                    }
                 }
             }
         }
@@ -151,48 +184,53 @@ namespace _51_Backup_System
         {
             if (e != null)
             {
-                bool isTryAgain = false;
-                string nameFolder = "";
+                string extension = Path.GetExtension(e.FullPath);
 
-                string backupPath = Path.Combine(PathBackup, e.Name);
-
-                bool isExists = Directory.Exists(backupPath);
-
-                if (!isExists)
+                if (extension == "" || extension == ".txt")
                 {
-                    isTryAgain = true;
+                    bool isTryAgain = false;
+                    string nameFolder = "";
 
-                    int lastIndex = e.Name.LastIndexOf('.');
+                    string backupPath = Path.Combine(PathBackup, e.Name);
 
-                    if (lastIndex != -1)
+                    bool isExists = Directory.Exists(backupPath);
+
+                    if (!isExists)
                     {
-                        nameFolder = e.Name.Substring(0, lastIndex);
-                        backupPath = Path.Combine(PathBackup, nameFolder);
+                        isTryAgain = true;
 
-                        isExists = Directory.Exists(backupPath);
+                        int lastIndex = e.Name.LastIndexOf('.');
+
+                        if (lastIndex != -1)
+                        {
+                            nameFolder = e.Name.Substring(0, lastIndex);
+                            backupPath = Path.Combine(PathBackup, nameFolder);
+
+                            isExists = Directory.Exists(backupPath);
+                        }
                     }
-                }
 
-                if (isExists)
-                {
-                    bool isContaintsSub = Directory.GetFileSystemEntries(backupPath).Any();
-
-                    if (isContaintsSub)
+                    if (isExists)
                     {
-                        string dateTimeRemoved = DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss");
-                        dateTimeRemoved = $"⚰{dateTimeRemoved}_";
+                        bool isContaintsSub = Directory.GetFileSystemEntries(backupPath).Any();
 
-                        if (isTryAgain)
-                            nameFolder = nameFolder.Insert(nameFolder.LastIndexOf('\\') + 1, dateTimeRemoved);
+                        if (isContaintsSub)
+                        {
+                            string dateTimeRemoved = DateTime.Now.ToString("yyyy.MM.dd-HH.mm.ss");
+                            dateTimeRemoved = $"⚰{dateTimeRemoved}_";
+
+                            if (isTryAgain)
+                                nameFolder = nameFolder.Insert(nameFolder.LastIndexOf('\\') + 1, dateTimeRemoved);
+                            else
+                                nameFolder = e.Name.Insert(e.Name.LastIndexOf('\\') + 1, dateTimeRemoved);
+
+                            string newBackupPath = Path.Combine(PathBackup, nameFolder);
+
+                            Directory.Move(backupPath, newBackupPath);
+                        }
                         else
-                            nameFolder = e.Name.Insert(e.Name.LastIndexOf('\\') + 1, dateTimeRemoved);
-
-                        string newBackupPath = Path.Combine(PathBackup, nameFolder);
-
-                        Directory.Move(backupPath, newBackupPath);
+                            Directory.Delete(backupPath);
                     }
-                    else
-                        Directory.Delete(backupPath);
                 }
             }
         }
@@ -204,8 +242,6 @@ namespace _51_Backup_System
         {
             if (e != null)
             {
-                (sender as FileSystemWatcher).EnableRaisingEvents = false;
-
                 FileSystemInfo fsInfo = new FileInfo(e.FullPath);
 
                 if (fsInfo.Attributes == FileAttributes.Directory)
@@ -215,15 +251,19 @@ namespace _51_Backup_System
                 else if (fsInfo.Attributes == FileAttributes.Archive
                             && fsInfo.Extension == ".txt")
                 {
+                    (sender as FileSystemWatcher).EnableRaisingEvents = false;
+
                     RenameBackupDirectory(e);
                     CreateBackup(e);
-                }
 
-                (sender as FileSystemWatcher).EnableRaisingEvents = true;
+                    (sender as FileSystemWatcher).EnableRaisingEvents = true;
+                }
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
         private static void WorkWithDirectory(RenamedEventArgs e)
         {
             string oldPath = Path.Combine(PathBackup, e.OldName);
@@ -320,7 +360,32 @@ namespace _51_Backup_System
                         oldFullPathDir = Path.Combine(PathBackup, subFolder, oldNameFolder);
                     }
 
-                    Directory.Move(oldFullPathDir, newFullPathDir);
+                    if (Directory.Exists(newFullPathDir))
+                    {
+                        if (Directory.GetFileSystemEntries(oldFullPathDir).Any())
+                        {
+                            string dest;
+                            DirectoryInfo dInfo = new DirectoryInfo(oldFullPathDir);
+
+                            foreach (var item in dInfo.EnumerateFileSystemInfos())
+                            {
+                                if (item is DirectoryInfo dir)
+                                {
+                                    dest = Path.Combine(newFullPathDir, dir.Name);
+                                    dir.MoveTo(dest);
+                                }
+                                else if (item is FileInfo file)
+                                {
+                                    dest = Path.Combine(newFullPathDir, file.Name);
+                                    file.MoveTo(dest);
+                                }
+                            }
+
+                            dInfo.Delete();
+                        }
+                    }
+                    else
+                        Directory.Move(oldFullPathDir, newFullPathDir);
                 }
             }
         }
