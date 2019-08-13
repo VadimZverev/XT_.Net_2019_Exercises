@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>_61_Users.BLL</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\6.1. Users.Common\6.1. Users.Common.csproj" />
+    <ProjectReference Include="..\6.1. Users.DAL\6.1. Users.DAL.csproj" />
+    <ProjectReference Include="..\6.1. Users.Entities\6.1. Users.Entities.csproj" />
+  </ItemGroup>
+
+</Project>
