@@ -13,8 +13,6 @@ namespace _61_Users.DAL
 
         private static List<User> Users { get; set; }
 
-        public int Count => Users.Count;
-
         public bool AddUser(User user)
         {
             if (!Users.Exists(u => u.Id == user.Id))
@@ -26,10 +24,10 @@ namespace _61_Users.DAL
             return false;
         }
 
-        public ICollection<User> GetAllUsers()
-        {
-            return Users;
-        }
+        public ICollection<User> GetAllUsers() => Users;
+
+        public User GetUser(string name) => 
+            Users.FirstOrDefault(u => u.Name == name);
 
         public bool RemoveUser(string name)
         {
@@ -40,5 +38,7 @@ namespace _61_Users.DAL
 
             return Users.Remove(user);
         }
+
+        void IStorable.Save() { }
     }
 }

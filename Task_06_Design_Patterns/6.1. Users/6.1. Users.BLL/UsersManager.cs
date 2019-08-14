@@ -7,11 +7,11 @@ namespace _61_Users.BLL
 {
     public static class UsersManager
     {
-        public static IStorable MemoryStorage => Dependencies.UsersStorage;
+        public static IStorable Storage => Dependencies.UsersStorage;
 
         public static bool AddUser(string name, DateTime dateOfBirth)
         {
-            return MemoryStorage.AddUser(
+            return Storage.AddUser(
                         new User()
                         {
                             Name = name,
@@ -21,12 +21,17 @@ namespace _61_Users.BLL
 
         public static IEnumerable<User> GetAllUsers()
         {
-            return MemoryStorage.GetAllUsers();
+            return Storage.GetAllUsers();
         }
 
         public static bool RemoveUser(string name)
         {
-            return MemoryStorage.RemoveUser(name);
+            return Storage.RemoveUser(name);
+        }
+
+        public static void Save()
+        {
+            Storage.Save();
         }
     }
 }

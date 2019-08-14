@@ -5,6 +5,11 @@ namespace _61_Users.Common
 {
     public static class Dependencies
     {
-        public static IStorable UsersStorage { get; } = new MemoryStorage();
+        static Dependencies()
+        {
+            UsersStorage = new FileStorage();
+        }
+
+        public static IStorable UsersStorage { get; }
     }
 }

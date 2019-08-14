@@ -16,7 +16,9 @@ namespace _61_Users.PL
             {
                 select = SelectOption();
 
-            } while (select != 'q');
+            } while (select != 'q' && select != 'й');
+
+            UsersManager.Save();
         }
 
 
@@ -116,7 +118,7 @@ namespace _61_Users.PL
             {
                 Console.WriteLine();
 
-                foreach (User user in UsersManager.GetAllUsers())
+                foreach (User user in u)
                 {
                     Console.WriteLine($"User: {user.Name}{Environment.NewLine}"
                                       + $"ID: {user.Id}{Environment.NewLine}"

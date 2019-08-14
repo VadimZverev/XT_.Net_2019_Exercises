@@ -9,5 +9,7 @@ namespace _61_Users.Entities
         ICollection<User> GetAllUsers();
 
         bool RemoveUser(string name);
+
+        void Save();
     }
 }
