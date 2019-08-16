@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 
-namespace _61_Users.Entities
+namespace Users_and_Awards.Entities
 {
     public class User
     {
         public User()
         {
             Id = Guid.NewGuid();
+            Awards = new List<Award>();
         }
 
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         public string Name { get; set; }
 
@@ -28,5 +30,7 @@ namespace _61_Users.Entities
                 return --age;
             }
         }
+
+        public ICollection<Award> Awards { get; set; }
     }
 }

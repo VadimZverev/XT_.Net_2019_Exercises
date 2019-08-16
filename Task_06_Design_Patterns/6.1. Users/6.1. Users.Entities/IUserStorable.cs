@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace _61_Users.Entities
+namespace Users_and_Awards.Entities
 {
-    public interface IStorable
+    public interface IUserStorable
     {
         bool AddUser(User user);
+
+        User GetUser(string name);
 
         ICollection<User> GetAllUsers();
 

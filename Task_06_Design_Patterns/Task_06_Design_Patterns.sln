@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.1. Users.PL", "6.1. Users\6.1. Users.PL\6.1. Users.PL.csproj", "{B147001E-738A-4CF0-8F7A-E3639F9F53CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Users_and_Awards.PL", "6.1. Users\6.1. Users.PL\Users_and_Awards.PL.csproj", "{B147001E-738A-4CF0-8F7A-E3639F9F53CB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PL", "PL", "{6F65DC60-6525-4765-B51F-6A5D4EFA900F}"
 EndProject
@@ -13,15 +13,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BLL", "BLL", "{958E8C81-9B9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{66922E5F-873A-42D8-999F-E48209AF97BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.1. Users.BLL", "6.1. Users\6.1. Users.BLL\6.1. Users.BLL.csproj", "{F9D99C71-35DB-417F-860E-9F0852212ED4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Users_and_Awards.BLL", "6.1. Users\6.1. Users.BLL\Users_and_Awards.BLL.csproj", "{F9D99C71-35DB-417F-860E-9F0852212ED4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.1. Users.Common", "6.1. Users\6.1. Users.Common\6.1. Users.Common.csproj", "{AF1DFEFE-A7A6-427D-92F4-D217E5DCDC57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Users_and_Awards.Common", "6.1. Users\6.1. Users.Common\Users_and_Awards.Common.csproj", "{AF1DFEFE-A7A6-427D-92F4-D217E5DCDC57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.1. Users.Entities", "6.1. Users\6.1. Users.Entities\6.1. Users.Entities.csproj", "{C99A4E53-DC86-46FB-A7B0-56AD874B0FE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Users_and_Awards.Entities", "6.1. Users\6.1. Users.Entities\Users_and_Awards.Entities.csproj", "{C99A4E53-DC86-46FB-A7B0-56AD874B0FE7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "6.1. Users.DAL", "6.1. Users\6.1. Users.DAL\6.1. Users.DAL.csproj", "{FDAD63E6-40E0-4B50-93AB-C39DDBBA16C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Users_and_Awards.DAL", "6.1. Users\6.1. Users.DAL\Users_and_Awards.DAL.csproj", "{FDAD63E6-40E0-4B50-93AB-C39DDBBA16C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "6.1_Users", "6.1_Users", "{5CA80F58-3CE2-4953-9218-F0A3FCF45D01}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Users and Awards", "Users and Awards", "{5CA80F58-3CE2-4953-9218-F0A3FCF45D01}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

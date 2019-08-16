@@ -1,15 +1,19 @@
-﻿using _61_Users.DAL;
-using _61_Users.Entities;
+﻿using Users_and_Awards.DAL;
+using Users_and_Awards.Entities;
 
-namespace _61_Users.Common
+namespace Users_and_Awards.Common
 {
     public static class Dependencies
     {
         static Dependencies()
         {
             UsersStorage = new FileStorage();
+
+            AwardsStorage = AwardsStorage = UsersStorage as FileStorage;
         }
 
-        public static IStorable UsersStorage { get; }
+        public static IAwardStorable AwardsStorage { get; }
+        public static IUserStorable UsersStorage { get; }
+        public static IAwardUserStorable AwardUsersStorage { get; set; }
     }
 }

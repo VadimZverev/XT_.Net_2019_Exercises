@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RootNamespace>_61_Users.DAL</RootNamespace>
+    <RootNamespace>Users_and_Awards.DAL</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\6.1. Users.Entities\6.1. Users.Entities.csproj" />
+    <ProjectReference Include="..\6.1. Users.Entities\Users_and_Awards.Entities.csproj" />
   </ItemGroup>
 
 </Project>
