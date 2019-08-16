@@ -2,7 +2,7 @@
 
 namespace Users_and_Awards.Entities
 {
-    public interface IAwardUserStorable
+    public interface IAwardUserRepository
     {
         bool AddAwardUser(AwardUser awardUser);
 
@@ -11,7 +11,5 @@ namespace Users_and_Awards.Entities
         AwardUser GetAwardUser(string awardId, string userId);
 
         bool RemoveAwardUser(string awardId, string userId);
-
-        void Save();
     }
 }

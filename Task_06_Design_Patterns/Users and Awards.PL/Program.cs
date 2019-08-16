@@ -19,7 +19,7 @@ namespace Users_and_Awards.PL
 
             } while (select != 'q' && select != 'й');
 
-            UsersManager.Save();
+            DataManager.Save();
         }
 
 
@@ -53,7 +53,7 @@ namespace Users_and_Awards.PL
                         return input.KeyChar;
                     case ConsoleKey.D3:
                     case ConsoleKey.NumPad3:
-                        AddAwardToUser();
+                        AddAwardUser();
                         return input.KeyChar;
                     case ConsoleKey.D4:
                     case ConsoleKey.NumPad4:
@@ -63,13 +63,17 @@ namespace Users_and_Awards.PL
                     case ConsoleKey.NumPad5:
                         RemoveUser();
                         return input.KeyChar;
+                    case ConsoleKey.D6:
+                    case ConsoleKey.NumPad6:
+                        RemoveAwardUser();
+                        return input.KeyChar;
                     case ConsoleKey.D7:
                     case ConsoleKey.NumPad7:
-                        ShowAwards(UsersManager.GetAllAwards());
+                        ShowAwards(DataManager.GetAllAwards());
                         return input.KeyChar;
                     case ConsoleKey.D8:
                     case ConsoleKey.NumPad8:
-                        ShowUsers(UsersManager.GetAllUsers());
+                        ShowUsers(DataManager.GetAllUsers());
                         return input.KeyChar;
                     case ConsoleKey.Q:
                         return input.KeyChar;
@@ -77,7 +81,7 @@ namespace Users_and_Awards.PL
             }
         }
 
-        private static void AddAwardToUser()
+        private static void RemoveAwardUser()
         {
             string name;
             string title;
@@ -105,7 +109,47 @@ namespace Users_and_Awards.PL
 
             } while (true);
 
-            if (UsersManager.AddAwardToUser(name, title))
+            if (DataManager.RemoveAwardToUser(name, title))
+            {
+                Console.WriteLine($"Award \"{title}\" removed to User \"{name}\" successful.{Environment.NewLine}");
+            }
+            else
+            {
+                Console.WriteLine("The award has not been added to the user.");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void AddAwardUser()
+        {
+            string name;
+            string title;
+
+            do
+            {
+                Console.WriteLine();
+                Console.Write("Enter name: ");
+                name = Console.ReadLine();
+
+                if (name != "") break;
+
+                Console.WriteLine("The name must not be empty.");
+
+            } while (true);
+
+            do
+            {
+                Console.Write("Enter title: ");
+                title = Console.ReadLine();
+
+                if (title != "") break;
+
+                Console.WriteLine("The title must not be empty.");
+
+            } while (true);
+
+            if (DataManager.AddAwardToUser(name, title))
             {
                 Console.WriteLine($"Award \"{title}\" added to User \"{name}\" successful.{Environment.NewLine}");
             }
@@ -133,7 +177,7 @@ namespace Users_and_Awards.PL
 
             } while (true);
 
-            if (UsersManager.AddAward(title))
+            if (DataManager.AddAward(title))
                 Console.WriteLine($"Award added successful.{Environment.NewLine}");
             else
                 Console.WriteLine("Award already exist.");
@@ -162,7 +206,7 @@ namespace Users_and_Awards.PL
                 if (DateTime.TryParseExact(Console.ReadLine(), "dd.MM.yyyy", null,
                     DateTimeStyles.None, out DateTime dateOfBirth))
                 {
-                    if (UsersManager.AddUser(name, dateOfBirth))
+                    if (DataManager.AddUser(name, dateOfBirth))
                         Console.WriteLine($"User added successful.{Environment.NewLine}");
                     else
                         Console.WriteLine("User already exist.");
@@ -191,7 +235,7 @@ namespace Users_and_Awards.PL
 
             } while (true);
 
-            if (UsersManager.RemoveAward(title))
+            if (DataManager.RemoveAward(title))
                 Console.WriteLine($"Award was deleted.{Environment.NewLine}");
             else
                 Console.WriteLine($"Award cannot found with this title.{Environment.NewLine}");
@@ -214,7 +258,7 @@ namespace Users_and_Awards.PL
 
             } while (true);
 
-            if (UsersManager.RemoveUser(name))
+            if (DataManager.RemoveUser(name))
                 Console.WriteLine($"User was deleted.{Environment.NewLine}");
             else
                 Console.WriteLine($"User cannot found with this name.{Environment.NewLine}");

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\6.1. Users.Entities\Users_and_Awards.Entities.csproj" />
+    <ProjectReference Include="..\Users and Awards.Entities\Users_and_Awards.Entities.csproj" />
   </ItemGroup>
 
 </Project>

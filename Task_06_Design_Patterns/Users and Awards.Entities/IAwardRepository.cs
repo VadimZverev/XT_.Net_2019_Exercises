@@ -2,7 +2,7 @@
 
 namespace Users_and_Awards.Entities
 {
-    public interface IAwardStorable
+    public interface IAwardRepository
     {
         bool AddAward(Award award);
 
@@ -11,7 +11,5 @@ namespace Users_and_Awards.Entities
         ICollection<Award> GetAllAwards();
 
         bool RemoveAward(string title);
-
-        void Save();
     }
 }

@@ -1,15 +1,17 @@
 ﻿using Users_and_Awards.Common;
 using Users_and_Awards.Entities;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Users_and_Awards.BLL
 {
-    public static class UsersManager
+    public static class DataManager
     {
-        public static IAwardStorable AwardsStorage => Dependencies.AwardsStorage;
-        public static IUserStorable UsersStorage => Dependencies.UsersStorage;
-        public static IAwardUserStorable AwardUserStorage => Dependencies.AwardUsersStorage;
+        private static IAwardRepository AwardsStorage => Dependencies.AwardsStorage;
+        private static IUserRepository UsersStorage => Dependencies.UsersStorage;
+        private static IAwardUserRepository AwardUserStorage => Dependencies.AwardUsersStorage;
+        private static ISaved SaveToFile => Dependencies.SaveToFile;
 
         public static bool AddAwardToUser(string userName, string awardTitle)
         {
@@ -68,7 +70,23 @@ namespace Users_and_Awards.BLL
 
         public static bool RemoveAward(string title)
         {
-            return AwardsStorage.RemoveAward(title);
+            Award award = AwardsStorage.GetAward(title);
+
+            if (award != null && AwardsStorage.RemoveAward(title))
+            {
+                var users = UsersStorage.GetAllUsers()
+                                        .Where(u => u.Awards.Contains(award));
+
+                foreach (User user in users)
+                {
+                    user.Awards.Remove(award);
+                    AwardUserStorage.RemoveAwardUser(award.Id.ToString(), user.Id.ToString());
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public static bool RemoveUser(string name)
@@ -83,18 +101,18 @@ namespace Users_and_Awards.BLL
 
             if (award != null && user != null)
             {
-                user.Awards.Remove(award);
-                award.Users.Remove(user);
+                if (AwardUserStorage.RemoveAwardUser(award.Id.ToString(), user.Id.ToString()))
+                {
+                    user.Awards.Remove(award);
+                    award.Users.Remove(user);
 
-                return true;
+                    return true;
+                }
             }
-            else
-                return false;
+
+            return false;
         }
 
-        public static void Save()
-        {
-            AwardUserStorage.Save();
-        }
+        public static void Save() => SaveToFile.Save();
     }
 }

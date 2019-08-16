@@ -2,7 +2,7 @@
 
 namespace Users_and_Awards.Entities
 {
-    public interface IUserStorable
+    public interface IUserRepository
     {
         bool AddUser(User user);
 
@@ -11,7 +11,5 @@ namespace Users_and_Awards.Entities
         ICollection<User> GetAllUsers();
 
         bool RemoveUser(string name);
-
-        void Save();
     }
 }
