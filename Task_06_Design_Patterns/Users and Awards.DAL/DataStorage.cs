@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using Users_and_Awards.Entities;
@@ -10,7 +11,8 @@ namespace Users_and_Awards.DAL
     {
         public DataStorage()
         {
-            GetData();
+            string storageMode = ConfigurationManager.AppSettings["Storage Mode"];
+            GetData(storageMode);
         }
 
         public AwardsStorage AwardsStorage { get; private set; }
@@ -49,52 +51,57 @@ namespace Users_and_Awards.DAL
             File.WriteAllText("DataBase.json", dateBase);
         }
 
-        private void GetData()
+        private void GetData(string storageMode)
         {
-            if (File.Exists("DataBase.json"))
+            if (storageMode == "File")
             {
-                var db = new
+                string dataBase = ConfigurationManager.AppSettings["DataBase"];
+
+                if (File.Exists(dataBase))
                 {
-                    Awards = new List<Award>(),
-                    Users = new List<User>(),
-                    AwardUsers = new List<AwardUser>()
-                };
-
-                string dateBase = File.ReadAllText("DataBase.json");
-                db = JsonConvert.DeserializeAnonymousType(dateBase, db);
-
-                if (db.AwardUsers.Count != 0)
-                {
-                    for (int i = 0; i < db.AwardUsers.Count; i++)
+                    var db = new
                     {
-                        db.AwardUsers[i].Award = 
-                            db.Awards.FirstOrDefault(a => a.Id == db.AwardUsers[i].AwardId);
+                        Awards = new List<Award>(),
+                        Users = new List<User>(),
+                        AwardUsers = new List<AwardUser>()
+                    };
 
-                        db.AwardUsers[i].User = 
-                            db.Users.FirstOrDefault(u => u.Id == db.AwardUsers[i].UserId);
-                    }
+                    string dateBase = File.ReadAllText("DataBase.json");
+                    db = JsonConvert.DeserializeAnonymousType(dateBase, db);
 
-                    for (int i = 0; i < db.Users.Count; i++)
+                    if (db.AwardUsers.Count != 0)
                     {
-                        var awards = db.AwardUsers.Where(au => au.UserId == db.Users[i].Id)
-                                                  .Select(au => au.Award)
-                                                  .ToList();
+                        for (int i = 0; i < db.AwardUsers.Count; i++)
+                        {
+                            db.AwardUsers[i].Award =
+                                db.Awards.FirstOrDefault(a => a.Id == db.AwardUsers[i].AwardId);
 
-                        db.Users[i].Awards = awards;
+                            db.AwardUsers[i].User =
+                                db.Users.FirstOrDefault(u => u.Id == db.AwardUsers[i].UserId);
+                        }
+
+                        for (int i = 0; i < db.Users.Count; i++)
+                        {
+                            var awards = db.AwardUsers.Where(au => au.UserId == db.Users[i].Id)
+                                                      .Select(au => au.Award)
+                                                      .ToList();
+
+                            db.Users[i].Awards = awards;
+                        }
+
+                        for (int i = 0; i < db.Awards.Count; i++)
+                        {
+                            var users = db.AwardUsers.Where(au => au.AwardId == db.Awards[i].Id)
+                                                      .Select(au => au.User)
+                                                      .ToList();
+
+                            db.Awards[i].Users = users;
+                        }
+
+                        AwardsStorage = new AwardsStorage(db.Awards);
+                        UsersStorage = new UsersStorage(db.Users);
+                        AwardUsersStorage = new AwardUsersStorage(db.AwardUsers);
                     }
-
-                    for (int i = 0; i < db.Awards.Count; i++)
-                    {
-                        var users = db.AwardUsers.Where(au => au.AwardId == db.Awards[i].Id)
-                                                  .Select(au => au.User)
-                                                  .ToList();
-
-                        db.Awards[i].Users = users;
-                    }
-
-                    AwardsStorage = new AwardsStorage(db.Awards);
-                    UsersStorage = new UsersStorage(db.Users);
-                    AwardUsersStorage = new AwardUsersStorage(db.AwardUsers);
                 }
             }
             else

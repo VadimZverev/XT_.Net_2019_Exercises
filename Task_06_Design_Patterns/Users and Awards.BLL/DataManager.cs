@@ -91,7 +91,23 @@ namespace Users_and_Awards.BLL
 
         public static bool RemoveUser(string name)
         {
-            return UsersStorage.RemoveUser(name);
+            User user = UsersStorage.GetUser(name);
+
+            if (user != null && UsersStorage.RemoveUser(name))
+            {
+                var awards = AwardsStorage.GetAllAwards()
+                                          .Where(a => a.Users.Contains(user));
+
+                foreach (Award award in awards)
+                {
+                    award.Users.Remove(user);
+                    AwardUserStorage.RemoveAwardUser(award.Id.ToString(), user.Id.ToString());
+                }
+
+                return true;
+            }
+
+            return false;
         }
 
         public static bool RemoveAwardToUser(string userName, string awardTitle)
