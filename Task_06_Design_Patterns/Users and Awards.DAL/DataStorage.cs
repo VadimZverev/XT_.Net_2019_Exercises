@@ -9,10 +9,12 @@ namespace Users_and_Awards.DAL
 {
     public class DataStorage : ISaved
     {
+        private string _storageMode;
+
         public DataStorage()
         {
-            string storageMode = ConfigurationManager.AppSettings["Storage Mode"];
-            GetData(storageMode);
+            _storageMode = ConfigurationManager.AppSettings["Storage Mode"];
+            GetData(_storageMode);
         }
 
         public AwardsStorage AwardsStorage { get; private set; }
@@ -21,39 +23,42 @@ namespace Users_and_Awards.DAL
 
         public void Save()
         {
-            var awards = from a in AwardsStorage.GetAllAwards()
-                         select new
-                         {
-                             a.Id,
-                             a.Title
-                         };
+            if (_storageMode == "File")
+            {
+                var awards = from a in AwardsStorage.GetAllAwards()
+                             select new
+                             {
+                                 a.Id,
+                                 a.Title
+                             };
 
-            var users = from u in UsersStorage.GetAllUsers()
-                        select new
-                        {
-                            u.Id,
-                            u.Name,
-                            u.DateOfBirth,
-                            u.Age
-                        };
-
-            var awardUser = from au in AwardUsersStorage.GetAllAwardUser()
+                var users = from u in UsersStorage.GetAllUsers()
                             select new
                             {
-                                au.AwardId,
-                                au.UserId
+                                u.Id,
+                                u.Name,
+                                u.DateOfBirth,
+                                u.Age
                             };
 
-            var db = new { Awards = awards, Users = users, AwardUsers = awardUser };
+                var awardUser = from au in AwardUsersStorage.GetAllAwardUser()
+                                select new
+                                {
+                                    au.AwardId,
+                                    au.UserId
+                                };
 
-            string dateBase = JsonConvert.SerializeObject(db, Formatting.Indented);
+                var db = new { Awards = awards, Users = users, AwardUsers = awardUser };
 
-            File.WriteAllText("DataBase.json", dateBase);
+                string dateBase = JsonConvert.SerializeObject(db, Formatting.Indented);
+
+                File.WriteAllText("DataBase.json", dateBase); 
+            }
         }
 
         private void GetData(string storageMode)
         {
-            if (storageMode == "File")
+            if (_storageMode == "File")
             {
                 string dataBase = ConfigurationManager.AppSettings["DataBase"];
 
