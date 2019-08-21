@@ -1,4 +1,4 @@
-div#menu{
+section#menu{
     width: 200px;
 }
 
@@ -15,7 +15,6 @@ ul{
 li{
     color: brown;
     font-weight: 550;
-    letter-spacing: -0.14ch;
     margin: 5px;
     padding: 2px 0px 3px 5px;
 }
