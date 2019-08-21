@@ -43,3 +43,6 @@ Project Structure:
 7. Task_06_Design_Patterns - Task 7 is done
 8. Task_08_Web_Basics
    * 8.1. List Menu
+   * 8.2. Registration Form
+   * 8.3. Dropdown Menu
+   
