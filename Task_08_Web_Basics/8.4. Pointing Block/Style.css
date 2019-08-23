@@ -1,0 +1,27 @@
+body{
+	background: #333333;
+}
+
+.pointer{
+    background-color: #88B7D5;
+    border-right: 5px solid #C2E1F5;
+    border-top: 5px solid #C2E1F5;
+    height: 50px;
+    margin: auto;
+    margin-top: 30px;
+    position: relative;
+    transform: rotate(-45deg);
+    width: 50px;
+    z-index: 1;
+}
+
+.block{
+    background-color: #88B7D5;
+    border: 5px solid #C2E1F5;
+    color: white;
+    font-size: 1.5em;
+    margin: -28px 7px;
+    padding: 49px;
+    position: relative;
+    text-align: center;
+}
