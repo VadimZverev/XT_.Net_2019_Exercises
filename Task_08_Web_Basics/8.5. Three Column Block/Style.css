@@ -1,0 +1,55 @@
+body {
+    background: #4E6379;
+    font: 12px Tahoma;
+}
+
+.general-block {
+    background: white;
+    overflow: hidden;
+    width: 602px;
+    box-shadow: 0 25px 40px #000000AB;
+    border-radius: 20px;
+    margin: auto;
+}
+
+.block {
+    float: left;
+    width: 200px;
+    border-left: 1px solid gray;
+    text-align: center;
+    margin: 10px 0;
+}
+
+.block:first-child 
+{
+     border: none; 
+}
+
+.icon {
+    width: 45px; 
+    height: 41px;
+    background: url(images.png) no-repeat;
+    margin: auto;
+}
+
+.cloud 
+{
+    background-position: 0 -42px;
+}
+    
+.server { 
+    background-position: 0 -84px;	
+}
+
+h3 {
+    color: coral;
+}
+
+.button {
+    background: coral;
+    display: inline-block;
+    padding: 5px 10px;
+    text-decoration: none;
+    color: white;
+    border-radius: 20px;
+}
