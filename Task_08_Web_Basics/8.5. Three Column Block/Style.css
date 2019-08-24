@@ -53,3 +53,7 @@ h3 {
     color: white;
     border-radius: 20px;
 }
+
+.button:hover{
+    cursor: pointer;
+}
