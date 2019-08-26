@@ -1,0 +1,126 @@
+body {
+    background: #EDEEF0;
+    font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-size: small;
+    margin: auto;
+}
+
+a{
+    color: #285473;
+    line-height: 1.3em;
+    text-decoration-line: none;
+}
+
+.checkbox {
+    margin-bottom: 10px;
+}
+
+.checkbox:hover label{
+    cursor: pointer;
+}
+
+.header {
+    background-color: #4a76a8;
+    height: 42px;
+    margin-bottom: 15px;
+}
+
+.list {
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding: 6px 0;
+    position: relative;
+}
+
+.list > li {
+    border-left: 2px solid #fff;
+    cursor: pointer;
+    padding: 5px 0px 5px 5px;
+}
+
+.list > li:first-child {
+    background-color: #f0f2f5;
+    border-left: 2px solid #5181b8;
+}
+
+.list > li:first-child a{
+    color: black;
+    font-weight: bold;
+}
+
+.list > li:not(:first-child):hover {
+    background-color: #f0f2f5;
+    border-left: 2px solid #f0f2f5;
+    text-decoration: none;
+}
+
+.settings-page {
+    display: flex;
+    justify-content: center;
+    min-width: min-content;
+}
+
+.settings {
+    background: #fff;
+    border-radius: 8px;
+    min-width: 560px;
+    width: auto;
+}
+
+.settings-header {
+    background: #fafbfc;
+    border-bottom: 1px solid #e7e8ec;
+    border-radius: 4px 4px 0 0;
+    font-size: 20px;
+    height: 54px;
+    line-height: 54px;
+    padding: 0 20px;
+}
+
+.settings-line {
+    border-bottom: 1px solid #e7e8ec;
+    display: flex;
+    padding: 15px 20px;
+}
+
+.settings-line > :first-child {
+    min-width: 155px;
+}
+
+.settings-line > a:last-child {
+    margin-left: auto;
+}
+
+.settings-delete-profile {
+    background: #fafbfc;
+    margin: auto;
+}
+ 
+.sub-options {
+    margin-left: 10px;
+    width: 230px;
+}
+
+.user-menu {
+    margin-right: 10px;
+    width: 150px;
+}
+
+.user-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.user-list > li {
+    color: #285473;
+    padding: 5px 10px;
+}
+
+.user-list > li:hover {
+    background-color: #dbe0e8;
+}
