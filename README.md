@@ -41,8 +41,10 @@ Project Structure:
 6. Task_05_Files - Task 6 is done.
    * 5.1_Backup_System
 7. Task_06_Design_Patterns - Task 7 is done
-8. Task_07_Regular_Expressions
+8. Task_07_Regular_Expressions - Task 8 is Done
    * 7.1. Date Existence
+   * 7.2. Html Replacer
+   * 7.3. Email Finder
 9. Task_08_Web_Basics - Task 9 is done
    * 8.1. List Menu
    * 8.2. Registration Form

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{66397898-FC88-4394-A87C-5C7C5D6CB9E9}</ProjectGuid>
+    <ProjectGuid>{A29C4194-DCD2-482D-94D0-0E766BAB3F4D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>_71_Date_Existence</RootNamespace>
-    <AssemblyName>7.1. Date_Existence</AssemblyName>
+    <RootNamespace>_73_Email_Finder</RootNamespace>
+    <AssemblyName>7.3. Email_Finder</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

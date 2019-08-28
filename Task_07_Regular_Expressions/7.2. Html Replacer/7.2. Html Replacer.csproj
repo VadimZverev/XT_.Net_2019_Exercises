@@ -7,7 +7,7 @@
     <ProjectGuid>{86305CBE-95CB-411E-B9ED-3E142CB6021A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>_72_Html_Replacer</RootNamespace>
-    <AssemblyName>_72_Html_Replacer</AssemblyName>
+    <AssemblyName>7.2. Html_Replacer</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

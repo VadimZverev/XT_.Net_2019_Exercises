@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace _72_Html_Replacer
+namespace _73_Email_Finder
 {
     class Program
     {
@@ -16,10 +17,13 @@ namespace _72_Html_Replacer
 
                 string sentence = Console.ReadLine();
 
-                sentence = sentence.ReplaceTag("_");
+                Console.WriteLine();
+                Console.WriteLine("Email Addresses Found:");
 
-                Console.WriteLine($"Replace tags in text:");
-                Console.WriteLine(sentence);
+                foreach (var email in sentence.FindEmails())
+                {
+                    Console.WriteLine(email);
+                }
 
                 Console.WriteLine(Environment.NewLine
                                   + "Start over? 1 - Yes, 2 - Complete program.");
@@ -47,16 +51,21 @@ namespace _72_Html_Replacer
                 }
             }
         }
+
     }
 
     public static class MyExt
     {
         /// <summary>
-        /// It replaces the tags on the selected character.
+        /// Return all mail matches in the text.
         /// </summary>
-        public static string ReplaceTag(this string @string, string symbol)
+        public static IEnumerable FindEmails(this string @string)
         {
-            return new Regex("<.+?>").Replace(@string, symbol);
+            string pattern = @"\b(([\dA-Za-z][\w-\.]*[\dA-Za-z])|([\dA-Za-z])+)@"
+                             + @"(([\dA-Za-z][\dA-Za-z-]*[\dA-Za-z]\.)|([\dA-Za-z]\.))+"
+                             + @"([A-Za-z]{2,6})\b";
+
+            return new Regex(pattern).Matches(@string);
         }
     }
 }
