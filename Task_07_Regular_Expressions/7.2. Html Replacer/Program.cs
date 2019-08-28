@@ -2,27 +2,26 @@
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace _71_Date_Existence
+namespace _72_Html_Replacer
 {
     class Program
     {
         static void Main()
         {
             Console.InputEncoding = Encoding.Unicode;
-            string pattern = @"((0[1-9])|([1-2][0-9])|([3][01]))-((0[1-9])|(1[0-2]))-\d{4}";
 
             do
             {
-                Console.WriteLine("Input sentence with(out) date:");
+                Console.WriteLine("Input sentence:");
 
                 string sentence = Console.ReadLine();
 
-                if (sentence.ContainsDate(pattern))
-                {
-                    Console.WriteLine($"The text \"{sentence}\" contains date.");
-                }
-                else
-                    Console.WriteLine($"The text \"{sentence}\" doesn't contains date.");
+                sentence = sentence.ReplaceTag("_");
+
+                Console.WriteLine($"Replace tags in text:");
+                Console.WriteLine(sentence);
+
+                Console.WriteLine();
 
                 Console.WriteLine(Environment.NewLine
                                   + "Start over? 1 - Yes, 2 - Complete program.");
@@ -50,17 +49,17 @@ namespace _71_Date_Existence
                 }
             }
         }
-    }
 
+    }
 
     public static class MyExt
     {
         /// <summary>
-        /// Checks if the date is in the text in a pattern.
+        /// It replaces the tags on the selected character.
         /// </summary>
-        public static bool ContainsDate(this string @string, string pattern)
+        public static string ReplaceTag(this string @string, string symbol)
         {
-            return new Regex(pattern).IsMatch(@string);
+            return new Regex("<.+?>").Replace(@string, symbol);
         }
     }
 }
