@@ -58,3 +58,4 @@ Project Structure:
     * 8.10. VK
 10. Task_09_JavaScript_Basics
 	* 9.1. Char Remover
+	* 9.2. Math Calculator
