@@ -1,0 +1,23 @@
+div.main {
+    display: flex;
+    margin: 10px;
+    text-align: center;
+}
+
+div.available, div.selected {
+    width: 120px;
+}
+
+div.control {
+    width: min-content;
+    padding: 0px 10px;
+}
+
+select {
+    width: inherit;
+}
+
+input {
+    width: 3em;
+    margin-top: 2px;
+}
