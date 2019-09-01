@@ -60,3 +60,4 @@ Project Structure:
 	* 9.1. Char Remover
 	* 9.2. Math Calculator
 	* 9.3. Butterfly Control
+	* 9.4. Simple Gallary
