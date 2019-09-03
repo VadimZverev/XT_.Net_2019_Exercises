@@ -56,7 +56,7 @@ Project Structure:
     * 8.8. Article
     * 8.9. Step Counter
     * 8.10. VK
-10. Task_09_JavaScript_Basics
+10. Task_09_JavaScript_Basics - Task 10 is done
 	* 9.1. Char Remover
 	* 9.2. Math Calculator
 	* 9.3. Butterfly Control
