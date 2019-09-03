@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>9.3. Butterfly Control</title>
-    <link rel="stylesheet" type="text/css" href="Style.css">
+    <link rel="stylesheet" href="Style.css">
 </head>
 
 <body>
@@ -19,10 +19,10 @@
             </select>
         </div>
         <div class="control">
-            <input id="addAllToSelected" type="button" value="&gt;&gt;" onclick="addAllToSelected()">
-            <input id="addToSelected" type="button" value="&gt;" onclick="addToSelected()">
-            <input id="addToAvailable" type="button" value="&lt;" onclick="addToAvailable()">
-            <input id="addAllToAvailable" type="button" value="&lt;&lt;" onclick="addAllToAvailable()" disabled>
+            <input id="addAllToSelected" type="button" value="&gt;&gt;">
+            <input id="addToSelected" type="button" value="&gt;">
+            <input id="addToAvailable" type="button" value="&lt;" disabled>
+            <input id="addAllToAvailable" type="button" value="&lt;&lt;" disabled>
         </div>
         <div class="selected">
             <b>Selected</b>
@@ -41,10 +41,10 @@
             </select>
         </div>
         <div class="control">
-            <input id="addAllToSelected" type="button" value="&gt;&gt;" onclick="addAllToSelected()">
-            <input id="addToSelected" type="button" value="&gt;" onclick="addToSelected()">
-            <input id="addToAvailable" type="button" value="&lt;" onclick="addToAvailable()">
-            <input id="addAllToAvailable" type="button" value="&lt;&lt;" onclick="addAllToAvailable()" disabled>
+            <input id="addAllToSelected" type="button" value="&gt;&gt;">
+            <input id="addToSelected" type="button" value="&gt;">
+            <input id="addToAvailable" type="button" value="&lt;" disabled>
+            <input id="addAllToAvailable" type="button" value="&lt;&lt;" disabled>
         </div>
         <div class="selected">
             <b>Selected</b>
@@ -52,25 +52,6 @@
             </select>
         </div>
     </div>
-
-    <script>
-        var selectsList = document.getElementsByTagName("select");
-        var sizeList = 0;
-
-        for (let i = 0; i < selectsList.length; i++) {
-
-            let length = selectsList[i].options.length;
-
-            if (sizeList < length) {
-                sizeList = length;
-            }
-        }
-
-        for (let i = 0; i < selectsList.length; i++) {
-            selectsList[i].setAttribute("size", sizeList);
-        }
-
-    </script>
     <script src="Script.js"></script>
 </body>
 

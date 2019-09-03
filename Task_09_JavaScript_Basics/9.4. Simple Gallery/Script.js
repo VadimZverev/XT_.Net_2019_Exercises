@@ -1,5 +1,15 @@
 var isPause = false;
 var seconds = 9;
+var prev;
+var swichMode;
+
+window.onload = () => {
+    swichMode = document.getElementById("switchMode");
+    prev = document.getElementById('prev');
+
+    if (swichMode) swichMode.addEventListener('click', toggleCountdown);
+    if (prev) prev.addEventListener('click', goToPrevPage);
+};
 
 var stopwatch = setInterval(() => {
     if (!isPause) {
@@ -24,14 +34,16 @@ function endCountdown() {
     }
 }
 
-function toggleCountdown(button) {
-    if (button.value == "pause") {
+function toggleCountdown() {
+    let btn = event.target;
+
+    if (btn.value == "pause") {
         isPause = true;
-        button.value = "resume";
+        btn.value = "resume";
     }
-    else if (button.value == "resume") {
+    else if (btn.value == "resume") {
         isPause = false;
-        button.value = "pause";
+        btn.value = "pause";
     }
 }
 
