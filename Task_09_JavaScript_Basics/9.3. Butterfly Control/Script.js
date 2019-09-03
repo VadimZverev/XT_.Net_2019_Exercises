@@ -3,16 +3,16 @@ window.onload = setSizeSelect();
 var inputsControl = document.querySelectorAll("div.control input");
 inputsControl.forEach((elem) => {
 
-    if (elem.id == "addAllToSelected") {
+    if (elem.dataset.action == "addAllToSelected") {
         elem.addEventListener('click', addAllToSelected);
     }
-    else if (elem.id == "addAllToAvailable") {
+    else if (elem.dataset.action == "addAllToAvailable") {
         elem.addEventListener('click', addAllToAvailable);
     }
-    else if (elem.id == "addToSelected") {
+    else if (elem.dataset.action == "addToSelected") {
         elem.addEventListener('click', addToSelected);
     }
-    else if (elem.id == "addToAvailable") {
+    else if (elem.dataset.action == "addToAvailable") {
         elem.addEventListener('click', addToAvailable);
     }
 });
@@ -30,18 +30,18 @@ function addToSelected() {
     let selectedDom = object.querySelector("div.selected select");
 
     moveToSelect(availableDom, selectedDom);
-    
+
     let btnsControl = event.target.closest("div.control").children;
 
     if (availableDom.length == 0) {
-        let setIdAray = ["addAllToSelected", "addToSelected"];
-        let removeIdAray = ["addToAvailable", "addAllToAvailable"];
+        let offDisabled = ["addToAvailable", "addAllToAvailable"];
+        let onDisabled = ["addAllToSelected", "addToSelected"];
 
-        toggleBtnAttrDisabled(btnsControl, removeIdAray, setIdAray);
+        toggleBtnAttrDisabled(btnsControl, offDisabled, onDisabled);
     }
     else {
-        let removeIdAray = ["addToAvailable", "addAllToSelected", "addToSelected", "addAllToAvailable"];
-        toggleBtnAttrDisabled(btnsControl, removeIdAray);
+        let offDisabled = ["addToAvailable", "addAllToSelected", "addToSelected", "addAllToAvailable"];
+        toggleBtnAttrDisabled(btnsControl, offDisabled);
     }
 }
 
@@ -58,41 +58,40 @@ function addToAvailable() {
     let availableDom = object.querySelector("div.available select");
 
     moveToSelect(selectedDom, availableDom);
-    
+
     let btnsControl = event.target.closest("div.control").children;
 
     if (selectedDom.length == 0) {
-        let removeIdAray = ["addAllToSelected", "addToSelected"];
-        let setIdAray = ["addToAvailable", "addAllToAvailable"];
+        let offDisabled = ["addAllToSelected", "addToSelected"];
+        let onDisabled = ["addToAvailable", "addAllToAvailable"];
 
-        toggleBtnAttrDisabled(btnsControl, removeIdAray, setIdAray);
+        toggleBtnAttrDisabled(btnsControl, offDisabled, onDisabled);
     }
     else {
-        let removeIdAray = ["addToAvailable", "addAllToSelected", "addToSelected", "addAllToAvailable"];
-        toggleBtnAttrDisabled(btnsControl, removeIdAray);
+        let offDisabled = ["addToAvailable", "addAllToSelected", "addToSelected", "addAllToAvailable"];
+        toggleBtnAttrDisabled(btnsControl, offDisabled);
     }
 }
 
 function addAllToAvailable() {
 
-    let removeIdAray = ["addAllToSelected", "addToSelected"];
-    let setIdAray = ["addToAvailable", "addAllToAvailable"];
-
     let object = event.target.closest("div.main");
-    if (!object) return;
 
+    if (!object) return;
+    
     let selectedDom = object.querySelector("div.selected select");
     let availableDom = object.querySelector("div.available select");
     moveAllToSelect(selectedDom, availableDom);
-
+    
+    let offDisabled = ["addAllToSelected", "addToSelected"];
+    let onDisabled = ["addToAvailable", "addAllToAvailable"];
     let btnsControl = event.target.closest("div.control").children;
-    toggleBtnAttrDisabled(btnsControl, removeIdAray, setIdAray);
+
+    toggleBtnAttrDisabled(btnsControl, offDisabled, onDisabled);
 }
 
 function addAllToSelected() {
 
-    let setIdAray = ["addAllToSelected", "addToSelected"];
-    let removeIdAray = ["addToAvailable", "addAllToAvailable"];
     let object = event.target.closest("div.main");
 
     if (!object) return;
@@ -101,25 +100,28 @@ function addAllToSelected() {
     let selectedDom = object.querySelector("div.selected select");
     moveAllToSelect(availableDom, selectedDom);
 
+    let onDisabled = ["addAllToSelected", "addToSelected"];
+    let offDisabled = ["addToAvailable", "addAllToAvailable"];
     let btnsControl = event.target.closest("div.control").children;
-    toggleBtnAttrDisabled(btnsControl, removeIdAray, setIdAray);
+
+    toggleBtnAttrDisabled(btnsControl, offDisabled, onDisabled);
 }
 
-function toggleBtnAttrDisabled(btns, removeIdArray, setIdArray) {
+function toggleBtnAttrDisabled(btns, offDisabled, onDisabled) {
 
     for (let i = 0; i < btns.length; i++) {
 
-        let _id = btns[i].id;
+        let action = btns[i].dataset.action;
 
-        if (setIdArray) {
-            if (setIdArray.includes(_id)) {
+        if (onDisabled) {
+            if (onDisabled.includes(action)) {
                 if (!btns[i].hasAttribute("disabled")) {
                     btns[i].setAttribute("disabled", "");
                 }
             }
         }
-        if (removeIdArray) {
-            if (removeIdArray.includes(_id)) {
+        if (offDisabled) {
+            if (offDisabled.includes(action)) {
                 if (btns[i].hasAttribute("disabled")) {
                     btns[i].removeAttribute("disabled");
                 }
