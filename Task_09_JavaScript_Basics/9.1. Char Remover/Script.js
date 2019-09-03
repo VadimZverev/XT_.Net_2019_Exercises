@@ -1,9 +1,23 @@
-function removeCharsDuplicate() {
-    var charsRemove = [];
-    var sentence = document.getElementById("sentence").value;
-    var separators = ["\t", "?", "!", ":", ";", ",", "."];
-    var words = splitViaSeparators(sentence, separators);
+const isDEBUG = true;
+const separators = ["\t", "?", "!", ":", ";", ",", "."];
 
+var execute = document.getElementById("execute");
+var result = document.getElementById("result");
+var sentence = document.getElementById("sentence");
+
+execute.addEventListener('click', removeCharsDuplicate);
+sentence.addEventListener('keyup', () => {
+    if (event.keyCode === 13) {
+        execute.click();
+    }
+});
+
+function removeCharsDuplicate() {
+    let charsRemove = [];
+    let sentenceValue = sentence.value;
+    let words = splitViaSeparators(sentenceValue, separators);
+
+    // Find duplicate symbols.
     words.forEach(
         word => {
             word.split('').forEach(
@@ -14,9 +28,12 @@ function removeCharsDuplicate() {
                 });
         });
 
-    console.log('Symbols to be removed from the sentence: ' + charsRemove);
+    isDEBUG && console.log('Symbols to be removed from the sentence: ' + charsRemove + '.');
 
-    sentence = words.join(' ')
+    // Exclude duplicate symbols.
+    // join words -> split -> 
+    // return symbols not included in charsRemove -> again join.
+    sentenceValue = words.join(' ')
         .split('')
         .filter(char => {
             if (!charsRemove.includes(char)) {
@@ -24,12 +41,12 @@ function removeCharsDuplicate() {
             }
         }).join('');
 
-    document.getElementById("result").value = sentence;
+    result.value = sentenceValue;
 }
 
 function splitViaSeparators(sentence, separators) {
 
-    for (var i = 0; i < sentence.length; i++) {
+    for (let i = 0; i < sentence.length; i++) {
         if (separators.includes(sentence[i])) {
             sentence = sentence.replace(sentence[i], " ");
         }

@@ -1,53 +1,30 @@
+const pattern = new RegExp(/\d+(\.\d+)?|[+\-*/=]/g);
+
+var execute = document.getElementById("execute");
+var expression = document.getElementById("expression");
+var result = document.getElementById("result");
+
+execute.addEventListener('click', mathCalculator);
+expression.addEventListener('keyup', () => {
+    if (event.keyCode === 13) {
+        execute.click();
+    }
+});
+
 function mathCalculator() {
+    let mathExpression = expression.value.match(pattern);
 
-    var result;
-    var mathExpression = document.getElementById("expression")
-        .value.match(/\d+(\.\d+)?|[+\-*/=]/g);
-
-    if (mathExpression === null){
-        document.getElementById("result").value = 'Enter expression!';
+    if (mathExpression === null) {
+        result.value = 'Enter expression!';
         return;
     }
 
     if (!isCorrectInput(mathExpression)) {
-        document.getElementById("result").value = 'Incorrect input';
+        result.value = 'Incorrect input';
         return;
     };
 
-    result = mathExpression[0];
-
-    for (let i = 1; i + 2 < mathExpression.length; i += 2) {
-
-        let x = Number(result);
-        let y = Number(mathExpression[i + 1]);
-
-        switch (mathExpression[i]) {
-            case "+": {
-                result = (x + y).toFixed(2);
-                break;
-            }
-            case "-": {
-                result = (x - y).toFixed(2);
-                break;
-            }
-
-            case "*": {
-                result = (x * y).toFixed(2);
-                break;
-            }
-
-            case "/": {
-                y !== 0
-                    ?
-                    result = (x / y).toFixed(2)
-                    :
-                    result = 0;
-                break;
-            }
-        }
-    }
-
-    document.getElementById("result").value = result;
+    result.value = executeExpression(mathExpression);
 }
 
 function isCorrectInput(input) {
@@ -75,4 +52,40 @@ function isCorrectInput(input) {
     }
 
     return true;
+}
+
+function executeExpression(expression) {
+    let res = +expression[0];
+
+    for (let i = 1; i + 2 < expression.length; i += 2) {
+
+        let y = +expression[i + 1];
+
+        switch (expression[i]) {
+            case "+": {
+                res += y;
+                break;
+            }
+            case "-": {
+                res -= y;
+                break;
+            }
+
+            case "*": {
+                res *= y;
+                break;
+            }
+
+            case "/": {
+                y !== 0
+                    ?
+                    res /= y
+                    :
+                    res = 0;
+                break;
+            }
+        }
+    }
+
+    return res.toFixed(2);
 }

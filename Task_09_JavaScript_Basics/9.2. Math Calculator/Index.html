@@ -4,28 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>9.2. Math Calculator</title>
+    <style>
+        div {
+            width: min-content;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 
 <body>
     <div>
-        <p>
-            <label>
-                <div>
-                    Math expression:
-                </div>
-                <input type="text" id="expression">
-            </label>
-        </p>
-        <p>
-            <label>
-                <div>
-                    Result:
-                </div>
-                <input type="text" id="result" placeholder="Result" readonly>
-            </label>
-        </p>
-        <p><input type="button" value="Send" onclick="mathCalculator()"></p>
+        <label for="expression">Math expression:</label>
+        <input id="expression" type="text" placeholder="Enter expression">
     </div>
+    <div>
+        <label for="result">Result:</label>
+        <input id="result" type="text" placeholder="Result" readonly>
+    </div>
+    <input id="execute" type="button" value="Send">
     <script src="Script.js"></script>
 </body>
 

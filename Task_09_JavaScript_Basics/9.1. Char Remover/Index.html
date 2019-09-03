@@ -4,14 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>9.1. Char Remover</title>
+    <style>
+        div {
+            width: min-content;
+            margin: 10px 0;
+        }
+    </style>
 </head>
 
 <body>
     <div>
-        <p><input type="text" id="sentence"></p>
-        <p><input type="text" id="result" placeholder="Processing result" readonly></p>
-        <p><input type="button" value="Go" onclick="removeCharsDuplicate()"></p>
+        <label for="sentence">Sentence:</label>
+        <input id="sentence" type="text" placeholder="Enter sentence">
     </div>
+    <div>
+        <label for="result">Processing result:</label>
+        <input id="result" type="text" placeholder="Processing result" readonly>
+    </div>
+    <input id="execute" type="button" value="Send">
     <script src="Script.js"></script>
 </body>
 

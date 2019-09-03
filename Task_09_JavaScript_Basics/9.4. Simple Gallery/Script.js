@@ -1,20 +1,19 @@
+const COLOR_RED = "#F00";
+
 var isPause = false;
-var seconds = 9;
 var prev;
+var seconds = 9;
 var swichMode;
-
-window.onload = () => {
-    swichMode = document.getElementById("switchMode");
-    prev = document.getElementById('prev');
-
-    if (swichMode) swichMode.addEventListener('click', toggleCountdown);
-    if (prev) prev.addEventListener('click', goToPrevPage);
-};
+var timer = document.getElementById("timer");
 
 var stopwatch = setInterval(() => {
     if (!isPause) {
-        document.getElementById("timer").innerHTML = seconds;
+        timer.innerHTML = seconds;
         seconds--;
+
+        if (seconds == 3) {
+            timer.style.color = COLOR_RED;
+        }
 
         if (seconds < 0) {
             clearInterval(stopwatch);
@@ -23,8 +22,16 @@ var stopwatch = setInterval(() => {
     }
 }, 1000);
 
+window.onload = () => {
+    prev = document.getElementById('prev');
+    swichMode = document.getElementById("switchMode");
+
+    if (prev) prev.addEventListener('click', goToPrevPage);
+    if (swichMode) swichMode.addEventListener('click', toggleCountdown);
+};
+
 function endCountdown() {
-    var pageName = getCurrentPageName(window.location);
+    let pageName = getCurrentPageName(window.location);
 
     if (pageName == "Page4") {
         isContinue();
@@ -52,9 +59,9 @@ function isContinue() {
         window.location.href = "Page1.html";
     }
     else {
-        var child = document.createElement("div");
+        let child = document.createElement("div");
         child.innerHTML = "<h1>Watch Over</h1>";
-        child.setAttribute("style", "color:red;");
+        child.style.color = COLOR_RED;
 
         document.body.innerHTML = child.outerHTML;
         document.title = "Watch Over";
@@ -62,14 +69,14 @@ function isContinue() {
 }
 
 function goToNextPage(pageName) {
-    var nextPage = "Page" + (+(pageName.slice(-1)) + 1) + ".html";
+    let nextPage = "Page" + (+(pageName.slice(-1)) + 1) + ".html";
     window.location = nextPage;
 }
 
 function goToPrevPage() {
-    var pageName = getCurrentPageName(window.location);
+    let pageName = getCurrentPageName(window.location);
 
-    var nextPageNumber = +(pageName.slice(-1)) - 1;
+    let nextPageNumber = +(pageName.slice(-1)) - 1;
     window.location = "Page" + nextPageNumber + ".html";
 }
 
