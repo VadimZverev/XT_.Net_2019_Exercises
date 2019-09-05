@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="Style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Style.css">
     <link rel="shortcut icon" href="VK_logo.jpg">
     <title>8.10 VK</title>
 </head>
@@ -11,123 +12,131 @@
 <body>
     <div class="header"></div>
     <div class="settings-page">
-            <div class="user-menu">
-                <ul class="user-list">
-                    <li><a href="#">Моя страница</a></li>
-                    <li><a href="#">Новости</a></li>
-                    <li><a href="#">Сообщения</a></li>
-                    <li><a href="#">Друзья</a></li>
-                    <li><a href="#">Сообщества</a></li>
-                    <li><a href="#">Фотографии</a></li>
-                    <li><a href="#">Музыка</a></li>
-                    <li><a href="#">Видео</a></li>
-                    <li><a href="#">Игры</a></li>
-                    <li><a href="#">Документы</a></li>
-                </ul>
+        <div class="user-menu">
+            <ul class="user-list">
+                <li><a href="#">Моя страница</a></li>
+                <li><a href="#">Новости</a></li>
+                <li><a href="#">Сообщения</a></li>
+                <li><a href="#">Друзья</a></li>
+                <li><a href="#">Сообщества</a></li>
+                <li><a href="#">Фотографии</a></li>
+                <li><a href="#">Музыка</a></li>
+                <li><a href="#">Видео</a></li>
+                <li><a href="#">Игры</a></li>
+                <li><a href="#">Документы</a></li>
+            </ul>
+        </div>
+        <div class="settings">
+            <div class="settings-header">Общее</div>
+            <div class="settings-line">
+                <div>Меню сайта</div>
+                <div>
+                    <a href="#">
+                        Настроить отображение пунктов меню
+                    </a>
+                </div>
             </div>
-            <div class="settings">
-                <div class="settings-header">Общее</div>
-                <div class="settings-line">
-                    <div>Меню сайта</div>
-                    <div>
-                        <a href="#">
-                            Настроить отображение пунктов меню
-                        </a>
+            <div class="settings-line">
+                <div>Настройки профиля</div>
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            Скрывать блок подарков
+                        </label>
                     </div>
-                </div>
-                <div class="settings-line">
-                    <div>Настройки профиля</div>
-                    <div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" />
-                                Скрывать блок подарков
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" />
-                                При открытии профиля показывать мои записи
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" />
-                                Отключить комментирование записей
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" />
-                                Специальные возможности
-                            </label>
-                        </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            При открытии профиля показывать мои записи
+                        </label>
                     </div>
-                </div>
-                <div class="settings-line">
-                    <div>Настройки контента</div>
-                    <div>
-                        <div class="checkbox">
+                    <div class="checkbox">
+                        <label>
                             <input type="checkbox" />
-                            <label>Автоматически воспроизводить видео</label>
-                        </div>
-                        <div class="checkbox">
-                            <input type="checkbox" />
-                            <label>Автоматически воспроизводить GIF-анимации </label>
-                        </div>
-                        <div class="checkbox">
-                            <input type="checkbox" />
-                            <label>Подсказывать стикеры в полях ввода</label>
-                        </div>
-                        <div class="checkbox">
-                            <input type="checkbox" />
-                            <label>Автоматически отмечать друзей на фотографиях</label>
-                        </div>
+                            Отключить комментирование записей
+                        </label>
                     </div>
-                </div>
-                <div class="settings-line">
-                    <div>Пароль</div>
-                    <div>Обновлен недавно</div>
-                    <a href="#">Изменить</a>
-                </div>
-                <div class="settings-line">
-                    <div>Электронная почта</div>
-                    <div>bla***@mail.ru</div>
-                    <a href="#">Изменить</a>
-                </div>
-                <div class="settings-line">
-                    <div>Номер телефона</div>
-                    <div>+7 *** *** ** 00</div>
-                    <a href="#">Изменить</a>
-                </div>
-                <div class="settings-line">
-                    <div>Адрес страницы</div>
-                    <div>https://vk.com/id00000000</div>
-                    <a href="#">Изменить</a>
-                </div>
-                <div class="settings-line">
-                    <div>Язык</div>
-                    <div>Русский</div>
-                    <a href="#">Изменить</a>
-                </div>
-                <div class="settings-line">
-                    <div class="settings-delete-profile">
-                        Вы можете <a href="#">удалить свою страницу</a>.
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            Специальные возможности
+                        </label>
                     </div>
                 </div>
             </div>
-            <div class="sub-options">
-                <ul class="list">
-                    <li><a href="#">Общее</a></li>
-                    <li><a href="#">Безопасность</a></li>
-                    <li><a href="#">Приватность</a></li>
-                    <li><a href="#">Уведомления</a></li>
-                    <li><a href="#">Черный список</a></li>
-                    <li><a href="#">Настройки приложения</a></li>
-                    <li><a href="#">Мобильные сервисы</a></li>
-                    <li><a href="#">Платежи, подписки, переводы</a></li>
-                </ul>
+            <div class="settings-line">
+                <div>Настройки контента</div>
+                <div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            Автоматически воспроизводить видео
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            Автоматически воспроизводить GIF-анимации
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            Подсказывать стикеры в полях ввода
+                        </label>
+                    </div>
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" />
+                            Автоматически отмечать друзей на фотографиях
+                        </label>
+                    </div>
+                </div>
             </div>
+            <div class="settings-line">
+                <div>Пароль</div>
+                <div>Обновлен недавно</div>
+                <a href="#">Изменить</a>
+            </div>
+            <div class="settings-line">
+                <div>Электронная почта</div>
+                <div>bla***@mail.ru</div>
+                <a href="#">Изменить</a>
+            </div>
+            <div class="settings-line">
+                <div>Номер телефона</div>
+                <div>+7 *** *** ** 00</div>
+                <a href="#">Изменить</a>
+            </div>
+            <div class="settings-line">
+                <div>Адрес страницы</div>
+                <div>https://vk.com/id00000000</div>
+                <a href="#">Изменить</a>
+            </div>
+            <div class="settings-line">
+                <div>Язык</div>
+                <div>Русский</div>
+                <a href="#">Изменить</a>
+            </div>
+            <div class="settings-line">
+                <div class="settings-delete-profile">
+                    Вы можете <a href="#">удалить свою страницу</a>.
+                </div>
+            </div>
+        </div>
+        <div class="sub-options">
+            <ul class="list">
+                <li><a href="#">Общее</a></li>
+                <li><a href="#">Безопасность</a></li>
+                <li><a href="#">Приватность</a></li>
+                <li><a href="#">Уведомления</a></li>
+                <li><a href="#">Черный список</a></li>
+                <li><a href="#">Настройки приложения</a></li>
+                <li><a href="#">Мобильные сервисы</a></li>
+                <li><a href="#">Платежи, подписки, переводы</a></li>
+            </ul>
+        </div>
     </div>
 </body>
 

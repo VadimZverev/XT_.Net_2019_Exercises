@@ -1,19 +1,17 @@
-.title
-{ 
-    background-color: #008B66;
-    color: white;
-    height: 50px;
-    line-height: 45px;
+.title {
     margin: auto;
+    height: 50px;
     padding-left: 10px;
-    text-align: left; 
+    line-height: 45px;
+    text-align: left;
+    background-color: #008B66;
+    color: #FFF;
 }
 
-.content
-{
-    background-color: #DFE6E1;
+.content {
+    position: relative;
     margin: -10px 0 0 20px;
     padding: 10px;
-    position: relative;
     text-align: justify;
+    background-color: #DFE6E1;
 }

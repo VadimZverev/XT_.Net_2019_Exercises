@@ -1,30 +1,30 @@
 const pattern = new RegExp(/\d+(\.\d+)?|[+\-*/=]/g);
 
 var execute = document.getElementById("execute");
-var expression = document.getElementById("expression");
-var result = document.getElementById("result");
+var expressionInput = document.getElementById("expression");
+var resultInput = document.getElementById("result");
 
 execute.addEventListener('click', mathCalculator);
-expression.addEventListener('keyup', () => {
+expressionInput.addEventListener('keyup', () => {
     if (event.keyCode === 13) {
         execute.click();
     }
 });
 
 function mathCalculator() {
-    let mathExpression = expression.value.match(pattern);
+    let mathExpression = expressionInput.value.match(pattern);
 
     if (mathExpression === null) {
-        result.value = 'Enter expression!';
+        resultInput.value = 'Enter expression!';
         return;
     }
 
     if (!isCorrectInput(mathExpression)) {
-        result.value = 'Incorrect input';
+        resultInput.value = 'Incorrect input';
         return;
-    };
+    }
 
-    result.value = executeExpression(mathExpression);
+    resultInput.value = executeExpression(mathExpression);
 }
 
 function isCorrectInput(input) {

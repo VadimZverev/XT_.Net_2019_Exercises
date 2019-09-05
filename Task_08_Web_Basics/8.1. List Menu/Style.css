@@ -1,20 +1,20 @@
-section#menu{
+nav#menu {
     width: 200px;
 }
 
-ul{
-    background-color: #f0de8f;
-    border: 1px outset;
-    border-radius: 10px;
-    box-shadow: 4px 4px 3px 0px brown;
-    list-style: none;
+nav#menu > ul {
     margin: 0px;
     padding: 0px;
+    background-color: #F0DE8F;
+    border: 1px outset;
+    border-radius: 10px;
+    box-shadow: 4px 4px 3px 0px #A52A2A;
+    list-style: none;
 }
 
-li{
-    color: brown;
-    font-weight: 550;
+nav#menu > ul > li {
     margin: 5px;
     padding: 2px 0px 3px 5px;
+    color: #A52A2A;
+    font-weight: 550;
 }

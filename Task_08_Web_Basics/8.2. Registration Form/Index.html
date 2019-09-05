@@ -1,33 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="Style.css">
     <title>8.2. Registration Form</title>
 </head>
 
 <body>
-    <form id="initial">
+    <form id="initial" action="" method="POST">
         <div>
             <h3>Регистрация</h3>
         </div>
-        <hr color="white" size="1">
+        <hr>
         <div class="email">
-            <label>E-mail</label>
-            <input type="email" id="e-mail">
+            <label for="e-mail">E-mail</label>
+            <input id="e-mail" type="email">
         </div>
         <div class="password">
-            <label>Пароль</label>
-            <input type="password" class="passClass">
+            <label for="pass">Пароль</label>
+            <input id="pass" type="password">
         </div>
         <div class="password">
-            <label>Ещё раз</label>
-            <input type="password" class="passClass">
+            <label for="passConfirm">Ещё раз</label>
+            <input id="passConfirm" type="password">
         </div>
         <div>
-            <button type="submit" class="btnColor">Отправить</button>
+            <button class="btnColor" type="submit">Отправить</button>
         </div>
-
     </form>
 
 </body>

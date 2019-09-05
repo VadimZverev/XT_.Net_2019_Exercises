@@ -55,7 +55,7 @@ function toggleCountdown() {
 }
 
 function isContinue() {
-    if (confirm("Start over?\nYes - start over; No - Watch Over.") == true) {
+    if (confirm("Start over?\nYes - start over; No - Watch Over.")) {
         window.location.href = "Page1.html";
     }
     else {

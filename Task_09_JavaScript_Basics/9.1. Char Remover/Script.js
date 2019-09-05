@@ -44,15 +44,15 @@ function removeCharsDuplicate() {
     result.value = sentenceValue;
 }
 
-function splitViaSeparators(sentence, separators) {
+function splitViaSeparators(str, separ) {
 
-    for (let i = 0; i < sentence.length; i++) {
-        if (separators.includes(sentence[i])) {
-            sentence = sentence.replace(sentence[i], " ");
+    for (let i = 0; i < str.length; i++) {
+        if (separ.includes(str[i])) {
+            str = str.replace(str[i], " ");
         }
     }
 
-    return sentence.split(' ').filter(
+    return str.split(' ').filter(
         word => {
             if (word.length > 0) {
                 return word;

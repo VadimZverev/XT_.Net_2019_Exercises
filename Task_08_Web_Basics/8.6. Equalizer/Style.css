@@ -1,25 +1,41 @@
 body {
-    background: #333333;
+    background: #333;
 }
 
-.content{
-    height: 200px;
+.content {
     margin: 5px;
+    height: 200px;
 }
 
 .content > div {
-    background: repeating-linear-gradient(to top, transparent, 
-    transparent 20px, #333333 20px, #333333 23px),
-    linear-gradient(to top, orange, coral);
-    width: 30px;
     display: inline-block;
     margin: 5px;
+    width: 30px;
     border-radius: 5px 5px 0 0;
+    background: repeating-linear-gradient(to top, transparent, transparent 20px, #333 20px, #333 23px),
+                linear-gradient(to top, #FFA500, #FF7F50);
 }
 
-.col-1 { height: 56%; }
-.col-2 { height: 21%; }
-.col-3 { height: 90%; }
-.col-4 { height: 114%; }
-.col-5 { height: 56%; }
-.col-6 { height: 33%; }
+.col-1 {
+    height: 56%;
+}
+
+.col-2 {
+    height: 21%;
+}
+
+.col-3 {
+    height: 90%;
+}
+
+.col-4 {
+    height: 114%;
+}
+
+.col-5 {
+    height: 56%;
+}
+
+.col-6 {
+    height: 33%;
+}

@@ -1,4 +1,4 @@
-window.onload = setSizeSelect();
+window.onload = setSizeSelect;
 
 var inputsControl = document.querySelectorAll("div.control input");
 inputsControl.forEach((elem) => {
@@ -78,11 +78,11 @@ function addAllToAvailable() {
     let object = event.target.closest("div.main");
 
     if (!object) return;
-    
+
     let selectedDom = object.querySelector("div.selected select");
     let availableDom = object.querySelector("div.available select");
     moveAllToSelect(selectedDom, availableDom);
-    
+
     let offDisabled = ["addAllToSelected", "addToSelected"];
     let onDisabled = ["addToAvailable", "addAllToAvailable"];
     let btnsControl = event.target.closest("div.control").children;
@@ -139,14 +139,14 @@ function moveAllToSelect(fromSelect, toSelect) {
         }
 
         toSelect.appendChild(fromSelect[0]);
-    };
+    }
 }
 
 function moveToSelect(fromSelect, toSelect) {
 
     while (fromSelect.selectedOptions.length != 0) {
         toSelect.appendChild(fromSelect.selectedOptions[0]);
-    };
+    }
 
     while (toSelect.selectedOptions.length != 0) {
         toSelect.selectedOptions[0].selected = false;
@@ -154,11 +154,7 @@ function moveToSelect(fromSelect, toSelect) {
 }
 
 function isSelectedOptions(select) {
-    if (select.selectedOptions.length == 0)
-        return false;
-    else {
-        return true;
-    }
+    return !select.selectedOptions.length == 0;
 }
 
 function setSizeSelect() {

@@ -1,36 +1,36 @@
-form#initial{
-    background-color: #0690CF;
-    border: 5px solid #0487C6;
+form#initial {
     width: 350px;
-    color: white;
+    border: 5px solid #0487C6;
+    background-color: #0690CF;
+    color: #FFF;
 }
 
-form > div{
-    margin : 5px;
+form#initial > div {
+    margin: 5px;
 }
 
-div.password{
-    width: 40%;
+form#initial > hr {
+    color: #FFF;
+}
+
+form#initial > div.password {
     display: inline-block;
+    width: 40%;
 }
 
-input#e-mail{
-    width : 87%;
-}
-
-input.passClass{
-    width: 100%;
-}
-
-button.btnColor{
-    background-color: #F7DB40;
-    margin: 10px 0px;
-}
-
-h3{
+form#initial > div > h3 {
     margin-bottom: 0px;
 }
 
-label{
-    display: block;
+input#e-mail {
+    width: 87%;
+}
+
+input#pass, input#passConfirm {
+    width: 100%;
+}
+
+button.btnColor {
+    margin: 10px 0px;
+    background-color: #F7DB40;
 }

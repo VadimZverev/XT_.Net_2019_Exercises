@@ -1,27 +1,27 @@
-body{
-	background: #333333;
+body {
+    background: #333;
 }
 
-.pointer{
-    background-color: #88B7D5;
-    border-right: 5px solid #C2E1F5;
-    border-top: 5px solid #C2E1F5;
+.pointer {
+    position: relative;
+    z-index: 1;
     height: 50px;
+    width: 50px;
     margin: auto;
     margin-top: 30px;
-    position: relative;
     transform: rotate(-45deg);
-    width: 50px;
-    z-index: 1;
+    border-right: 5px solid #C2E1F5;
+    border-top: 5px solid #C2E1F5;
+    background-color: #88B7D5;
 }
 
-.block{
-    background-color: #88B7D5;
-    border: 5px solid #C2E1F5;
-    color: white;
-    font-size: 1.5em;
+.block {
+    position: relative;
     margin: -28px 7px;
     padding: 49px;
-    position: relative;
+    border: 5px solid #C2E1F5;
     text-align: center;
+    background-color: #88B7D5;
+    color: white;
+    font-size: 1.5em;
 }
