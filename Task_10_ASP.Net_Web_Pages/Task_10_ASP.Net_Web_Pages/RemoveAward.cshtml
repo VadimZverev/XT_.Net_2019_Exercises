@@ -1,0 +1,26 @@
+﻿@using Task_10_ASP.Net_Web_Pages.Models
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Remove Award";
+}
+
+<h3>Remove Award</h3>
+
+<div>
+    <form action="/Processing" method="post">
+        <select name="Award">
+            <option selected disabled>Choose Award</option>
+            @foreach (var award in ProgramManager.GetAwards())
+            {
+                <option value="@award.Id">
+                    @award.Title
+                </option>
+            }
+        </select>
+        <button type="submit">Delete</button>
+    </form>
+</div>
+<div>
+    <a href="/">Cancel</a>
+</div>

@@ -1,6 +1,7 @@
 ﻿using EPAM.UsersAndAwards.DAL.Interface;
 using EPAM.UsersAndAwards.Entities;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,7 +16,9 @@ namespace EPAM.UsersAndAwards.DAL
 
         static AwardFileDao()
         {
-            _dataBase = ConfigurationManager.AppSettings["Awards"];
+            _dataBase =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory , ConfigurationManager.AppSettings["Awards"]);
+
             _repoAwards = new Dictionary<int, Award>();
 
             GetData();

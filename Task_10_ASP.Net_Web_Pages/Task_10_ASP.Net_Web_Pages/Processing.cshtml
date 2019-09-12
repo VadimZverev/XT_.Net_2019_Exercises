@@ -1,0 +1,61 @@
+﻿@using Task_10_ASP.Net_Web_Pages.Models
+
+@{
+    if (IsPost)
+    {
+        var path = Request.UrlReferrer.AbsolutePath;
+
+        if (path == "/AddAward")
+        {
+            string title = Request.Form.Get("Title");
+
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                ProgramManager.AddAward(title);
+            }
+        }
+        else if (path == "/AddAwardToUser")
+        {
+            int idUser = int.Parse(Request.Form.Get("User"));
+            int idAward = int.Parse(Request.Form.Get("Award"));
+
+            ProgramManager.AddAwardUser(idUser, idAward);
+        }
+        else if (path == "/AddUser")
+        {
+            string name = Request.Form.Get("Name");
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                if (DateTime.TryParse(Request.Form.Get("DateOfBirth"), out DateTime dateOfDirth))
+                {
+                    ProgramManager.AddUser(name, dateOfDirth);
+                }
+            }
+
+            Response.Redirect("path");
+        }
+        else if (path == "/RemoveAward")
+        {
+            int idAward = int.Parse(Request.Form.Get("Award"));
+
+            ProgramManager.RemoveAward(idAward);
+
+        }
+        else if (path == "/RemoveAwardToUser")
+        {
+            int idUser = int.Parse(Request.Form.Get("User"));
+            int idAward = int.Parse(Request.Form.Get("Award"));
+
+            ProgramManager.RemoveAwardUser(idUser, idAward);
+        }
+        else if (path == "/RemoveUser")
+        {
+            int idUser = int.Parse(Request.Form.Get("User"));
+
+            ProgramManager.RemoveUser(idUser);
+        }
+    }
+
+    Response.Redirect("/");
+}

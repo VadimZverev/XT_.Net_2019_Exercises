@@ -1,0 +1,16 @@
+{
+  "Users": [
+    {
+      "Id": 2,
+      "Name": "User 2",
+      "DateOfBirth": "1999-01-01T00:00:00",
+      "Age": 20
+    },
+    {
+      "Id": 3,
+      "Name": "User 3",
+      "DateOfBirth": "2000-02-02T00:00:00",
+      "Age": 19
+    }
+  ]
+}
