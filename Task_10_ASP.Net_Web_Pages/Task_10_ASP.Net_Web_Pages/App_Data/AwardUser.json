@@ -1,3 +1,8 @@
 {
-  "AwardUser": []
+  "AwardUser": [
+    {
+      "AwardId": 2,
+      "UserId": 2
+    }
+  ]
 }

@@ -1,0 +1,65 @@
+﻿@using EPAM.UsersAndAwards.Entities;
+@using Task_10_ASP.Net_Web_Pages.Models;
+@{
+    Layout = "/Pages/_Layout.cshtml";
+    Page.Title = "Update Award";
+
+
+    string msg = null;
+
+    if (Request.QueryString.Count != 0)
+    {
+        if (Response.Headers["ErrorMsg"] != null)
+        {
+            msg = Response.Headers["ErrorMsg"];
+        }
+
+        <h3 class="p-2 bg-primary text-white text-center">Update Award</h3>
+
+        if (int.TryParse(Request.QueryString["idAward"], out int idAward))
+        {
+            Award award = ProgramModel.GetAward(idAward);
+
+            if (award != null)
+            {
+                if (msg != null)
+                {
+                    <div class="alert-danger">
+                        @msg
+                    </div>
+                }
+
+                <form action="" method="post">
+                    <input type="hidden" name="idAward" value="@award.Id" />
+                    <input type="hidden" name="returnUrl"
+                           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")" />
+                    <div class="form-group">
+                        <label for="title">Title:</label>
+                        <input class="form-control" id="title" type="text" name="Title" value="@award.Title" />
+                    </div>
+                    <div class="form-group text-center">
+                        <button id="update" class="btn btn-primary" type="submit">Update</button>
+                        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            }
+            else
+            {
+                <h3 class="pl-2 bg-danger text-white text-center">Award not found</h3>
+                <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+            }
+        }
+        else
+        {
+            <h3 class="pl-2 bg-warning text-white text-center">Not valid id.</h3>
+            <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+        }
+    }
+    else
+    {
+        <h3 class="pl-2 bg-danger text-white text-center">Nothing update</h3>
+        <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+    }
+}

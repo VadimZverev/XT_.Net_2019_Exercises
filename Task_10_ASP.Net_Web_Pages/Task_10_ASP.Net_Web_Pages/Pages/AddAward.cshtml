@@ -1,0 +1,31 @@
+﻿@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Add Award";
+
+    string msg = null;
+
+    if (Request.QueryString["ErrorMsg"] != null)
+    {
+        msg = Request.QueryString["ErrorMsg"];
+    }
+}
+
+<h3 class="p-2 bg-primary text-white text-center">Add Award</h3>
+
+@if (msg != null)
+{
+    <div class="alert-danger">
+        @msg
+    </div>
+}
+
+<form action="" method="post">
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input class="form-control" id="title" type="text" name="Title" required />
+    </div>
+    <div class="form-group text-center">
+        <button id="add" class="btn btn-primary" type="submit">Add</button>
+        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">Cancel</a>
+    </div>
+</form>

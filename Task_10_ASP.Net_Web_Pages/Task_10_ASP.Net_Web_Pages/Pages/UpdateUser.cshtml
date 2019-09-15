@@ -1,0 +1,66 @@
+﻿@using EPAM.UsersAndAwards.Entities;
+@using Task_10_ASP.Net_Web_Pages.Models;
+@{
+    Layout = "/Pages/_Layout.cshtml";
+    Page.Title = "Update User";
+
+
+    string msg = null;
+
+    if (Request.QueryString.Count != 0)
+    {
+        if (Request.Headers["ErrorMsg"] != null)
+        {
+            msg = Request.QueryString["ErrorMsg"];
+        }
+
+        if (int.TryParse(Request.QueryString["idUser"], out int idUser))
+        {
+            User user = ProgramModel.GetUser(idUser);
+
+            if (user == null)
+            {
+                msg = "User not found";
+                <h3 class="pl-2 bg-danger text-white text-center">@msg</h3>
+                <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+            }
+            else
+            {
+                <h3 class="p-2 bg-primary text-white text-center">Update User</h3>
+
+                if (msg != null)
+                {
+                    <div class="alert-danger">
+                        @msg
+                    </div>
+                }
+                <form action="" method="post">
+                    <input type="hidden" name="idUser" value="@user.Id" />
+                    <input type="hidden" name="returnUrl"
+                           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")" />
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input class="form-control" id="name" type="text" name="Name" value="@user.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DateOfBirth">Date Of Birth:</label>
+                        <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth"
+                               value="@(user?.DateOfBirth.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="form-group text-center">
+                        <button id="update" class="btn btn-primary" type="submit">Update</button>
+                        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            }
+        }
+    }
+    else
+    {
+        msg = "Nothing update";
+        <h3 class="pl-2 bg-danger text-white text-center">@msg</h3>
+        <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+    }
+}

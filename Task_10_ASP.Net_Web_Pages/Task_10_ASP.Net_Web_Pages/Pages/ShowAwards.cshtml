@@ -1,0 +1,50 @@
+﻿@using Task_10_ASP.Net_Web_Pages.Models;
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Show Awards";
+}
+
+<h3 class="p-2 bg-primary text-white text-center">Awards</h3>
+
+<div>
+    <table class="table table-striped table-bordered table-sm">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>Title</td>
+                <th class="text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var award in ProgramModel.GetAwards())
+            {
+                <tr>
+                    <td>@award.Id</td>
+                    <td>@award.Title</td>
+                    <td class="text-center">
+                        <div class="custom-control-inline">
+                            <form class="" action="" method="post">
+                                <input type="hidden" name="idAward" value="@award.Id" />
+                                <input type="hidden" name="Mode" value="Update" />
+                                <button type="submit" class="btn btn-warning btn-sm">
+                                    Edit
+                                </button>
+                            </form>
+                            <form id="delUser@(award.Id)" action="" method="post">
+                                <input type="hidden" name="idAward" value="@award.Id" />
+                                <input type="hidden" name="Mode" value="Delete" />
+                                <input type="button" class="btn btn-danger btn-sm delete" value="delete" />
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div>
+    <a class="btn btn-primary" href="~/Pages/AddAward">Create</a>
+    <a class="btn btn-secondary" href="~/Pages/">Cancel</a>
+</div>
+
+@RenderPage("/Pages/_ConfirmDeletePartial.cshtml")

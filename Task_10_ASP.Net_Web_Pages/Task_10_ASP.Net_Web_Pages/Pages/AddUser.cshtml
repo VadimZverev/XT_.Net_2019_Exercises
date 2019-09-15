@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "/Pages/_Layout.cshtml";
+    Page.Title = "Add User";
+
+    string msg = null;
+
+    if (Request.QueryString["ErrorMsg"] != null)
+    {
+        msg = Request.QueryString["ErrorMsg"];
+    }
+}
+
+<h3 class="p-2 bg-primary text-white text-center">Add User</h3>
+@if (msg != null)
+{
+    <div class="alert-danger">
+        @msg
+    </div>
+}
+<form action="" method="post">
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input class="form-control" id="name" type="text" name="Name" />
+    </div>
+    <div class="form-group">
+        <label for="DateOfBirth">Date Of Birth:</label>
+        <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth" />
+    </div>
+    <div class="form-group text-center">
+        <button id="add" class="btn btn-primary" type="submit">Add</button>
+        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">Cancel</a>
+    </div>
+</form>
