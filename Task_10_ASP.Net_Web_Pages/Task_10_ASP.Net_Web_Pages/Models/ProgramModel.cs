@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Configuration;
 
 namespace Task_10_ASP.Net_Web_Pages.Models
@@ -99,9 +100,19 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                if (_awardLogic.Add(new Award { Title = title }))
+                Award award = new Award { Title = title };
+
+                WebImage photo = WebImage.GetImageFromRequest();
+
+                if (photo != null)
                 {
-                    httpContext.Response.Redirect("/Pages/Index");
+                    award.Image = photo.GetBytes();
+                }
+
+                if (_awardLogic.Add(award))
+                {
+                    redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
+                    httpContext.Response.Redirect(redirect);
                 }
                 else
                 {
@@ -154,9 +165,18 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                 && !string.IsNullOrWhiteSpace(name))
             {
                 User user = new User { Name = name, DateOfBirth = dateOfBirth };
+
+                WebImage photo = WebImage.GetImageFromRequest();
+
+                if (photo != null)
+                {
+                    user.Image = photo.GetBytes();
+                }
+
                 if (_userLogic.Add(user))
                 {
-                    httpContext.Response.Redirect("/Pages/Index");
+                    redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
+                    httpContext.Response.Redirect(redirect);
                 }
                 else
                 {
@@ -337,6 +357,17 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                     user.Name = name;
                     user.DateOfBirth = dateOfBirth;
 
+                    WebImage photo = WebImage.GetImageFromRequest();
+
+                    if (photo != null)
+                    {
+                        user.Image = photo.GetBytes();
+                    }
+                    else if (httpContext.Request["delImage"] == "on" )
+                    {
+                        user.Image = null;
+                    }
+
                     string redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
                     httpContext.Response.Redirect(redirect);
                 }
@@ -357,6 +388,17 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
                 if (award != null)
                 {
+                    WebImage photo = WebImage.GetImageFromRequest();
+
+                    if (photo != null)
+                    {
+                        award.Image = photo.GetBytes();
+                    }
+                    else if (httpContext.Request["delImage"] == "on")
+                    {
+                        award.Image = null;
+                    }
+
                     award.Title = Title;
 
                     string redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";

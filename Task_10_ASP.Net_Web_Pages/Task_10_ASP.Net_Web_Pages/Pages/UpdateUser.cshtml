@@ -20,8 +20,7 @@
 
             if (user == null)
             {
-                msg = "User not found";
-                <h3 class="pl-2 bg-danger text-white text-center">@msg</h3>
+                <h3 class="pl-2 bg-danger text-white text-center">User not found</h3>
                 <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
             }
             else
@@ -34,7 +33,7 @@
                         @msg
                     </div>
                 }
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="idUser" value="@user.Id" />
                     <input type="hidden" name="returnUrl"
                            value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")" />
@@ -47,6 +46,34 @@
                         <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth"
                                value="@(user?.DateOfBirth.ToString("yyyy-MM-dd"))" />
                     </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <div class="custom-file">
+                            <label id="fileName" class="custom-file-label" for="customFile">Choose image file</label>
+                            <input id="customFile" type="file" accept="image/*" class="custom-file-input" name="Image">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="delImage" name="delImage">
+                        <label class="form-check-label" for="delImage">Delete image</label>
+                    </div>
+                    <div class="form-group text-center">
+                        @if (user.Image != null)
+                        {
+                            var src = Convert.ToBase64String(user.Image);
+                            <div class="img-fluid text-center">
+                                <img id="avatar" style="width:150px;height:150px" class="imgView rounded mx-auto d-block"
+                                     src="data:image;base64,@src" alt="image" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="img-fluid text-center">
+                                <img id="avatar" style="width:150px;height:150px" class="imgView rounded mx-auto d-block"
+                                     src="~/Content/Images/noimage.png" alt="image" />
+                            </div>
+                        }
+                    </div>
                     <div class="form-group text-center">
                         <button id="update" class="btn btn-primary" type="submit">Update</button>
                         <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">
@@ -54,13 +81,14 @@
                         </a>
                     </div>
                 </form>
+
+                <script src="~/Scripts/onChangeFileUpload.js"></script>
             }
         }
     }
     else
     {
-        msg = "Nothing update";
-        <h3 class="pl-2 bg-danger text-white text-center">@msg</h3>
-        <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+        <h3 class="pl-2 bg-danger text-white text-center">Nothing update</h3>
+        <a href="~/Pages/Index" class="btn btn-primary">Main menu</a>
     }
 }

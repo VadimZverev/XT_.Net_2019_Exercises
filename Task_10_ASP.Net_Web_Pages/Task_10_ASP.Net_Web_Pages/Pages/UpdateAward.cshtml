@@ -29,13 +29,42 @@
                     </div>
                 }
 
-                <form action="" method="post">
+                <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="idAward" value="@award.Id" />
                     <input type="hidden" name="returnUrl"
                            value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")" />
                     <div class="form-group">
                         <label for="title">Title:</label>
                         <input class="form-control" id="title" type="text" name="Title" value="@award.Title" />
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <div class="custom-file">
+                            <label id="fileName" class="custom-file-label" for="customFile">Choose image file</label>
+                            <input id="customFile" type="file" accept="image/*" class="custom-file-input" name="Image">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="delImage" name="delImage">
+                        <label class="form-check-label" for="delImage">Delete image</label>
+                    </div>
+                    <div class="form-group text-center">
+                        @if (award.Image != null)
+                        {
+                            var src = Convert.ToBase64String(award.Image);
+
+                            <div class="img-fluid text-center">
+                                <img id="avatar" style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                     src="data:image;base64,@src" alt="image" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="img-fluid text-center">
+                                <img id="avatar" style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                     src="~/Content/Images/noimage.png" alt="image" />
+                            </div>
+                        }
                     </div>
                     <div class="form-group text-center">
                         <button id="update" class="btn btn-primary" type="submit">Update</button>
@@ -63,3 +92,5 @@
         <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
     }
 }
+
+<script src="~/Scripts/onChangeFileUpload.js"></script>

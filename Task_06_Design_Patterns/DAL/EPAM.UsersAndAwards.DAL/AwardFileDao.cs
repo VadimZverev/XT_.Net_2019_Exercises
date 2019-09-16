@@ -17,7 +17,7 @@ namespace EPAM.UsersAndAwards.DAL
         static AwardFileDao()
         {
             _dataBase =
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory , ConfigurationManager.AppSettings["Awards"]);
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["Awards"]);
 
             _repoAwards = new Dictionary<int, Award>();
 
@@ -26,20 +26,18 @@ namespace EPAM.UsersAndAwards.DAL
 
         private static void GetData()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && File.Exists(_dataBase))
             {
-                if (File.Exists(_dataBase))
+                string data = File.ReadAllText(_dataBase);
+
+                var awardsDb = new { Awards = new List<Award>() };
+
+                awardsDb = JsonConvert.DeserializeAnonymousType(data, awardsDb);
+
+                foreach (Award award in awardsDb.Awards)
                 {
-                    string data = File.ReadAllText(_dataBase);
-
-                    var awardsDb = new { Awards = new List<Award>() };
-
-                    awardsDb = JsonConvert.DeserializeAnonymousType(data, awardsDb);
-
-                    foreach (Award award in awardsDb.Awards)
-                    {
-                        _repoAwards.Add(award.Id, award);
-                    }
+                    _repoAwards.Add(award.Id, award);
                 }
             }
         }
@@ -79,7 +77,8 @@ namespace EPAM.UsersAndAwards.DAL
                              select new
                              {
                                  a.Id,
-                                 a.Title
+                                 a.Title,
+                                 a.Image
                              };
 
                 var db = new { Awards = awards };

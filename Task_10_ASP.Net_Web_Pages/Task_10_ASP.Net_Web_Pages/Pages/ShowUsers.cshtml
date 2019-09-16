@@ -19,6 +19,10 @@
     </div>
 }
 
+<div class="m-2">
+    <a class="btn btn-primary" href="~/Pages/AddUser">Create</a>
+    <a class="btn btn-secondary" href="~/Pages/Index">Cancel</a>
+</div>
 <div>
     <table class="table table-striped table-bordered table-sm text-center">
         <thead>
@@ -27,6 +31,7 @@
                 <td>Name</td>
                 <td>Date of Birth</td>
                 <td>Age</td>
+                <td>Image</td>
                 <td>Awards</td>
                 <td class="text-center">Actions</td>
             </tr>
@@ -39,6 +44,23 @@
                     <td>@user.Name</td>
                     <td>@user.DateOfBirth.ToShortDateString()</td>
                     <td>@user.Age</td>
+                    <td>
+                        <div class="text-center">
+                            @if (user.Image != null)
+                            {
+                                var src = Convert.ToBase64String(user.Image);
+                                <img style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                     src="data:image/png;base64,@src" alt="image" />
+
+                            }
+                            else
+                            {
+                                <img style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                     src="~/Content/Images/noimage.png" alt="image" />
+
+                            }
+                        </div>
+                    </td>
                     <td>
                         @if (user.Awards.Any())
                         {
@@ -72,10 +94,6 @@
             }
         </tbody>
     </table>
-</div>
-<div>
-    <a class="btn btn-primary" href="~/Pages/AddUser">Create</a>
-    <a class="btn btn-secondary" href="~/Pages/">Cancel</a>
 </div>
 
 @RenderPage("/Pages/_ConfirmDeletePartial.cshtml")

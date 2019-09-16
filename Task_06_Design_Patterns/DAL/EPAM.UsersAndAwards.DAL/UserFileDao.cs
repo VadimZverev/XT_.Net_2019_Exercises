@@ -26,23 +26,22 @@ namespace EPAM.UsersAndAwards.DAL
 
         private static void GetData()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && File.Exists(_dataBase))
             {
-                if (File.Exists(_dataBase))
+                string data = File.ReadAllText(_dataBase);
+
+                var usersDb = new { Users = new List<User>() };
+
+                usersDb = JsonConvert.DeserializeAnonymousType(data, usersDb);
+
+                foreach (User user in usersDb.Users)
                 {
-                    string data = File.ReadAllText(_dataBase);
-
-                    var usersDb = new { Users = new List<User>() };
-
-                    usersDb = JsonConvert.DeserializeAnonymousType(data, usersDb);
-
-                    foreach (User user in usersDb.Users)
-                    {
-                        _repoUsers.Add(user.Id, user);
-                    }
+                    _repoUsers.Add(user.Id, user);
                 }
             }
         }
+
 
         public void Add(User user)
         {
@@ -81,7 +80,8 @@ namespace EPAM.UsersAndAwards.DAL
                                 u.Id,
                                 u.Name,
                                 u.DateOfBirth,
-                                u.Age
+                                u.Age,
+                                u.Image
                             };
 
                 var db = new { Users = users };

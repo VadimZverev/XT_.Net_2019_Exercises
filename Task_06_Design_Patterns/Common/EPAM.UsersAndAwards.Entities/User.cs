@@ -30,6 +30,8 @@ namespace EPAM.UsersAndAwards.Entities
             }
         }
 
+        public byte[] Image { get; set; }
+
         public ICollection<Award> Awards { get; set; }
     }
 }

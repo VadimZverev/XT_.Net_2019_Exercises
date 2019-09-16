@@ -19,13 +19,28 @@
     </div>
 }
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="returnUrl"
+           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/Index")" />
     <div class="form-group">
         <label for="title">Title:</label>
         <input class="form-control" id="title" type="text" name="Title" required />
     </div>
+    <div class="form-group">
+        <label>Image</label>
+        <div class="custom-file">
+            <label id="fileName" class="custom-file-label" for="customFile">Choose image file</label>
+            <input id="customFile" type="file" accept="image/*" class="custom-file-input" name="Image">
+        </div>
+    </div>
+    <div class="img-fluid text-center m-2">
+        <img id="avatar" style="width:150px;height:150px" class="imgView rounded mx-auto d-block"
+             src="~/Content/Images/noimage.png" alt="image" />
+    </div>
     <div class="form-group text-center">
-        <button id="add" class="btn btn-primary" type="submit">Add</button>
+        <button id="add" class="btn btn-primary" type="submit">Create</button>
         <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">Cancel</a>
     </div>
 </form>
+
+<script src="~/Scripts/onChangeFileUpload.js"></script>

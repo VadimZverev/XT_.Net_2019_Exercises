@@ -16,7 +16,7 @@ namespace EPAM.UsersAndAwards.DAL
 
         static AwardUserFileDao()
         {
-            _dataBase = 
+            _dataBase =
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["AwardUser"]);
 
             _repoAwardUsers = new Dictionary<int, AwardUser>();
@@ -26,24 +26,23 @@ namespace EPAM.UsersAndAwards.DAL
 
         private static void GetData()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && File.Exists(_dataBase))
             {
-                if (File.Exists(_dataBase))
+                string data = File.ReadAllText(_dataBase);
+
+                var awardUserDb = new { AwardUser = new List<AwardUser>() };
+
+                awardUserDb = JsonConvert.DeserializeAnonymousType(data, awardUserDb);
+
+                foreach (AwardUser awardUser in awardUserDb.AwardUser)
                 {
-                    string data = File.ReadAllText(_dataBase);
-
-                    var awardUserDb = new { AwardUser = new List<AwardUser>() };
-
-                    awardUserDb = JsonConvert.DeserializeAnonymousType(data, awardUserDb);
-
-                    foreach (AwardUser awardUser in awardUserDb.AwardUser)
+                    if (int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id))
                     {
-                        if (int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id))
-                        {
-                            _repoAwardUsers.Add(id, awardUser);
-                        }
+                        _repoAwardUsers.Add(id, awardUser);
                     }
                 }
+
             }
         }
 

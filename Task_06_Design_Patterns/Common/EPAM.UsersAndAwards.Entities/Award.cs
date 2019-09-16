@@ -14,6 +14,8 @@ namespace EPAM.UsersAndAwards.Entities
 
         public string Title { get; set; }
 
+        public byte[] Image { get; set; }
+
         public ICollection<User> Users { get; set; }
     }
 }
