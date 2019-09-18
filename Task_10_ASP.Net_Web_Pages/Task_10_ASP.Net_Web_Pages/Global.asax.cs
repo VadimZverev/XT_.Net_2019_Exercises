@@ -8,11 +8,12 @@ using Task_10_ASP.Net_Web_Pages.Models;
 
 namespace Task_10_ASP.Net_Web_Pages
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
         protected void Application_Start(object sender, EventArgs e)
         {
             ProgramModel.InitialLogic();
+            AccountModel.InitialLogic();
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -22,6 +23,11 @@ namespace Task_10_ASP.Net_Web_Pages
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
+            if (Request["SignOut"] != null)
+            {
+                AccountModel.SignOut();
+            }
+
             if (Request.HttpMethod == "POST")
             {
                 ProgramModel.SelectAction(Context);

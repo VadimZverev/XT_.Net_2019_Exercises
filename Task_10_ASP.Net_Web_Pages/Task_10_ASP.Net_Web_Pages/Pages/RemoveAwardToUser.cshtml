@@ -3,9 +3,33 @@
 @{
     Layout = "_Layout.cshtml";
     Page.Title = "Remove Award to User";
+
+    string errorMsg = Response.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (returnUrl == "/Pages/RemoveAwardToUser" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
+    }
 }
 
 <h3 class="p-2 bg-primary text-white text-center">@Page.Title</h3>
+
+@if (errorMsg != null)
+{
+    <div class="alert-danger m-1 p-2">
+        @errorMsg
+    </div>
+}
 
 <form action="" method="post">
     <div class="input-group mb-3">

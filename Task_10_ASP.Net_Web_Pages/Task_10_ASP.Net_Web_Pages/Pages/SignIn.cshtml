@@ -1,0 +1,60 @@
+﻿@using Task_10_ASP.Net_Web_Pages.Models;
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "SignIn";
+
+    string errorMsg = null;
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (returnUrl == "/Pages/SignIn" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (IsPost)
+    {
+        var login = Request["login"] ?? string.Empty;
+        var pass = Request["pass"] ?? string.Empty;
+
+        if (!string.IsNullOrEmpty(login) && !string.IsNullOrEmpty(pass))
+        {
+            if (AccountModel.SignIn(login, pass))
+            {
+                if (Request["returnUrl"] != null)
+                {
+                    Response.Redirect(Request["returnUrl"]);
+                }
+                else
+                {
+                    Response.Redirect("/Pages/Index");
+                }
+            }
+            else
+            {
+                errorMsg = "Invalid login or password";
+            }
+        }
+    }
+}
+
+<h3 class="p-2 bg-primary text-white text-center">Sign In</h3>
+
+@if (errorMsg != null)
+{
+    <div class="alert alert-danger">@errorMsg</div>
+}
+
+<form action="" method="post">
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+    <div class="form-group">
+        <label for="login">Login:</label>
+        <input id="login" type="text" class="form-control" name="login" required />
+    </div>
+    <div class="form-group">
+        <label for="pass">Password:</label>
+        <input id="pass" type="password" class="form-control" name="pass" required />
+    </div>
+    <button class="btn btn-primary">Sign In</button>
+    <a href="@returnUrl" class="btn btn-secondary">Cancel</a>
+</form>

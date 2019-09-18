@@ -1,0 +1,25 @@
+{
+  "Accounts": [
+    {
+      "Id": 1,
+      "Login": "admin",
+      "Password": "admin",
+	  "Role": 2,
+	  "UserId": 1
+    },
+	{
+      "Id": 2,
+      "Login": "user",
+      "Password": "user",
+	  "Role": 1,
+	  "UserId": 2
+    },
+	{
+      "Id": 3,
+      "Login": "admin2",
+      "Password": "admin2",
+	  "Role": 2,
+	  "UserId": 3
+    }
+  ]
+}

@@ -1,32 +1,59 @@
-﻿@{
+﻿@using model = Task_10_ASP.Net_Web_Pages.Models;
+@{
     Layout = "/Pages/_Layout.cshtml";
     Page.Title = "Add User";
 
-    string msg = null;
+    string errorMsg = Response.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
 
-    if (Request.QueryString["ErrorMsg"] != null)
+    if (returnUrl == "/Pages/AddUser" || returnUrl == null)
     {
-        msg = Request.QueryString["ErrorMsg"];
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
     }
 }
 
 <h3 class="p-2 bg-primary text-white text-center">Add User</h3>
-@if (msg != null)
+@if (errorMsg != null)
 {
     <div class="alert-danger">
-        @msg
+        @errorMsg
     </div>
 }
 <form action="" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="returnUrl"
-           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/Index")" />
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
+    <div class="form-group">
+        <label for="login">Login:</label>
+        <input class="form-control" id="login" type="text" name="Login" required />
+    </div>
+    <div class="form-group">
+        <label for="password">Password:</label>
+        <input class="form-control" id="password" type="password" name="Pass" required />
+    </div>
     <div class="form-group">
         <label for="name">Name:</label>
-        <input class="form-control" id="name" type="text" name="Name" />
+        <input class="form-control" id="name" type="text" name="Name" required />
     </div>
     <div class="form-group">
         <label for="DateOfBirth">Date Of Birth:</label>
-        <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth" />
+        <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth" required />
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelectRole">Role</label>
+        </div>
+        <select name="Role" class="custom-select" id="inputGroupSelectRole">
+            <option value="@((int)model.Roles.User)">User</option>
+            <option value="@((int)model.Roles.Admin)">Admin</option>
+        </select>
     </div>
     <div class="form-group">
         <label>Image</label>
@@ -41,7 +68,7 @@
     </div>
     <div class="form-group text-center">
         <button id="add" class="btn btn-primary" type="submit">Add</button>
-        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">Cancel</a>
+        <a class="btn btn-secondary" href="@returnUrl">Cancel</a>
     </div>
 </form>
 

@@ -1,22 +1,32 @@
 ﻿@using EPAM.UsersAndAwards.Entities;
-@using Task_10_ASP.Net_Web_Pages.Models;
+@using models = Task_10_ASP.Net_Web_Pages.Models;
 @{
     Layout = "/Pages/_Layout.cshtml";
     Page.Title = "Update User";
 
 
-    string msg = null;
+    string errorMsg = Response.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (returnUrl == "/Pages/UpdateUser" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
+    }
 
     if (Request.QueryString.Count != 0)
     {
-        if (Request.Headers["ErrorMsg"] != null)
-        {
-            msg = Request.QueryString["ErrorMsg"];
-        }
-
         if (int.TryParse(Request.QueryString["idUser"], out int idUser))
         {
-            User user = ProgramModel.GetUser(idUser);
+            User user = models.ProgramModel.GetUser(idUser);
 
             if (user == null)
             {
@@ -27,16 +37,20 @@
             {
                 <h3 class="p-2 bg-primary text-white text-center">Update User</h3>
 
-                if (msg != null)
+                if (errorMsg != null)
                 {
                     <div class="alert-danger">
-                        @msg
+                        @errorMsg
                     </div>
                 }
+
                 <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="idUser" value="@user.Id" />
-                    <input type="hidden" name="returnUrl"
-                           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")" />
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <div class="form-group">
+                        <label for="password">New Password:</label>
+                        <input class="form-control" id="password" type="password" name="Pass" />
+                    </div>
                     <div class="form-group">
                         <label for="name">Name:</label>
                         <input class="form-control" id="name" type="text" name="Name" value="@user.Name" />
@@ -45,6 +59,23 @@
                         <label for="DateOfBirth">Date Of Birth:</label>
                         <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth"
                                value="@(user?.DateOfBirth.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelectRole">Role</label>
+                        </div>
+                        <select name="Role" class="custom-select" id="inputGroupSelectRole">
+                            @if (models.AccountModel.GetAccount(user.Id)?.Role == 1)
+                            {
+                                <option value="@((int)models.Roles.User)" selected>User</option>
+                                <option value="@((int)models.Roles.Admin)">Admin</option>
+                            }
+                            else
+                            {
+                                <option value="@((int)models.Roles.Admin)" selected>Admin</option>
+                                <option value="@((int)models.Roles.User)">User</option>
+                            }
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>Image</label>
@@ -62,21 +93,23 @@
                         {
                             var src = Convert.ToBase64String(user.Image);
                             <div class="img-fluid text-center">
-                                <img id="avatar" style="width:150px;height:150px" class="imgView rounded mx-auto d-block"
+                                <img id="avatar" style="width:150px;height:150px"
+                                     class="imgView rounded mx-auto d-block"
                                      src="data:image;base64,@src" alt="image" />
                             </div>
                         }
                         else
                         {
                             <div class="img-fluid text-center">
-                                <img id="avatar" style="width:150px;height:150px" class="imgView rounded mx-auto d-block"
+                                <img id="avatar" style="width:150px;height:150px"
+                                     class="imgView rounded mx-auto d-block"
                                      src="~/Content/Images/noimage.png" alt="image" />
                             </div>
                         }
                     </div>
                     <div class="form-group text-center">
                         <button id="update" class="btn btn-primary" type="submit">Update</button>
-                        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">
+                        <a class="btn btn-secondary" href="@returnUrl">
                             Cancel
                         </a>
                     </div>
@@ -84,6 +117,11 @@
 
                 <script src="~/Scripts/onChangeFileUpload.js"></script>
             }
+        }
+        else
+        {
+            <h3 class="pl-2 bg-warning text-white text-center">Not valid id.</h3>
+            <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
         }
     }
     else

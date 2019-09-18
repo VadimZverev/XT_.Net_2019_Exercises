@@ -4,44 +4,68 @@
     Layout = "/Pages/_Layout.cshtml";
     Page.Title = "Update Award";
 
+    string errorMsg = null;
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
 
-    string msg = null;
+    if (IsPost)
+    {
+        errorMsg = Response.Headers["ErrorMsg"];
+        returnUrl = Response.Headers["returnUrl"];
+    }
+
+    if (returnUrl == "/Pages/UpdateAward" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
+    }
+
 
     if (Request.QueryString.Count != 0)
     {
-        if (Response.Headers["ErrorMsg"] != null)
-        {
-            msg = Response.Headers["ErrorMsg"];
-        }
-
         <h3 class="p-2 bg-primary text-white text-center">Update Award</h3>
 
         if (int.TryParse(Request.QueryString["idAward"], out int idAward))
         {
             Award award = ProgramModel.GetAward(idAward);
 
-            if (award != null)
+            if (award == null)
             {
-                if (msg != null)
+                <h3 class="pl-2 bg-danger text-white text-center">Award not found</h3>
+                <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+            }
+            else
+            {
+                if (errorMsg != null)
                 {
-                    <div class="alert-danger">
-                        @msg
+                    <div class="alert-danger p-2">
+                        @errorMsg
                     </div>
                 }
 
                 <form action="" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="idAward" value="@award.Id" />
-                    <input type="hidden" name="returnUrl"
-                           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")" />
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
                     <div class="form-group">
                         <label for="title">Title:</label>
-                        <input class="form-control" id="title" type="text" name="Title" value="@award.Title" />
+                        <input class="form-control" id="title" type="text"
+                               name="Title" value="@award.Title" />
                     </div>
                     <div class="form-group">
                         <label>Image</label>
                         <div class="custom-file">
-                            <label id="fileName" class="custom-file-label" for="customFile">Choose image file</label>
-                            <input id="customFile" type="file" accept="image/*" class="custom-file-input" name="Image">
+                            <label id="fileName" class="custom-file-label" for="customFile">
+                                Choose image file
+                            </label>
+                            <input id="customFile" type="file" accept="image/*"
+                                   class="custom-file-input" name="Image">
                         </div>
                     </div>
                     <div class="form-check">
@@ -54,30 +78,28 @@
                             var src = Convert.ToBase64String(award.Image);
 
                             <div class="img-fluid text-center">
-                                <img id="avatar" style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                <img id="avatar" style="width:150px;height:150px"
+                                     class="rounded mx-auto d-block"
                                      src="data:image;base64,@src" alt="image" />
                             </div>
                         }
                         else
                         {
                             <div class="img-fluid text-center">
-                                <img id="avatar" style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                <img id="avatar" style="width:150px;height:150px"
+                                     class="rounded mx-auto d-block"
                                      src="~/Content/Images/noimage.png" alt="image" />
                             </div>
                         }
                     </div>
                     <div class="form-group text-center">
                         <button id="update" class="btn btn-primary" type="submit">Update</button>
-                        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">
+                        <a class="btn btn-secondary" href="@returnUrl">
                             Cancel
                         </a>
                     </div>
                 </form>
-            }
-            else
-            {
-                <h3 class="pl-2 bg-danger text-white text-center">Award not found</h3>
-                <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+                <script src="~/Scripts/onChangeFileUpload.js"></script>
             }
         }
         else
@@ -88,9 +110,7 @@
     }
     else
     {
-        <h3 class="pl-2 bg-danger text-white text-center">Nothing update</h3>
+        <h3 class="pl-2 bg-warning text-white text-center">Nothing Update.</h3>
         <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
     }
 }
-
-<script src="~/Scripts/onChangeFileUpload.js"></script>

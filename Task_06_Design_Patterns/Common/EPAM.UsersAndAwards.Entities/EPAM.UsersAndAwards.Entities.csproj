@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
     <Compile Include="Award.cs" />
     <Compile Include="AwardUser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

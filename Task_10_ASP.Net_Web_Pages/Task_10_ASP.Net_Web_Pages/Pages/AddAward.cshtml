@@ -2,26 +2,35 @@
     Layout = "_Layout.cshtml";
     Page.Title = "Add Award";
 
-    string msg = null;
+    string errorMsg = Request.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
 
-    if (Request.QueryString["ErrorMsg"] != null)
+    if (returnUrl == "/Pages/AddAward" || returnUrl == null)
     {
-        msg = Request.QueryString["ErrorMsg"];
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
     }
 }
 
 <h3 class="p-2 bg-primary text-white text-center">Add Award</h3>
 
-@if (msg != null)
+@if (errorMsg != null)
 {
     <div class="alert-danger">
-        @msg
+        @errorMsg
     </div>
 }
 
 <form action="" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="returnUrl"
-           value="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/Index")" />
+    <input type="hidden" name="returnUrl" value="@returnUrl" />
     <div class="form-group">
         <label for="title">Title:</label>
         <input class="form-control" id="title" type="text" name="Title" required />
@@ -39,7 +48,7 @@
     </div>
     <div class="form-group text-center">
         <button id="add" class="btn btn-primary" type="submit">Create</button>
-        <a class="btn btn-secondary" href="@(Request?.UrlReferrer?.AbsolutePath ?? "/Pages/")">Cancel</a>
+        <a class="btn btn-secondary" href="@returnUrl">Cancel</a>
     </div>
 </form>
 
