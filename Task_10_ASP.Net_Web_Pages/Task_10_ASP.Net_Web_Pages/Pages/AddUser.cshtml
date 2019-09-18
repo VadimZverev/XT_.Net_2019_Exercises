@@ -31,14 +31,6 @@
 <form action="" method="post" enctype="multipart/form-data">
     <input type="hidden" name="returnUrl" value="@returnUrl" />
     <div class="form-group">
-        <label for="login">Login:</label>
-        <input class="form-control" id="login" type="text" name="Login" required />
-    </div>
-    <div class="form-group">
-        <label for="password">Password:</label>
-        <input class="form-control" id="password" type="password" name="Pass" required />
-    </div>
-    <div class="form-group">
         <label for="name">Name:</label>
         <input class="form-control" id="name" type="text" name="Name" required />
     </div>
@@ -46,7 +38,8 @@
         <label for="DateOfBirth">Date Of Birth:</label>
         <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth" required />
     </div>
-    <div class="input-group mb-3">
+    @*  TODO: Перенести на будущую страницу редактирования зарегистрированных пользователей.
+        <div class="input-group mb-3">
         <div class="input-group-prepend">
             <label class="input-group-text" for="inputGroupSelectRole">Role</label>
         </div>
@@ -54,7 +47,7 @@
             <option value="@((int)model.Roles.User)">User</option>
             <option value="@((int)model.Roles.Admin)">Admin</option>
         </select>
-    </div>
+    </div>*@
     <div class="form-group">
         <label>Image</label>
         <div class="custom-file">

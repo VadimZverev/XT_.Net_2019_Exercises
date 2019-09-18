@@ -6,8 +6,7 @@
     string errorMsg = null;
     string returnUrl = Request?.UrlReferrer?.AbsolutePath;
 
-    if (returnUrl == "/Pages/Registration" 
-        || returnUrl == "/Pages/SignIn" 
+    if (returnUrl == "/Pages/Registration" || returnUrl == "/Pages/SignIn" 
         || returnUrl == null)
     {
         returnUrl = "/Pages/Index";

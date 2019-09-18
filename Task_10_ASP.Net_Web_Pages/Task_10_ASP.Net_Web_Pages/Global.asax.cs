@@ -23,13 +23,17 @@ namespace Task_10_ASP.Net_Web_Pages
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            if (Request["SignOut"] != null)
-            {
-                AccountModel.SignOut();
-            }
-
             if (Request.HttpMethod == "POST")
             {
+                if (Request["SignOut"] != null)
+                {
+                    AccountModel.SignOut();
+                }
+                else if (Request["account"] == "true")
+                {
+                    AccountModel.ChageRole();
+                }
+
                 ProgramModel.SelectAction(Context);
             }
         }

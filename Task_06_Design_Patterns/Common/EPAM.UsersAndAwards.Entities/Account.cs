@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EPAM.UsersAndAwards.Entities
+﻿namespace EPAM.UsersAndAwards.Entities
 {
     public class Account
     {
@@ -12,7 +6,5 @@ namespace EPAM.UsersAndAwards.Entities
         public string Login { get; set; }
         public string Password { get; set; }
         public int Role { get; set; }
-        public int UserId { get; set; }
-        public User User { get; set; }
     }
 }

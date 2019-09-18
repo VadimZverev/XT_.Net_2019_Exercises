@@ -48,10 +48,6 @@
                     <input type="hidden" name="idUser" value="@user.Id" />
                     <input type="hidden" name="returnUrl" value="@returnUrl" />
                     <div class="form-group">
-                        <label for="password">New Password:</label>
-                        <input class="form-control" id="password" type="password" name="Pass" />
-                    </div>
-                    <div class="form-group">
                         <label for="name">Name:</label>
                         <input class="form-control" id="name" type="text" name="Name" value="@user.Name" />
                     </div>
@@ -59,23 +55,6 @@
                         <label for="DateOfBirth">Date Of Birth:</label>
                         <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth"
                                value="@(user?.DateOfBirth.ToString("yyyy-MM-dd"))" />
-                    </div>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelectRole">Role</label>
-                        </div>
-                        <select name="Role" class="custom-select" id="inputGroupSelectRole">
-                            @if (models.AccountModel.GetAccount(user.Id)?.Role == 1)
-                            {
-                                <option value="@((int)models.Roles.User)" selected>User</option>
-                                <option value="@((int)models.Roles.Admin)">Admin</option>
-                            }
-                            else
-                            {
-                                <option value="@((int)models.Roles.Admin)" selected>Admin</option>
-                                <option value="@((int)models.Roles.User)">User</option>
-                            }
-                        </select>
                     </div>
                     <div class="form-group">
                         <label>Image</label>

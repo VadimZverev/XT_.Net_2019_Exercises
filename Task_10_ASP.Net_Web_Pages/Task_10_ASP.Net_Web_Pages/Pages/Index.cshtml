@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "_Layout.cshtml";
     Page.Title = "Main Page";
+
     string role = null;
 }
 
@@ -24,33 +25,27 @@ else
 
 <div class="list-group">
 
-    @if (!User.Identity.IsAuthenticated)
+    <a href="~/Pages/ShowUsers"
+       class="list-group-item list-group-item-action">
+        Show Users
+    </a>
+    @if (User.IsInRole("Admin"))
     {
-        <a href="~/Pages/ShowUsers"
+        <a href="~/Pages/ShowAwards"
            class="list-group-item list-group-item-action">
-            Show Users
+            Show Awards
         </a>
-    }
-    else
-    {
-        if (User.IsInRole("Admin"))
-        {
-            <a href="~/Pages/AddAwardToUser"
-               class="list-group-item list-group-item-action">
-                Add Award to User
-            </a>
-            <a href="~/Pages/RemoveAwardToUser"
-               class="list-group-item list-group-item-action">
-                Remove Award to User
-            </a>
-            <a href="~/Pages/ShowAwards"
-               class="list-group-item list-group-item-action">
-                Show Awards
-            </a>
-        }
-        <a href="~/Pages/ShowUsers"
+        <a href="~/Pages/ShowAccounts"
            class="list-group-item list-group-item-action">
-            Show Users
+            Show Accounts
+        </a>
+        <a href="~/Pages/AddAwardToUser"
+           class="list-group-item list-group-item-action">
+            Add Award to User
+        </a>
+        <a href="~/Pages/RemoveAwardToUser"
+           class="list-group-item list-group-item-action">
+            Remove Award to User
         </a>
     }
 </div>

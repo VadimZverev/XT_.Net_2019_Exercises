@@ -1,0 +1,89 @@
+﻿@using EPAM.UsersAndAwards.Entities;
+@using Task_10_ASP.Net_Web_Pages.Models;
+@using roleEnum = Task_10_ASP.Net_Web_Pages.Models.Roles;
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Change Role Account";
+
+    string errorMsg = Response.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (returnUrl == "/Pages/ChangeRoleAccount" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
+    }
+
+    if (Request.QueryString.Count != 0)
+    {
+        if (int.TryParse(Request.QueryString["accId"], out int accId))
+        {
+            Account account = AccountModel.GetAccount(accId);
+
+            if (account == null)
+            {
+                <h3 class="pl-2 bg-danger text-white text-center">Account not found</h3>
+                <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+            }
+            else
+            {
+                <h3 class="p-2 bg-primary text-white text-center">Change Role Account</h3>
+
+                if (errorMsg != null)
+                {
+                    <div class="alert-danger">
+                        @errorMsg
+                    </div>
+                }
+
+                <form action="" method="post">
+                    <input type="hidden" name="accId" value="@account.Id" />
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <input type="hidden" name="account" value="true" />
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelectRole">Role</label>
+                        </div>
+                        <select name="Role" class="custom-select" id="inputGroupSelectRole">
+                            @if (account.Role == (int)roleEnum.Admin)
+                            {
+                                <option value="@((int)roleEnum.User)">User</option>
+                                <option value="@((int)roleEnum.Admin)" selected>Admin</option>
+                            }
+                            else
+                            {
+                                <option value="@((int)roleEnum.User)" selected>User</option>
+                                <option value="@((int)roleEnum.Admin)">Admin</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group text-center">
+                        <button class="btn btn-primary" type="submit">Change Role</button>
+                        <a class="btn btn-secondary" href="~/Pages/ShowAccounts">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            }
+        }
+        else
+        {
+            <h3 class="pl-2 bg-warning text-white text-center">Not valid id.</h3>
+            <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+        }
+    }
+    else
+    {
+        <h3 class="pl-2 bg-danger text-white text-center">Nothing Change</h3>
+        <a href="~/Pages/Index" class="btn btn-primary">Main menu</a>
+    }
+}

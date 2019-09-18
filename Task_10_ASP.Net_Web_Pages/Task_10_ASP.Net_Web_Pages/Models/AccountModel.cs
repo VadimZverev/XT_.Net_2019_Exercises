@@ -17,25 +17,46 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             = WebConfigurationManager.AppSettings["StorageMode"];
 
         private static IAccountLogic _accountLogic;
-        private static IUserLogic _userLogic;
+
+        public static void ChageRole()
+        {
+            var context = HttpContext.Current;
+            string returnUrl = context.Request["returnUrl"] ?? "Pages/Index";
+            string strRole = context.Request["Role"] ?? "1";
+            string accId = context.Request["accId"] ?? null;
+
+            if (int.TryParse(strRole, out int role)
+                && int.TryParse(accId, out int id))
+            {
+                var acc = _accountLogic.GetById(id);
+
+                if (acc != null)
+                {
+                    acc.Role = role;
+                    context.Response.Redirect(returnUrl);
+                }
+                else
+                {
+                    context.Response.AppendHeader("ErrorMsg", "Account not found.");
+                    return;
+                }
+            }
+
+            context.Response.AppendHeader("ErrorMsg", "Incorrect data.");
+        }
 
         public static bool Create(string login, string password)
         {
             Account account = _accountLogic.GetAll()
-                .FirstOrDefault(a => a.Login == login && a.Password == password);
+                .FirstOrDefault(a => a.Login == login);
 
             if (account == null)
             {
-                var user = new User { Name = login };
-                _userLogic.Add(user);
-
                 account = new Account
                 {
                     Login = login,
-                    Password = password,
-                    Role = (int)Roles.User,
-                    UserId = user.Id,
-                    User = user
+                    Password = Crypto.HashPassword(password),
+                    Role = (int)Roles.User
                 };
 
                 return _accountLogic.Add(account);
@@ -49,25 +70,20 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             if (_storageMode == "File")
             {
                 _accountLogic = DependencyResolver.AccountFileLogic;
-                _userLogic = DependencyResolver.UserFileLogic;
-
-                foreach (var account in _accountLogic.GetAll())
-                {
-                    account.User = _userLogic.GetById(account.UserId);
-                }
             }
-            else
+            else if (_storageMode == "Database")
             {
-                //TODO: написать мемори сторедж
+                //TODO: написать DBLogic
             }
         }
 
         public static bool SignIn(string login, string password)
         {
             Account account = _accountLogic.GetAll()
-                .FirstOrDefault(a => a.Login == login && a.Password == password);
+                .FirstOrDefault(a => a.Login == login);
 
-            if (account != null)
+            if (account != null
+                && Crypto.VerifyHashedPassword(account.Password, password))
             {
                 FormsAuthentication.SetAuthCookie(login, true);
                 return true;
@@ -91,10 +107,14 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             }
         }
 
-        public static Account GetAccount(int userId)
+        public static Account GetAccount(int accountId)
         {
-            return _accountLogic.GetAll()
-                .FirstOrDefault(acc => acc.UserId == userId);
+            return _accountLogic.GetById(accountId);
+        }
+
+        public static IEnumerable<Account> GetAccounts()
+        {
+            return _accountLogic.GetAll();
         }
     }
 }

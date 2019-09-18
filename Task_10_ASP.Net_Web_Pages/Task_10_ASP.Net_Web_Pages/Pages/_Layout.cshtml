@@ -11,12 +11,15 @@
 <body class="m-1 p-1">
     <nav class="navbar navbar-dark nav bg-dark">
         <div class="navbar-brand">
-            <a class="navbar-brand" href="~/Pages/Index">Main</a>
+            <a class="navbar-brand" href="~/Pages/Index">Main Page</a>
         </div>
         @if (User.Identity.IsAuthenticated)
         {
             <form class="form-inline my-2 my-lg-0" action="" method="post">
-                <button type="submit" class="btn btn-outline-light my-2 my-sm-0" name="SignOut">Sign Out</button>
+                <button type="submit" name="SignOut"
+                        class="btn btn-outline-light my-2 my-sm-0">
+                    Sign Out
+                </button>
             </form>
         }
         else

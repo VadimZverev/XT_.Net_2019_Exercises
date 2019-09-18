@@ -2,7 +2,7 @@
     Layout = "_Layout.cshtml";
     Page.Title = "Add Award";
 
-    string errorMsg = Request.Headers["ErrorMsg"];
+    string errorMsg = Response.Headers["ErrorMsg"];
     string returnUrl = Request?.UrlReferrer?.AbsolutePath;
 
     if (returnUrl == "/Pages/AddAward" || returnUrl == null)

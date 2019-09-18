@@ -78,9 +78,7 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
         public override bool IsUserInRole(string username, string roleName)
         {
-            // TODO: add another roles and users logic!
-
-            return username == "admin" && roleName == "Admin";
+            throw new NotImplementedException();
         }
 
         public override void RemoveUsersFromRoles(string[] usernames, string[] roleNames)

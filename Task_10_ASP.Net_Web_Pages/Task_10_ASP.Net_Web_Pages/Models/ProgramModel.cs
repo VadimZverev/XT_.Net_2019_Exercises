@@ -26,7 +26,6 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         private static IUserLogic _userLogic;
         private static IAwardLogic _awardLogic;
         private static IAwardUserLogic _awardUserLogic;
-        private static IAccountLogic _accountLogic;
 
         public static void Save(SaveMode mode = SaveMode.AllMode)
         {
@@ -59,19 +58,11 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                 _userLogic = DependencyResolver.UserFileLogic;
                 _awardLogic = DependencyResolver.AwardFileLogic;
                 _awardUserLogic = DependencyResolver.AwardUserFileLogic;
-                _accountLogic = DependencyResolver.AccountFileLogic;
 
                 if (_awardUserLogic.GetAll().Count() != 0)
                 {
                     foreach (var user in _userLogic.GetAll())
                     {
-                        var account = _accountLogic.GetAll().FirstOrDefault(acc => acc.UserId == user.Id);
-
-                        if (account != null)
-                        {
-                            account.User = user;
-                        }
-
                         var userAwards = _awardUserLogic.GetAll().Where(au => au.UserId == user.Id);
 
                         foreach (var item in userAwards)
@@ -93,8 +84,12 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                     }
                 }
             }
-            else
+            else if (_storageMode == "Database")
             {
+                //TODO: написать DBLogic
+            }
+            else
+                    {
                 _userLogic = DependencyResolver.UserLogic;
                 _awardLogic = DependencyResolver.AwardLogic;
                 _awardUserLogic = DependencyResolver.AwardUserLogic;
@@ -167,30 +162,12 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         {
             var httpContext = HttpContext.Current;
             string redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
-            string login = httpContext.Request["Login"] ?? null;
-            string password = httpContext.Request["Pass"] ?? null;
             string name = httpContext.Request["Name"] ?? null;
             string strDateOfBirth = httpContext.Request["DateOfBirth"] ?? null;
-            string strRole = httpContext.Request["Role"] ?? "1";
 
             if (DateTime.TryParse(strDateOfBirth, out DateTime dateOfBirth)
-                && int.TryParse(strRole, out int role)
-                && !string.IsNullOrWhiteSpace(name)
-                && !string.IsNullOrWhiteSpace(login)
-                && !string.IsNullOrWhiteSpace(password))
+                && !string.IsNullOrWhiteSpace(name))
             {
-                if (password.Contains(' '))
-                {
-                    httpContext.Response.AppendHeader("ErrorMsg", $"The password contains whitespace.");
-                    return;
-                }
-
-                if (_accountLogic.GetAll().FirstOrDefault(acc => acc.Login == login) != null)
-                {
-                    httpContext.Response.AppendHeader("ErrorMsg", $"The login already exist");
-                    return;
-                }
-
                 User user = new User { Name = name, DateOfBirth = dateOfBirth };
 
                 WebImage photo = WebImage.GetImageFromRequest();
@@ -205,14 +182,6 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                     httpContext.Response.AppendHeader("ErrorMsg", $"{user.Name} already exist");
                     return;
                 }
-
-                _accountLogic.Add(new Account
-                {
-                    Login = login,
-                    Password = password,
-                    Role = role,
-                    UserId = user.Id
-                });
 
                 httpContext.Response.Redirect(redirect);
             }
@@ -230,9 +199,9 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             return _awardLogic.GetAll();
         }
 
-        public static User GetUser(int idUser)
+        public static User GetUser(int userId)
         {
-            return _userLogic.GetById(idUser);
+            return _userLogic.GetById(userId);
         }
 
         public static IEnumerable<User> GetUsers()
@@ -326,13 +295,6 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
                 if (user != null && _userLogic.Delete(user.Id))
                 {
-                    var account = _accountLogic.GetAll().FirstOrDefault(acc => acc.UserId == user.Id);
-
-                    if (account != null)
-                    {
-                        _accountLogic.Delete(account.Id);
-                    }
-
                     var awards = _awardLogic.GetAll().Where(a => a.Users.Contains(user));
 
                     foreach (Award award in awards)
@@ -402,10 +364,8 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         public static void UpdateUser()
         {
             var httpContext = HttpContext.Current;
-            string password = httpContext.Request["Pass"] ?? null;
             string name = httpContext.Request["Name"] ?? null;
             string strDateOfBirth = httpContext.Request["DateOfBirth"] ?? null;
-            string strRole = httpContext.Request["Role"] ?? "1";
             string strIdUser = httpContext.Request["idUser"];
 
             if (int.TryParse(strIdUser, out int idUser)
@@ -413,28 +373,9 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                 && !string.IsNullOrWhiteSpace(name))
             {
                 User user = _userLogic.GetById(idUser);
-                Account account = _accountLogic.GetAll()
-                                        .FirstOrDefault(acc => acc.UserId == idUser);
 
-                if (user != null && account != null)
+                if (user != null)
                 {
-                    if (!string.IsNullOrWhiteSpace(password))
-                    {
-                        if (password.Contains(' '))
-                        {
-                            httpContext.Response.Headers.Add("ErrorMsg", 
-                                                "The password contains whitespace");
-                            return;
-                        }
-
-                        account.Password = password;
-                    }
-
-                    if (int.TryParse(strRole, out int role))
-                    {
-                        account.Role = role;
-                    }
-
                     user.Name = name;
                     user.DateOfBirth = dateOfBirth;
 
@@ -460,7 +401,7 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         public static void UpdateAward()
         {
             var httpContext = HttpContext.Current;
-            string url = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
+            string returnUrl = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
             string Title = httpContext.Request["Title"];
 
             if (int.TryParse(httpContext.Request["IdAward"], out int idAward)
@@ -483,11 +424,11 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
                     award.Title = Title;
 
-                    httpContext.Response.Redirect(url);
+                    httpContext.Response.Redirect(returnUrl);
                 }
             }
 
-            httpContext.Response.Headers.Add("returnUrl", url);
+            httpContext.Response.Headers.Add("returnUrl", returnUrl);
             httpContext.Response.Headers.Add("ErrorMsg", "Failed to update award");
         }
     }

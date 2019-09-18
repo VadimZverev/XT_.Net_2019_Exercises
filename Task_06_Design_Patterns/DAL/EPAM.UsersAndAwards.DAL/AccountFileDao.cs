@@ -79,8 +79,7 @@ namespace EPAM.UsersAndAwards.DAL
                                  a.Id,
                                  a.Login,
                                  a.Password,
-                                 a.Role,
-                                 a.UserId
+                                 a.Role
                              };
 
                 var db = new { Accounts = accounts };
