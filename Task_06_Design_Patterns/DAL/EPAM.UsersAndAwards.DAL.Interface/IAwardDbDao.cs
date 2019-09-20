@@ -1,6 +1,6 @@
 ﻿namespace EPAM.UsersAndAwards.DAL.Interface
 {
-    public interface IAwardFileDao : IAwardDao
+    public interface IAwardDbDao : IAwardDao
     {
     }
 }

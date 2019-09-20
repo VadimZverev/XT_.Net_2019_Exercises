@@ -30,15 +30,24 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             {
                 var acc = _accountLogic.GetById(id);
 
-                if (acc != null)
-                {
-                    acc.Role = role;
-                    context.Response.Redirect(returnUrl);
-                }
-                else
+                if (acc == null)
                 {
                     context.Response.AppendHeader("ErrorMsg", "Account not found.");
                     return;
+                }
+                else
+                {
+                    acc.Role = role;
+
+                    if (_accountLogic.Update(acc))
+                    {
+                        context.Response.Redirect(returnUrl);
+                    }
+                    else
+                    {
+                        context.Response.AppendHeader("ErrorMsg", "Failed to update Account.");
+                        return;
+                    }
                 }
             }
 
@@ -73,7 +82,18 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             }
             else if (_storageMode == "Database")
             {
-                //TODO: написать DBLogic
+                _accountLogic = DependencyResolver.AccountDbLogic;
+            }
+            else
+            {
+                _accountLogic = DependencyResolver.AccountLogic;
+                _accountLogic.Add(new Account
+                {
+                    Id = 1,
+                    Login = "admin",
+                    Password = "AFQ2Ov+xNLDKynXrlVnvza0raj8yG/93udzwdY9pnSXRHStOiFck3oyFqOmzHA1RDA==",
+                    Role = 2
+                });
             }
         }
 

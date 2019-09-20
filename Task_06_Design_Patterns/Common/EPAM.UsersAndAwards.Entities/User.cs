@@ -5,11 +5,6 @@ namespace EPAM.UsersAndAwards.Entities
 {
     public class User
     {
-        public User()
-        {
-            Awards = new List<Award>();
-        }
-
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -31,7 +26,5 @@ namespace EPAM.UsersAndAwards.Entities
         }
 
         public byte[] Image { get; set; }
-
-        public ICollection<Award> Awards { get; set; }
     }
 }

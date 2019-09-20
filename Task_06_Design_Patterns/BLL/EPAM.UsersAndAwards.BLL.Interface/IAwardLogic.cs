@@ -15,8 +15,6 @@ namespace EPAM.UsersAndAwards.BLL.Interface
 
         Award GetById(int id);
 
-        void Save();
-
         bool Update(Award award);
     }
 }

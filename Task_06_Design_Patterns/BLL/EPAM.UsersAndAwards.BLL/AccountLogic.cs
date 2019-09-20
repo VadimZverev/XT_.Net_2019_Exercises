@@ -16,11 +16,6 @@ namespace EPAM.UsersAndAwards.BLL
             _accountDao = accountDao;
         }
 
-        public AccountLogic(IAccountFileDao accountDao)
-        {
-            _accountDao = accountDao;
-        }
-
         public bool Add(Account account)
         {
             Account _account = _accountDao.GetAll()
@@ -54,16 +49,6 @@ namespace EPAM.UsersAndAwards.BLL
         public bool Update(Account account)
         {
             return _accountDao.Update(account);
-        }
-
-        public void Save()
-        {
-            var _userFileDao = _accountDao as IAccountFileDao;
-
-            if (_accountDao != null)
-            {
-                _userFileDao.Save();
-            }
         }
     }
 }

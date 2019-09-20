@@ -76,9 +76,9 @@
                         if (User.IsInRole("User"))
                         {
                             <td>
-                                @if (user.Awards.Any())
+                                @if (ProgramModel.AwardExistByUserId(user.Id))
                                 {
-                                    foreach (var award in user.Awards)
+                                    foreach (var award in ProgramModel.GetAwardsByUserId(user.Id))
                                     {
                                         <div>- @award.Title</div>
                                     }

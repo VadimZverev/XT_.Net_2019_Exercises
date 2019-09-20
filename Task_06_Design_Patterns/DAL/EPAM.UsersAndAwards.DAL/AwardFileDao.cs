@@ -47,31 +47,54 @@ namespace EPAM.UsersAndAwards.DAL
             var lastId = _repoAwards.Any()
                 ? _repoAwards.Keys.Max()
                 : 0;
+
             award.Id = ++lastId;
 
             _repoAwards.Add(award.Id, award);
+
+            Save();
         }
 
         public bool Delete(int id)
         {
-            return _repoAwards.Remove(id);
+            if (_repoAwards.Remove(id))
+            {
+                Save();
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<Award> GetAll()
         {
-            return _repoAwards.Values;
+            foreach (var award in _repoAwards.Values)
+            {
+                yield return new Award
+                {
+                    Id = award.Id,
+                    Title = award.Title,
+                    Image = award.Image
+                };
+            }
         }
 
         public Award GetById(int id)
         {
             return _repoAwards.TryGetValue(id, out var award)
-                ? award
+                ? new Award
+                {
+                    Id = award.Id,
+                    Title = award.Title,
+                    Image = award.Image
+                }
                 : null;
         }
 
-        public void Save()
+        private void Save()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && !string.IsNullOrWhiteSpace(_dataBase))
             {
                 var awards = from a in _repoAwards.Values
                              select new
@@ -91,13 +114,16 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Update(Award award)
         {
-            if (!_repoAwards.ContainsKey(award.Id))
+            if (_repoAwards.ContainsKey(award.Id))
             {
-                return false;
+                _repoAwards[award.Id] = award;
+
+                Save();
+
+                return true;
             }
 
-            _repoAwards[award.Id] = award;
-            return true;
+            return false;
         }
     }
 }

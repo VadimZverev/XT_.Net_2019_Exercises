@@ -51,28 +51,61 @@ namespace EPAM.UsersAndAwards.DAL
             int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id);
 
             _repoAwardUsers.Add(id, awardUser);
+
+            Save();
         }
 
-        public bool Delete(int id)
+        public bool Delete(int awardId, int userId)
         {
-            return _repoAwardUsers.Remove(id);
+            var keyStr = $"{awardId}{userId}";
+
+            if (int.TryParse(keyStr, out int key)
+                && _repoAwardUsers.Remove(key))
+            {
+                Save();
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<AwardUser> GetAll()
         {
-            return _repoAwardUsers.Values;
+            foreach (var item in _repoAwardUsers.Values)
+            {
+                yield return new AwardUser
+                {
+                    AwardId = item.AwardId,
+                    UserId = item.UserId
+                };
+            }
         }
 
         public AwardUser GetById(int id)
         {
-            return _repoAwardUsers.TryGetValue(id, out var awardUSer)
-                ? awardUSer
+            return _repoAwardUsers.TryGetValue(id, out var awardUser)
+                ? new AwardUser { AwardId = awardUser.AwardId, UserId = awardUser.UserId }
                 : null;
         }
 
-        public void Save()
+        public AwardUser GetById(int awardId, int userId)
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            var keyStr = $"{awardId}{userId}";
+
+            if (int.TryParse(keyStr, out int key))
+            {
+                return _repoAwardUsers.TryGetValue(key, out var awardUser)
+                    ? new AwardUser { AwardId = awardUser.AwardId, UserId = awardUser.UserId }
+                    : null;
+            }
+
+            return null;
+        }
+
+        private void Save()
+        {
+            if (!string.IsNullOrEmpty(_dataBase)
+                && !string.IsNullOrWhiteSpace(_dataBase))
             {
                 var awardUser = from au in _repoAwardUsers.Values
                                 select new
@@ -91,13 +124,21 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Update(AwardUser awardUser)
         {
-            if (!_repoAwardUsers.ContainsKey(awardUser.AwardId))
+            if (_repoAwardUsers.ContainsValue(awardUser))
             {
-                return false;
+                var keyStr = $"{awardUser.AwardId}{awardUser.UserId}";
+
+                if (int.TryParse(keyStr, out int key))
+                {
+                    _repoAwardUsers[key] = awardUser;
+
+                    Save();
+
+                    return true;
+                }
             }
 
-            _repoAwardUsers[awardUser.AwardId] = awardUser;
-            return true;
+            return false;
         }
     }
 }

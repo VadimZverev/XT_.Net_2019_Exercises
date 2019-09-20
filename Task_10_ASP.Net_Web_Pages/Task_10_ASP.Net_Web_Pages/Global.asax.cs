@@ -55,7 +55,6 @@ namespace Task_10_ASP.Net_Web_Pages
 
         protected void Application_End(object sender, EventArgs e)
         {
-            ProgramModel.Save();
         }
     }
 }

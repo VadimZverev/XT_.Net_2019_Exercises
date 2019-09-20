@@ -31,13 +31,6 @@ namespace EPAM.UsersAndAwards.ConsolePL
                 select = SelectOption();
 
             } while (select != 'q' && select != 'й');
-
-            if (_storageMode == "File")
-            {
-                _userLogic.Save();
-                _awardLogic.Save();
-                _awardUserLogic.Save();
-            }
         }
 
         private static void InitialLogic(string storageMode)
@@ -47,31 +40,6 @@ namespace EPAM.UsersAndAwards.ConsolePL
                 _userLogic = DependencyResolver.UserFileLogic;
                 _awardLogic = DependencyResolver.AwardFileLogic;
                 _awardUserLogic = DependencyResolver.AwardUserFileLogic;
-
-                if (_awardUserLogic.GetAll().Count() != 0)
-                {
-                    foreach (var user in _userLogic.GetAll())
-                    {
-                        var userAwards = _awardUserLogic.GetAll().Where(au => au.UserId == user.Id);
-
-                        foreach (var item in userAwards)
-                        {
-                            var award = _awardLogic.GetById(item.AwardId);
-                            user.Awards.Add(award);
-                        }
-                    }
-
-                    foreach (var award in _awardLogic.GetAll())
-                    {
-                        var userAwards = _awardUserLogic.GetAll().Where(au => au.AwardId == award.Id);
-
-                        foreach (var item in userAwards)
-                        {
-                            var user = _userLogic.GetById(item.UserId);
-                            award.Users.Add(user);
-                        }
-                    }
-                }
             }
             else
             {
@@ -140,7 +108,8 @@ namespace EPAM.UsersAndAwards.ConsolePL
 
                     if (award != null)
                     {
-                        if (user.Awards.Contains(award))
+
+                        if (_awardUserLogic.GetById(award.Id, user.Id) != null)
                         {
                             Console.WriteLine($"Award already exists, enter another award.");
                             continue;
@@ -158,10 +127,6 @@ namespace EPAM.UsersAndAwards.ConsolePL
                 Console.WriteLine("The title must not be empty.");
 
             } while (true);
-
-
-            user.Awards.Add(award);
-            award.Users.Add(user);
 
             AwardUser awardUser = new AwardUser
             {
@@ -206,9 +171,7 @@ namespace EPAM.UsersAndAwards.ConsolePL
                 {
                     User user = new User { Name = name, DateOfBirth = dateOfBirth };
 
-                    bool isAdded = _userLogic.Add(user);
-
-                    if (isAdded)
+                    if (_userLogic.Add(user))
                         Console.WriteLine($"User added successful.{Environment.NewLine}");
                     else
                         Console.WriteLine("User already exist.");
@@ -243,23 +206,13 @@ namespace EPAM.UsersAndAwards.ConsolePL
             {
                 _awardLogic.Delete(award.Id);
 
-                var users = _userLogic.GetAll().Where(u => u.Awards.Contains(award));
-
-                foreach (User user in users)
-                {
-                    user.Awards.Remove(award);
-                }
-
                 var awardUserList = _awardUserLogic.GetAll()
                                                    .Where(au => au.AwardId == award.Id)
                                                    .ToList();
 
                 foreach (var awardUser in awardUserList)
                 {
-                    if (int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id))
-                    {
-                        _awardUserLogic.Delete(id);
-                    }
+                    _awardUserLogic.Delete(awardUser.AwardId, awardUser.UserId);
                 }
 
                 Console.WriteLine($"Award was deleted.{Environment.NewLine}");
@@ -315,23 +268,17 @@ namespace EPAM.UsersAndAwards.ConsolePL
             } while (true);
 
 
-            AwardUser awardUser =
-                _awardUserLogic.GetAll()
-                               .FirstOrDefault(au => au.AwardId == award.Id && au.UserId == user.Id);
+            AwardUser awardUser = _awardUserLogic.GetById(award.Id, user.Id);
 
-            if (awardUser != null)
+            if (awardUser != null
+                && _awardUserLogic.Delete(award.Id, user.Id))
             {
-                if (_awardUserLogic.Delete(awardUser.AwardId + awardUser.UserId))
-                {
-                    user.Awards.Remove(award);
-                    award.Users.Remove(user);
-
-                    Console.WriteLine($"Award \"{award.Title}\" removed to User \"{user.Name}\" successful.{Environment.NewLine}");
-                }
+                Console.WriteLine($"Award \"{award.Title}\" removed to " +
+                                    $"User \"{user.Name}\" successful.{Environment.NewLine}");
             }
             else
             {
-                Console.WriteLine("The award has not been added to the user.");
+                Console.WriteLine("The award has not been removed in the user.");
             }
 
             Console.WriteLine();
@@ -353,18 +300,11 @@ namespace EPAM.UsersAndAwards.ConsolePL
 
             } while (true);
 
-            var user = _userLogic.GetAll().FirstOrDefault(u => u.Id == id);
+            var user = _userLogic.GetById(id);
 
             if (user != null)
             {
                 _userLogic.Delete(user.Id);
-
-                var awards = _awardLogic.GetAll().Where(a => a.Users.Contains(user));
-
-                foreach (Award award in awards)
-                {
-                    award.Users.Remove(user);
-                }
 
                 var awardUserList = _awardUserLogic.GetAll()
                                                    .Where(au => au.UserId == user.Id)
@@ -372,13 +312,10 @@ namespace EPAM.UsersAndAwards.ConsolePL
 
                 foreach (var awardUser in awardUserList)
                 {
-                    if (int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out id))
-                    {
-                        _awardUserLogic.Delete(id);
-                    }
+                    _awardUserLogic.Delete(awardUser.AwardId, awardUser.UserId);
                 }
 
-                Console.WriteLine($"User was deleted.{Environment.NewLine}"); ;
+                Console.WriteLine($"User was deleted.{Environment.NewLine}");
             }
             else
                 Console.WriteLine($"User was not found with this Id = {id}.{Environment.NewLine}");
@@ -464,19 +401,25 @@ namespace EPAM.UsersAndAwards.ConsolePL
 
         private static void ShowUsers(IEnumerable<User> users)
         {
-            if (users is ICollection<User> u && u.Count != 0)
+            if (users.Count() != 0)
             {
                 Console.WriteLine();
 
-                foreach (User user in u)
+                foreach (User user in users)
                 {
                     Console.WriteLine($"User: {user.Name}{Environment.NewLine}"
                                       + $"ID: {user.Id}{Environment.NewLine}"
                                       + $"Date of Birth: {user.DateOfBirth.ToShortDateString()}{Environment.NewLine}"
                                       + $"Age: {user.Age}");
 
-                    if (user.Awards.Count() != 0)
-                        ShowAwards(user.Awards);
+                    var awardIds = _awardUserLogic.GetAll()
+                                           .Where(ac => ac.UserId == user.Id)
+                                           .Select(au => au.AwardId);
+
+                    var awards = _awardLogic.GetAll()
+                                    .Where(award => awardIds.Contains(award.Id));
+
+                    ShowAwards(awards);
 
                     Console.WriteLine();
                 }

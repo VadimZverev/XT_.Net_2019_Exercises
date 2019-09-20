@@ -47,40 +47,66 @@ namespace EPAM.UsersAndAwards.DAL
             var lastId = _repoAccounts.Any()
                 ? _repoAccounts.Keys.Max()
                 : 0;
+
             account.Id = ++lastId;
 
             _repoAccounts.Add(account.Id, account);
+
+            Save();
         }
 
         public bool Delete(int id)
         {
-            return _repoAccounts.Remove(id);
+            if (_repoAccounts.Remove(id))
+            {
+                Save();
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<Account> GetAll()
         {
-            return _repoAccounts.Values;
+            foreach (var acc in _repoAccounts.Values)
+            {
+                yield return new Account
+                {
+                    Id = acc.Id,
+                    Login = acc.Login,
+                    Password = acc.Password,
+                    Role = acc.Role
+                };
+            }
+
         }
 
         public Account GetById(int id)
         {
             return _repoAccounts.TryGetValue(id, out var account)
-                ? account
+                ? new Account
+                {
+                    Id = account.Id,
+                    Login = account.Login,
+                    Password = account.Password,
+                    Role = account.Role
+                }
                 : null;
         }
 
-        public void Save()
+        private void Save()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && !string.IsNullOrWhiteSpace(_dataBase))
             {
                 var accounts = from a in _repoAccounts.Values
-                             select new
-                             {
-                                 a.Id,
-                                 a.Login,
-                                 a.Password,
-                                 a.Role
-                             };
+                               select new
+                               {
+                                   a.Id,
+                                   a.Login,
+                                   a.Password,
+                                   a.Role
+                               };
 
                 var db = new { Accounts = accounts };
 
@@ -92,13 +118,16 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Update(Account account)
         {
-            if (!_repoAccounts.ContainsKey(account.Id))
+            if (_repoAccounts.ContainsKey(account.Id))
             {
-                return false;
+                _repoAccounts[account.Id] = account;
+
+                Save();
+
+                return true;
             }
 
-            _repoAccounts[account.Id] = account;
-            return true;
+            return false;
         }
     }
 }

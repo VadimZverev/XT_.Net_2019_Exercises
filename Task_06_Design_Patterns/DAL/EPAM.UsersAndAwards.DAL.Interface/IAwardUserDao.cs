@@ -7,11 +7,13 @@ namespace EPAM.UsersAndAwards.DAL.Interface
     {
         void Add(AwardUser awardUser);
 
-        bool Delete(int id);
+        bool Delete(int awardId, int userId);
 
         IEnumerable<AwardUser> GetAll();
 
         AwardUser GetById(int id);
+
+        AwardUser GetById(int awardId, int userId);
 
         bool Update(AwardUser awardUser);
     }

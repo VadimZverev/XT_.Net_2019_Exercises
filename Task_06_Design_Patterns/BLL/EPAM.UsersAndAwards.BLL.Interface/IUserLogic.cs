@@ -13,8 +13,6 @@ namespace EPAM.UsersAndAwards.BLL.Interface
 
         User GetById(int id);
 
-        void Save();
-
         bool Update(User user);
     }
 }

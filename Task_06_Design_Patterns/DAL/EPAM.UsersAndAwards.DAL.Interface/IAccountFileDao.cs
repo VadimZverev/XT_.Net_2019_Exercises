@@ -2,6 +2,5 @@
 {
     public interface IAccountFileDao : IAccountDao
     {
-        void Save();
     }
 }
