@@ -53,15 +53,5 @@ namespace EPAM.UsersAndAwards.BLL
         {
             return _userDao.Update(user);
         }
-
-        public void Save()
-        {
-            var _userFileDao = _userDao as IUserFileDao;
-
-            if (_userDao != null)
-            {
-                _userFileDao.Save();
-            }
-        }
     }
 }

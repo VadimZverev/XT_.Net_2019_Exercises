@@ -2,6 +2,5 @@
 {
     public interface IUserFileDao : IUserDao
     {
-        void Save();
     }
 }

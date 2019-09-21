@@ -15,9 +15,16 @@ namespace EPAM.UsersAndAwards.DAL
             _repoAwardUsers.Add(id, awardUser);
         }
 
-        public bool Delete(int id)
+        public bool Delete(int awardId, int userId)
         {
-            return _repoAwardUsers.Remove(id);
+            var keyStr = $"{awardId}{userId}";
+
+            if (int.TryParse(keyStr, out int key))
+            {
+                return _repoAwardUsers.Remove(key);
+            }
+
+            return false;
         }
 
         public IEnumerable<AwardUser> GetAll()
@@ -25,22 +32,18 @@ namespace EPAM.UsersAndAwards.DAL
             return _repoAwardUsers.Values;
         }
 
-        public AwardUser GetById(int id)
+        public AwardUser GetById(int awardId, int userId)
         {
-            return _repoAwardUsers.TryGetValue(id, out var awardUSer)
-                ? awardUSer
-                : null;
-        }
+            var keyStr = $"{awardId}{userId}";
 
-        public bool Update(AwardUser awardUser)
-        {
-            if (!_repoAwardUsers.ContainsKey(awardUser.AwardId))
+            if (int.TryParse(keyStr, out int key))
             {
-                return false;
+                return _repoAwardUsers.TryGetValue(key, out var awardUser)
+                    ? awardUser
+                    : null;
             }
 
-            _repoAwardUsers[awardUser.AwardId] = awardUser;
-            return true;
+            return null;
         }
     }
 }

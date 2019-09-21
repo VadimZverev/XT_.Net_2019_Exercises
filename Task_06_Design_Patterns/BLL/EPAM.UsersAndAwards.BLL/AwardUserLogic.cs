@@ -36,9 +36,9 @@ namespace EPAM.UsersAndAwards.BLL
             return false;
         }
 
-        public bool Delete(int id)
+        public bool Delete(int awardId, int userId)
         {
-            return _awardUserDao.Delete(id);
+            return _awardUserDao.Delete(awardId, userId);
         }
 
         public IEnumerable<AwardUser> GetAll()
@@ -46,24 +46,9 @@ namespace EPAM.UsersAndAwards.BLL
             return _awardUserDao.GetAll();
         }
 
-        public AwardUser GetById(int id)
+        public AwardUser GetById(int awardId, int userId)
         {
-            return _awardUserDao.GetById(id);
-        }
-
-        public void Save()
-        {
-            var _awardUserFileDao = _awardUserDao as IAwardUserFileDao;
-
-            if (_awardUserDao != null)
-            {
-                _awardUserFileDao.Save();
-            }
-        }
-
-        public bool Update(AwardUser awardUser)
-        {
-            return _awardUserDao.Update(awardUser);
+            return _awardUserDao.GetById(awardId, userId);
         }
     }
 }

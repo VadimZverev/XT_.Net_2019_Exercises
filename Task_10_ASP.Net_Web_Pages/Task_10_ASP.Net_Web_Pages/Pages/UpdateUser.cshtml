@@ -1,0 +1,111 @@
+﻿@using EPAM.UsersAndAwards.Entities;
+@using models = Task_10_ASP.Net_Web_Pages.Models;
+@{
+    Layout = "/Pages/_Layout.cshtml";
+    Page.Title = "Update User";
+
+
+    string errorMsg = Response.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (returnUrl == "/Pages/UpdateUser" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
+    }
+
+    if (Request.QueryString.Count != 0)
+    {
+        if (int.TryParse(Request.QueryString["idUser"], out int idUser))
+        {
+            User user = models.ProgramModel.GetUser(idUser);
+
+            if (user == null)
+            {
+                <h3 class="pl-2 bg-danger text-white text-center">User not found</h3>
+                <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+            }
+            else
+            {
+                <h3 class="p-2 bg-primary text-white text-center">Update User</h3>
+
+                if (errorMsg != null)
+                {
+                    <div class="alert-danger">
+                        @errorMsg
+                    </div>
+                }
+
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="idUser" value="@user.Id" />
+                    <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input class="form-control" id="name" type="text" name="Name" value="@user.Name" />
+                    </div>
+                    <div class="form-group">
+                        <label for="DateOfBirth">Date Of Birth:</label>
+                        <input class="form-control" id="DateOfBirth" type="date" name="DateOfBirth"
+                               value="@(user?.DateOfBirth.ToString("yyyy-MM-dd"))" />
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <div class="custom-file">
+                            <label id="fileName" class="custom-file-label" for="customFile">Choose image file</label>
+                            <input id="customFile" type="file" accept="image/*" class="custom-file-input" name="Image">
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="delImage" name="delImage">
+                        <label class="form-check-label" for="delImage">Delete image</label>
+                    </div>
+                    <div class="form-group text-center">
+                        @if (user.Image != null)
+                        {
+                            var src = Convert.ToBase64String(user.Image);
+                            <div class="img-fluid text-center">
+                                <img id="avatar" style="width:150px;height:150px"
+                                     class="imgView rounded mx-auto d-block"
+                                     src="data:image;base64,@src" alt="image" />
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="img-fluid text-center">
+                                <img id="avatar" style="width:150px;height:150px"
+                                     class="imgView rounded mx-auto d-block"
+                                     src="~/Content/Images/noimage.png" alt="image" />
+                            </div>
+                        }
+                    </div>
+                    <div class="form-group text-center">
+                        <button id="update" class="btn btn-primary" type="submit">Update</button>
+                        <a class="btn btn-secondary" href="@returnUrl">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+                <script src="~/Scripts/onChangeFileUpload.js"></script>
+            }
+        }
+        else
+        {
+            <h3 class="pl-2 bg-warning text-white text-center">Not valid id.</h3>
+            <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
+        }
+    }
+    else
+    {
+        <h3 class="pl-2 bg-danger text-white text-center">Nothing update</h3>
+        <a href="~/Pages/Index" class="btn btn-primary">Main menu</a>
+    }
+}

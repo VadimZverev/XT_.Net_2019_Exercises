@@ -16,11 +16,6 @@ namespace EPAM.UsersAndAwards.BLL
             _awardDao = awardDao;
         }
 
-        public AwardLogic(IAwardFileDao awardFileDao)
-        {
-            _awardDao = awardFileDao;
-        }
-
         public bool Add(Award award)
         {
             Award _award = _awardDao.GetAll()
@@ -59,16 +54,6 @@ namespace EPAM.UsersAndAwards.BLL
         public Award GetById(int id)
         {
             return _awardDao.GetById(id);
-        }
-
-        public void Save()
-        {
-            var _awardFileDao = _awardDao as IAwardFileDao;
-
-            if (_awardDao != null)
-            {
-                _awardFileDao.Save();
-            }
         }
 
         public bool Update(Award award)

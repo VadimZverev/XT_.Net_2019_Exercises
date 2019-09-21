@@ -7,14 +7,10 @@ namespace EPAM.UsersAndAwards.BLL.Interface
     {
         bool Add(AwardUser awardUser);
 
-        bool Delete(int id);
+        bool Delete(int awardId, int userId);
 
         IEnumerable<AwardUser> GetAll();
 
-        AwardUser GetById(int id);
-
-        void Save();
-
-        bool Update(AwardUser awardUser);
+        AwardUser GetById(int awardId, int userId);
     }
 }

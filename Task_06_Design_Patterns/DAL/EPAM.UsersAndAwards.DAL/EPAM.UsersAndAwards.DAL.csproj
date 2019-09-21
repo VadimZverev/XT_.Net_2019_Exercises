@@ -45,11 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountFakeDao.cs" />
+    <Compile Include="AccountFileDao.cs" />
+    <Compile Include="AwardDbDao.cs" />
     <Compile Include="AwardFakeDao.cs" />
     <Compile Include="AwardFileDao.cs" />
+    <Compile Include="AwardUserDbDao.cs" />
     <Compile Include="AwardUserFakeDao.cs" />
     <Compile Include="AwardUserFileDao.cs" />
+    <Compile Include="AccountDbDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UserDbDao.cs" />
     <Compile Include="UserFakeDao.cs" />
     <Compile Include="UserFileDao.cs" />
   </ItemGroup>

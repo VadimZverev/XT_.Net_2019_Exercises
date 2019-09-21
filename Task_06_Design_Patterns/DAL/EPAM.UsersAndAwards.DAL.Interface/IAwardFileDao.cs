@@ -2,6 +2,5 @@
 {
     public interface IAwardFileDao : IAwardDao
     {
-        void Save();
     }
 }

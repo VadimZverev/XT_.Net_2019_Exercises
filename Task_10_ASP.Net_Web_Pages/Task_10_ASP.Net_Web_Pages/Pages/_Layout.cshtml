@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>@Page.Title</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/Content/bootstrap.min.css" />
+    <script src="~/Scripts/jquery-3.4.1.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+</head>
+<body class="m-1 p-1">
+    <nav class="navbar navbar-dark nav bg-dark">
+        <div class="navbar-brand">
+            <a class="navbar-brand" href="~/Pages/Index">Main Page</a>
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <form class="form-inline my-2 my-lg-0" action="" method="post">
+                <button type="submit" name="SignOut"
+                        class="btn btn-outline-light my-2 my-sm-0">
+                    Sign Out
+                </button>
+            </form>
+        }
+        else
+        {
+            <div class="form-inline my-2 my-lg-0">
+                <a href="~/Pages/SignIn" class="btn btn-outline-light m-2">Sign In</a>
+                <a href="~/Pages/Registration" class="btn btn-outline-light m-2">Registration</a>
+            </div>
+        }
+    </nav>
+    @RenderBody()
+</body>
+</html>

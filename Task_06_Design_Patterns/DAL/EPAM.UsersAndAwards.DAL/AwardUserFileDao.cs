@@ -1,6 +1,7 @@
 ﻿using EPAM.UsersAndAwards.DAL.Interface;
 using EPAM.UsersAndAwards.Entities;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,7 +16,9 @@ namespace EPAM.UsersAndAwards.DAL
 
         static AwardUserFileDao()
         {
-            _dataBase = ConfigurationManager.AppSettings["AwardUser"];
+            _dataBase =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["AwardUser"]);
+
             _repoAwardUsers = new Dictionary<int, AwardUser>();
 
             GetData();
@@ -23,24 +26,23 @@ namespace EPAM.UsersAndAwards.DAL
 
         private static void GetData()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && File.Exists(_dataBase))
             {
-                if (File.Exists(_dataBase))
+                string data = File.ReadAllText(_dataBase);
+
+                var awardUserDb = new { AwardUser = new List<AwardUser>() };
+
+                awardUserDb = JsonConvert.DeserializeAnonymousType(data, awardUserDb);
+
+                foreach (AwardUser awardUser in awardUserDb.AwardUser)
                 {
-                    string data = File.ReadAllText(_dataBase);
-
-                    var awardUserDb = new { AwardUser = new List<AwardUser>() };
-
-                    awardUserDb = JsonConvert.DeserializeAnonymousType(data, awardUserDb);
-
-                    foreach (AwardUser awardUser in awardUserDb.AwardUser)
+                    if (int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id))
                     {
-                        if (int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id))
-                        {
-                            _repoAwardUsers.Add(id, awardUser);
-                        }
+                        _repoAwardUsers.Add(id, awardUser);
                     }
                 }
+
             }
         }
 
@@ -49,28 +51,54 @@ namespace EPAM.UsersAndAwards.DAL
             int.TryParse($"{awardUser.AwardId}{awardUser.UserId}", out int id);
 
             _repoAwardUsers.Add(id, awardUser);
+
+            Save();
         }
 
-        public bool Delete(int id)
+        public bool Delete(int awardId, int userId)
         {
-            return _repoAwardUsers.Remove(id);
+            var keyStr = $"{awardId}{userId}";
+
+            if (int.TryParse(keyStr, out int key)
+                && _repoAwardUsers.Remove(key))
+            {
+                Save();
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<AwardUser> GetAll()
         {
-            return _repoAwardUsers.Values;
+            foreach (var item in _repoAwardUsers.Values)
+            {
+                yield return new AwardUser
+                {
+                    AwardId = item.AwardId,
+                    UserId = item.UserId
+                };
+            }
         }
 
-        public AwardUser GetById(int id)
+        public AwardUser GetById(int awardId, int userId)
         {
-            return _repoAwardUsers.TryGetValue(id, out var awardUSer)
-                ? awardUSer
-                : null;
+            var keyStr = $"{awardId}{userId}";
+
+            if (int.TryParse(keyStr, out int key))
+            {
+                return _repoAwardUsers.TryGetValue(key, out var awardUser)
+                    ? new AwardUser { AwardId = awardUser.AwardId, UserId = awardUser.UserId }
+                    : null;
+            }
+
+            return null;
         }
 
-        public void Save()
+        private void Save()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && !string.IsNullOrWhiteSpace(_dataBase))
             {
                 var awardUser = from au in _repoAwardUsers.Values
                                 select new
@@ -85,17 +113,6 @@ namespace EPAM.UsersAndAwards.DAL
 
                 File.WriteAllText(_dataBase, dateBase);
             }
-        }
-
-        public bool Update(AwardUser awardUser)
-        {
-            if (!_repoAwardUsers.ContainsKey(awardUser.AwardId))
-            {
-                return false;
-            }
-
-            _repoAwardUsers[awardUser.AwardId] = awardUser;
-            return true;
         }
     }
 }

@@ -41,10 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IAccountDbDao.cs" />
+    <Compile Include="IAccountFileDao.cs" />
     <Compile Include="IAwardDao.cs" />
+    <Compile Include="IAwardDbDao.cs" />
     <Compile Include="IAwardFileDao.cs" />
     <Compile Include="IAwardUserDao.cs" />
+    <Compile Include="IAwardUserDbDao.cs" />
     <Compile Include="IAwardUserFileDao.cs" />
+    <Compile Include="IAccountDao.cs" />
+    <Compile Include="IUserDbDao.cs" />
     <Compile Include="IUserDao.cs" />
     <Compile Include="IUserFileDao.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

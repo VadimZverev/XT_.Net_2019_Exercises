@@ -1,0 +1,67 @@
+﻿@using Task_10_ASP.Net_Web_Pages.Models
+
+@{
+    Layout = "_Layout.cshtml";
+    Page.Title = "Add Award to User";
+
+    string errorMsg = Response.Headers["ErrorMsg"];
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Response.Redirect("/Pages/SignIn");
+    }
+    else if (!User.IsInRole("Admin"))
+    {
+        Response.Redirect("/Pages/Index");
+    }
+
+    if (returnUrl == "/Pages/AddAwardToUser" || returnUrl == null)
+    {
+        returnUrl = "/Pages/Index";
+    }
+}
+
+<h3 class="p-2 bg-primary text-white text-center">@Page.Title</h3>
+
+@if (errorMsg != null)
+{
+    <div class="alert-danger m-2">
+        @errorMsg
+    </div>
+}
+
+<form action="" method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelectUser">User</label>
+        </div>
+        <select name="User" class="custom-select" id="inputGroupSelectUser">
+            <option selected disabled>Choose...</option>
+            @foreach (var user in ProgramModel.GetUsers().OrderBy(u => u.Name))
+            {
+                <option value="@user.Id">
+                    @user.Name
+                </option>
+            }
+        </select>
+    </div>
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <label class="input-group-text" for="inputGroupSelectAward">Award</label>
+        </div>
+        <select name="Award" class="custom-select" id="inputGroupSelectAward">
+            <option selected disabled>Choose...</option>
+            @foreach (var award in ProgramModel.GetAwards().OrderBy(a => a.Title))
+            {
+                <option value="@award.Id">
+                    @award.Title
+                </option>
+            }
+        </select>
+    </div>
+    <div class="form-group text-center">
+        <button id="add" class="btn btn-primary" type="submit">Add</button>
+        <a class="btn btn-secondary" href="@returnUrl">Cancel</a>
+    </div>
+</form>

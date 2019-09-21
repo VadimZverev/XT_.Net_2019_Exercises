@@ -1,6 +1,7 @@
 ﻿using EPAM.UsersAndAwards.DAL.Interface;
 using EPAM.UsersAndAwards.Entities;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
@@ -15,7 +16,9 @@ namespace EPAM.UsersAndAwards.DAL
 
         static UserFileDao()
         {
-            _dataBase = ConfigurationManager.AppSettings["Users"];
+            _dataBase =
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ConfigurationManager.AppSettings["Users"]);
+
             _repoUsers = new Dictionary<int, User>();
 
             GetData();
@@ -23,23 +26,22 @@ namespace EPAM.UsersAndAwards.DAL
 
         private static void GetData()
         {
-            if (!string.IsNullOrEmpty(_dataBase))
+            if (!string.IsNullOrEmpty(_dataBase)
+                && File.Exists(_dataBase))
             {
-                if (File.Exists(_dataBase))
+                string data = File.ReadAllText(_dataBase);
+
+                var usersDb = new { Users = new List<User>() };
+
+                usersDb = JsonConvert.DeserializeAnonymousType(data, usersDb);
+
+                foreach (User user in usersDb.Users)
                 {
-                    string data = File.ReadAllText(_dataBase);
-
-                    var usersDb = new { Users = new List<User>() };
-
-                    usersDb = JsonConvert.DeserializeAnonymousType(data, usersDb);
-
-                    foreach (User user in usersDb.Users)
-                    {
-                        _repoUsers.Add(user.Id, user);
-                    }
+                    _repoUsers.Add(user.Id, user);
                 }
             }
         }
+
 
         public void Add(User user)
         {
@@ -49,26 +51,49 @@ namespace EPAM.UsersAndAwards.DAL
             user.Id = ++lastId;
 
             _repoUsers.Add(user.Id, user);
+
+            Save();
         }
 
         public bool Delete(int id)
         {
-            return _repoUsers.Remove(id);
+            if (_repoUsers.Remove(id))
+            {
+                Save();
+                return true;
+            }
+
+            return false;
         }
 
         public IEnumerable<User> GetAll()
         {
-            return _repoUsers.Values;
+            foreach (var user in _repoUsers.Values)
+            {
+                yield return new User
+                {
+                    Id = user.Id,
+                    Name = user.Name,
+                    DateOfBirth = user.DateOfBirth,
+                    Image = user.Image
+                };
+            }
         }
 
         public User GetById(int id)
         {
             return _repoUsers.TryGetValue(id, out var user)
-                   ? user
+                   ? new User
+                   {
+                       Id = user.Id,
+                       Name = user.Name,
+                       DateOfBirth = user.DateOfBirth,
+                       Image = user.Image
+                   }
                    : null;
         }
 
-        public void Save()
+        private void Save()
         {
             if (!string.IsNullOrEmpty(_dataBase))
             {
@@ -78,7 +103,8 @@ namespace EPAM.UsersAndAwards.DAL
                                 u.Id,
                                 u.Name,
                                 u.DateOfBirth,
-                                u.Age
+                                u.Age,
+                                u.Image
                             };
 
                 var db = new { Users = users };
@@ -97,6 +123,9 @@ namespace EPAM.UsersAndAwards.DAL
             }
 
             _repoUsers[user.Id] = user;
+
+            Save();
+
             return true;
         }
     }
