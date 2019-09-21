@@ -50,21 +50,38 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Delete(int awardId, int userId)
         {
-            int rows;
+            int res;
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "DeleteAwardUser";
+                command.CommandType = CommandType.StoredProcedure;
 
-                using (var command = new SqlCommand("DELETE FROM AwardUser WHERE AwardId = @awardId AND UserId = @userId;", connection))
+                var AwardId = new SqlParameter
                 {
-                    command.Parameters.AddWithValue("@awardId", awardId);
-                    command.Parameters.AddWithValue("@userId", userId);
-                    rows = command.ExecuteNonQuery();
-                }
+                    ParameterName = "@awardId",
+                    Value = awardId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                var UserId = new SqlParameter
+                {
+                    ParameterName = "@userId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(AwardId);
+                command.Parameters.Add(UserId);
+
+                connection.Open();
+                res = command.ExecuteNonQuery();
             }
 
-            return rows > 0;
+            return res > 0;
         }
 
         public IEnumerable<AwardUser> GetAll()
@@ -72,8 +89,8 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = "SELECT * FROM AwardUser";
+                command.CommandText = "GetAwardUser";
+                command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
 
                 var reader = command.ExecuteReader();
@@ -92,19 +109,32 @@ namespace EPAM.UsersAndAwards.DAL
             }
         }
 
-        ///<exception cref="NotImplementedException"></exception>
-        public AwardUser GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
         public AwardUser GetById(int awardId, int userId)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = $"SELECT * FROM Award WHERE AwardId = {awardId}, UserId = {userId};";
+                command.CommandText = "GetAwardUserByIds";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var AwardId = new SqlParameter
+                {
+                    ParameterName = "@awardId",
+                    Value = awardId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                var UserId = new SqlParameter
+                {
+                    ParameterName = "@userId",
+                    Value = userId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(AwardId);
+                command.Parameters.Add(UserId);
 
                 connection.Open();
 
@@ -121,28 +151,6 @@ namespace EPAM.UsersAndAwards.DAL
 
                 return null;
             }
-        }
-
-        public bool Update(AwardUser awardUser)
-        {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                connection.Open();
-
-                var commandStr = "UPDATE AwardUser SET " +
-                                 "AwardId = @awardId, " +
-                                 "UserId = @userId;";
-
-                using (var command = new SqlCommand(commandStr, connection))
-                {
-                    command.Parameters.AddWithValue("@awardId", awardUser.AwardId);
-                    command.Parameters.AddWithValue("@userId", awardUser.UserId);
-
-                    command.ExecuteNonQuery();
-                }
-            }
-
-            return true;
         }
     }
 }

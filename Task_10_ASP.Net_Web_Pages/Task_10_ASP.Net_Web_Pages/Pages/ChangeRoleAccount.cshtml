@@ -34,6 +34,14 @@
                 <h3 class="pl-2 bg-danger text-white text-center">Account not found</h3>
                 <a href="/Pages/Index" class="btn btn-primary">Main menu</a>
             }
+            else if (account.Login == User.Identity.Name)
+            {
+                <h3 class="pl-2 bg-danger text-white text-center">
+                    It is impossible to change your role. 
+                    Contact the DB admin or another admins to change your role.
+                </h3>
+                <a href="~/Pages/ShowAccounts" class="btn btn-primary">Back</a>
+            }
             else
             {
                 <h3 class="p-2 bg-primary text-white text-center">Change Role Account</h3>

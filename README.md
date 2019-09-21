@@ -61,3 +61,11 @@ Project Structure:
 	* 9.2. Math Calculator
 	* 9.3. Butterfly Control
 	* 9.4. Simple Gallary
+11. Task_10_ASP.Net_Web_Pages - In progress
+	* 10.1. WEB UI
+	* 10.2. CRUD Application
+	* 10.3. Images
+	* 10.4. Security
+12. Task 11 Databases - Task 12 is done
+	* 11.1. Database - Script in root catalog Task_10_ASP...
+	* 11.2. SQL DAL

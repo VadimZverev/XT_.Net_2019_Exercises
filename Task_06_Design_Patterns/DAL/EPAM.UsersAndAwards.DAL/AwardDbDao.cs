@@ -38,11 +38,8 @@ namespace EPAM.UsersAndAwards.DAL
                     Direction = ParameterDirection.Input
                 };
 
-                command.Parameters.AddRange(new SqlParameter[]
-                {
-                    name,
-                    image
-                });
+                command.Parameters.Add(name);
+                command.Parameters.Add(image);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -51,18 +48,29 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Delete(int id)
         {
+            int res;
+
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "DeleteAward";
+                command.CommandType = CommandType.StoredProcedure;
 
-                using (var command = new SqlCommand("DELETE FROM Awards WHERE Id = @id", connection))
+                var awardId = new SqlParameter
                 {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
-                }
+                    ParameterName = "@id",
+                    Value = id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(awardId);
+
+                connection.Open();
+                res = command.ExecuteNonQuery();
             }
 
-            return true;
+            return res > 0;
         }
 
         public IEnumerable<Award> GetAll()
@@ -70,10 +78,10 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = "SELECT * FROM Awards";
-                connection.Open();
+                command.CommandText = "GetAwards";
+                command.CommandType = CommandType.StoredProcedure;
 
+                connection.Open();
                 var reader = command.ExecuteReader();
 
                 while (reader.Read())
@@ -97,8 +105,18 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = $"SELECT * FROM Awards WHERE Id = {id};";
+                command.CommandText = "GetAwardById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var awardId = new SqlParameter
+                {
+                    ParameterName = "@id",
+                    Value = id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(awardId);
 
                 connection.Open();
 
@@ -123,29 +141,49 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Update(Award award)
         {
+            int res;
+
             using (var connection = new SqlConnection(_connectionString))
             {
+                var command = connection.CreateCommand();
+                command.CommandText = "UpdateAwardById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var id = new SqlParameter
+                {
+                    ParameterName = "@id",
+                    Value = award.Id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                var title = new SqlParameter
+                {
+                    ParameterName = "@title",
+                    Value = award.Title,
+                    SqlDbType = SqlDbType.NVarChar,
+                    Direction = ParameterDirection.Input
+                };
+
+                var image = new SqlParameter
+                {
+                    ParameterName = "@Image",
+                    Value = award.Image ?? System.Data.SqlTypes.SqlBinary.Null,
+                    SqlDbType = SqlDbType.VarBinary,
+                    IsNullable = true,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(id);
+                command.Parameters.Add(title);
+                command.Parameters.Add(image);
+                
                 connection.Open();
 
-                var commandStr = "UPDATE Awards SET " +
-                                 "Title = @title, " +
-                                 "Image = @image " +
-                                 "WHERE Id = @id;";
-
-                using (var command = new SqlCommand(commandStr, connection))
-                {
-                    command.Parameters.AddWithValue("@id", award.Id);
-                    command.Parameters.AddWithValue("@title", award.Title);
-
-                    var image = command.Parameters.Add("@image", SqlDbType.VarBinary);
-                    image.Value = award.Image ?? System.Data.SqlTypes.SqlBinary.Null;
-                    image.IsNullable = true;
-
-                    command.ExecuteNonQuery();
-                }
+                res = command.ExecuteNonQuery();
             }
 
-            return true;
+            return res > 0;
         }
     }
 }

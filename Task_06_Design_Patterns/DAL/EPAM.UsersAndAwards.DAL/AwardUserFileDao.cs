@@ -81,13 +81,6 @@ namespace EPAM.UsersAndAwards.DAL
             }
         }
 
-        public AwardUser GetById(int id)
-        {
-            return _repoAwardUsers.TryGetValue(id, out var awardUser)
-                ? new AwardUser { AwardId = awardUser.AwardId, UserId = awardUser.UserId }
-                : null;
-        }
-
         public AwardUser GetById(int awardId, int userId)
         {
             var keyStr = $"{awardId}{userId}";
@@ -120,25 +113,6 @@ namespace EPAM.UsersAndAwards.DAL
 
                 File.WriteAllText(_dataBase, dateBase);
             }
-        }
-
-        public bool Update(AwardUser awardUser)
-        {
-            if (_repoAwardUsers.ContainsValue(awardUser))
-            {
-                var keyStr = $"{awardUser.AwardId}{awardUser.UserId}";
-
-                if (int.TryParse(keyStr, out int key))
-                {
-                    _repoAwardUsers[key] = awardUser;
-
-                    Save();
-
-                    return true;
-                }
-            }
-
-            return false;
         }
     }
 }

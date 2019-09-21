@@ -54,13 +54,10 @@ namespace EPAM.UsersAndAwards.DAL
                     Direction = ParameterDirection.Input
                 };
 
-                command.Parameters.AddRange(new SqlParameter[]
-                {
-                    name,
-                    dateOfBirth,
-                    age,
-                    image
-                });
+                command.Parameters.Add(name);
+                command.Parameters.Add(dateOfBirth);
+                command.Parameters.Add(age);
+                command.Parameters.Add(image);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -69,18 +66,29 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Delete(int id)
         {
+            int res;
+
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "DeleteUser";
+                command.CommandType = CommandType.StoredProcedure;
 
-                using (var command = new SqlCommand("DELETE FROM Users WHERE Id = @id", connection))
+                var userId = new SqlParameter
                 {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
-                }
+                    ParameterName = "@id",
+                    Value = id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(userId);
+
+                connection.Open();
+                res = command.ExecuteNonQuery();
             }
 
-            return true;
+            return res > 0;
         }
 
         public IEnumerable<User> GetAll()
@@ -88,8 +96,8 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = "SELECT * FROM Users";
+                command.CommandText = "GetUsers";
+                command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
 
                 var reader = command.ExecuteReader();
@@ -117,8 +125,18 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = $"SELECT * FROM Users WHERE Id = {id};";
+                command.CommandText = "GetUserById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var userId = new SqlParameter
+                {
+                    ParameterName = "@id",
+                    Value = id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(userId);
 
                 connection.Open();
 
@@ -145,33 +163,67 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Update(User user)
         {
+            int res;
+
             using (var connection = new SqlConnection(_connectionString))
             {
+                var command = connection.CreateCommand();
+                command.CommandText = "UpdateUserById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var id = new SqlParameter
+                {
+                    ParameterName = "@id",
+                    Value = user.Id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                var name = new SqlParameter
+                {
+                    ParameterName = "@Name",
+                    Value = user.Name,
+                    SqlDbType = SqlDbType.NVarChar,
+                    Direction = ParameterDirection.Input
+                };
+
+                var dateOfBirth = new SqlParameter
+                {
+                    ParameterName = "@DateOfBirth",
+                    Value = user.DateOfBirth,
+                    SqlDbType = SqlDbType.Date,
+                    Direction = ParameterDirection.Input
+                };
+
+                var age = new SqlParameter
+                {
+                    ParameterName = "@Age",
+                    Value = user.Age,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                var image = new SqlParameter
+                {
+                    ParameterName = "@Image",
+                    Value = user.Image ?? System.Data.SqlTypes.SqlBinary.Null,
+                    SqlDbType = SqlDbType.VarBinary,
+                    IsNullable = true,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(id);
+                command.Parameters.Add(name);
+                command.Parameters.Add(dateOfBirth);
+                command.Parameters.Add(age);
+                command.Parameters.Add(image);
+
                 connection.Open();
 
-                var commandStr = "UPDATE Users SET " +
-                                 "Name = @name, " +
-                                 "DateOfBirth = @dateOfBirth, " +
-                                 "Age = @age, " +
-                                 "Image = @image " +
-                                 "WHERE Id = @id;";
-
-                using (var command = new SqlCommand(commandStr, connection))
-                {
-                    command.Parameters.AddWithValue("@id", user.Id);
-                    command.Parameters.AddWithValue("@name", user.Name);
-                    command.Parameters.AddWithValue("@dateOfBirth", user.DateOfBirth);
-                    command.Parameters.AddWithValue("@age", user.Age);
-
-                    var image = command.Parameters.Add("@image", SqlDbType.VarBinary);
-                    image.Value = user.Image ?? System.Data.SqlTypes.SqlBinary.Null;
-                    image.IsNullable = true;
-
-                    command.ExecuteNonQuery();
-                }
+                res = command.ExecuteNonQuery();
             }
 
-            return true;
+            return res > 0;
         }
     }
 }

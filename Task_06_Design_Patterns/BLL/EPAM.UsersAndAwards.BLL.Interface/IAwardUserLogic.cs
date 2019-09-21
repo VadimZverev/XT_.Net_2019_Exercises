@@ -11,10 +11,6 @@ namespace EPAM.UsersAndAwards.BLL.Interface
 
         IEnumerable<AwardUser> GetAll();
 
-        AwardUser GetById(int id);
-
         AwardUser GetById(int awardId, int userId);
-
-        bool Update(AwardUser awardUser);
     }
 }

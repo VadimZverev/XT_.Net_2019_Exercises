@@ -32,13 +32,6 @@ namespace EPAM.UsersAndAwards.DAL
             return _repoAwardUsers.Values;
         }
 
-        public AwardUser GetById(int id)
-        {
-            return _repoAwardUsers.TryGetValue(id, out var awardUSer)
-                ? awardUSer
-                : null;
-        }
-
         public AwardUser GetById(int awardId, int userId)
         {
             var keyStr = $"{awardId}{userId}";
@@ -51,17 +44,6 @@ namespace EPAM.UsersAndAwards.DAL
             }
 
             return null;
-        }
-
-        public bool Update(AwardUser awardUser)
-        {
-            if (!_repoAwardUsers.ContainsKey(awardUser.AwardId))
-            {
-                return false;
-            }
-
-            _repoAwardUsers[awardUser.AwardId] = awardUser;
-            return true;
         }
     }
 }

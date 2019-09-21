@@ -46,19 +46,9 @@ namespace EPAM.UsersAndAwards.BLL
             return _awardUserDao.GetAll();
         }
 
-        public AwardUser GetById(int id)
-        {
-            return _awardUserDao.GetById(id);
-        }
-
         public AwardUser GetById(int awardId, int userId)
         {
             return _awardUserDao.GetById(awardId, userId);
-        }
-
-        public bool Update(AwardUser awardUser)
-        {
-            return _awardUserDao.Update(awardUser);
         }
     }
 }

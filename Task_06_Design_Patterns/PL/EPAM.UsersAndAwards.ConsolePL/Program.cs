@@ -12,7 +12,7 @@ namespace EPAM.UsersAndAwards.ConsolePL
 {
     class Program
     {
-        private static string _storageMode
+        private static readonly string _storageMode
             = ConfigurationManager.AppSettings["StorageMode"];
 
         private static IUserLogic _userLogic;
@@ -40,6 +40,12 @@ namespace EPAM.UsersAndAwards.ConsolePL
                 _userLogic = DependencyResolver.UserFileLogic;
                 _awardLogic = DependencyResolver.AwardFileLogic;
                 _awardUserLogic = DependencyResolver.AwardUserFileLogic;
+            }
+            else if (storageMode == "DataBase")
+            {
+                _userLogic = DependencyResolver.UserDbLogic;
+                _awardLogic = DependencyResolver.AwardDbLogic;
+                _awardUserLogic = DependencyResolver.AwardUserDbLogic;
             }
             else
             {

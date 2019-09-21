@@ -45,12 +45,9 @@ namespace EPAM.UsersAndAwards.DAL
                     Direction = ParameterDirection.Input
                 };
 
-                command.Parameters.AddRange(new SqlParameter[]
-                {
-                    login,
-                    password,
-                    role
-                });
+                command.Parameters.Add(login);
+                command.Parameters.Add(password);
+                command.Parameters.Add(role);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -59,18 +56,29 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Delete(int id)
         {
+            int res;
+
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "DeleteAccount";
+                command.CommandType = CommandType.StoredProcedure;
 
-                using (var command = new SqlCommand("DELETE FROM Accounts WHERE Id = @id", connection))
+                var accountId = new SqlParameter
                 {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.ExecuteNonQuery();
-                }
+                    ParameterName = "@id",
+                    Value = id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(accountId);
+
+                connection.Open();
+                res = command.ExecuteNonQuery();
             }
 
-            return true;
+            return res > 0;
         }
 
         public IEnumerable<Account> GetAll()
@@ -78,8 +86,8 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = "SELECT * FROM Accounts";
+                command.CommandText = "GetAccounts";
+                command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
 
                 var reader = command.ExecuteReader();
@@ -107,8 +115,18 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandType = CommandType.Text;
-                command.CommandText = $"SELECT * FROM Accounts WHERE Id = {id};";
+                command.CommandText = "GetAccountById";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var accountId = new SqlParameter
+                {
+                    ParameterName = "@id",
+                    Value = id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(accountId);
 
                 connection.Open();
 
@@ -135,28 +153,56 @@ namespace EPAM.UsersAndAwards.DAL
 
         public bool Update(Account account)
         {
+            int res;
+
             using (var connection = new SqlConnection(_connectionString))
             {
-                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "UpdateAccountById";
+                command.CommandType = CommandType.StoredProcedure;
 
-                var commandStr = "UPDATE Accounts SET " +
-                                 "Login = @login, " +
-                                 "Password = @password, " +
-                                 "Role = @role " +
-                                 "WHERE Id = @id;";
-
-                using (var command = new SqlCommand(commandStr, connection))
+                var id = new SqlParameter
                 {
-                    command.Parameters.AddWithValue("@id", account.Id);
-                    command.Parameters.AddWithValue("@login", account.Login);
-                    command.Parameters.AddWithValue("@password", account.Password);
-                    command.Parameters.AddWithValue("@role", account.Role);
+                    ParameterName = "@id",
+                    Value = account.Id,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
 
-                    command.ExecuteNonQuery();
-                }
+                var login = new SqlParameter
+                {
+                    ParameterName = "@Login",
+                    Value = account.Login,
+                    SqlDbType = SqlDbType.NVarChar,
+                    Direction = ParameterDirection.Input
+                };
+
+                var password = new SqlParameter
+                {
+                    ParameterName = "@Password",
+                    Value = account.Password,
+                    SqlDbType = SqlDbType.NVarChar,
+                    Direction = ParameterDirection.Input
+                };
+
+                var role = new SqlParameter
+                {
+                    ParameterName = "@Role",
+                    Value = account.Role,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(id);
+                command.Parameters.Add(login);
+                command.Parameters.Add(password);
+                command.Parameters.Add(role);
+
+                connection.Open();
+                res = command.ExecuteNonQuery();
             }
 
-            return true;
+            return res > 0;
         }
     }
 }
