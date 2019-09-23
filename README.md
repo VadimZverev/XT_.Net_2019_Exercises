@@ -61,7 +61,7 @@ Project Structure:
 	* 9.2. Math Calculator
 	* 9.3. Butterfly Control
 	* 9.4. Simple Gallary
-11. Task_10_ASP.Net_Web_Pages - In progress
+11. Task_10_ASP.Net_Web_Pages - Task 11 is done
 	* 10.1. WEB UI
 	* 10.2. CRUD Application
 	* 10.3. Images
