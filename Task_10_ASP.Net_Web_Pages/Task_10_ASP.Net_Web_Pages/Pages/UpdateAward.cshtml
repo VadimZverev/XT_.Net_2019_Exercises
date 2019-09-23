@@ -32,9 +32,9 @@
     {
         <h3 class="p-2 bg-primary text-white text-center">Update Award</h3>
 
-        if (int.TryParse(Request.QueryString["idAward"], out int idAward))
+        if (int.TryParse(Request.QueryString["awardId"], out int awardId))
         {
-            Award award = ProgramModel.GetAward(idAward);
+            Award award = ProgramModel.GetAward(awardId);
 
             if (award == null)
             {
@@ -51,7 +51,7 @@
                 }
 
                 <form action="" method="post" enctype="multipart/form-data">
-                    <input type="hidden" name="idAward" value="@award.Id" />
+                    <input type="hidden" name="awardId" value="@award.Id" />
                     <input type="hidden" name="returnUrl" value="@returnUrl" />
                     <div class="form-group">
                         <label for="title">Title:</label>

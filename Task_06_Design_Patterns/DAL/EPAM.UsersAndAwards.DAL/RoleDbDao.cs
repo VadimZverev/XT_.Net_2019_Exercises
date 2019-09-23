@@ -8,47 +8,28 @@ using System.Data.SqlClient;
 
 namespace EPAM.UsersAndAwards.DAL
 {
-    public class AccountDbDao : IAccountDbDao
+    public class RoleDbDao : IRoleDbDao
     {
         private static readonly string _connectionString
             = ConfigurationManager.ConnectionStrings["DB"].ConnectionString;
 
-        public void Add(Account account)
+        public void Add(Role role)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandText = "AddAccount";
+                command.CommandText = "AddRole";
                 command.CommandType = CommandType.StoredProcedure;
 
-                var login = new SqlParameter
+                var name = new SqlParameter
                 {
-                    ParameterName = "@Login",
-                    Value = account.Login,
+                    ParameterName = "@Name",
+                    Value = role.Name,
                     SqlDbType = SqlDbType.NVarChar,
                     Direction = ParameterDirection.Input
                 };
 
-                var password = new SqlParameter
-                {
-                    ParameterName = "@PasswordHash",
-                    Value = account.PasswordHash,
-                    SqlDbType = SqlDbType.NVarChar,
-                    Direction = ParameterDirection.Input
-                };
-
-                var role = new SqlParameter
-                {
-                    ParameterName = "@RoleId",
-                    Value = account.RoleId,
-                    SqlDbType = SqlDbType.Int,
-                    IsNullable = true,
-                    Direction = ParameterDirection.Input
-                };
-
-                command.Parameters.Add(login);
-                command.Parameters.Add(password);
-                command.Parameters.Add(role);
+                command.Parameters.Add(name);
 
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -62,10 +43,10 @@ namespace EPAM.UsersAndAwards.DAL
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandText = "DeleteAccount";
+                command.CommandText = "DeleteRole";
                 command.CommandType = CommandType.StoredProcedure;
 
-                var accountId = new SqlParameter
+                var roleId = new SqlParameter
                 {
                     ParameterName = "@Id",
                     Value = id,
@@ -73,7 +54,7 @@ namespace EPAM.UsersAndAwards.DAL
                     Direction = ParameterDirection.Input
                 };
 
-                command.Parameters.Add(accountId);
+                command.Parameters.Add(roleId);
 
                 connection.Open();
                 res = command.ExecuteNonQuery();
@@ -82,12 +63,12 @@ namespace EPAM.UsersAndAwards.DAL
             return res > 0;
         }
 
-        public IEnumerable<Account> GetAll()
+        public IEnumerable<Role> GetAll()
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandText = "GetAccounts";
+                command.CommandText = "GetRoles";
                 command.CommandType = CommandType.StoredProcedure;
                 connection.Open();
 
@@ -96,55 +77,47 @@ namespace EPAM.UsersAndAwards.DAL
                 while (reader.Read())
                 {
                     var id = (int)reader["Id"];
-                    var login = (string)reader["Login"];
-                    var passwordHash = (string)reader["PasswordHash"];
-                    var roleId = reader["RoleId"] is DBNull ? null : (int?)reader["RoleId"];
+                    var name = (string)reader["Name"];
 
-                    yield return new Account
+                    yield return new Role
                     {
                         Id = id,
-                        Login = login,
-                        PasswordHash = passwordHash,
-                        RoleId = roleId
+                        Name = name
                     };
                 }
             }
         }
 
-        public Account GetById(int id)
+        public Role GetById(int id)
         {
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandText = "GetAccountById";
+                command.CommandText = "GetRoleById";
                 command.CommandType = CommandType.StoredProcedure;
 
-                var accountId = new SqlParameter
+                var roleId = new SqlParameter
                 {
-                    ParameterName = "@id",
+                    ParameterName = "@Id",
                     Value = id,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
                 };
 
-                command.Parameters.Add(accountId);
+                command.Parameters.Add(roleId);
 
                 connection.Open();
 
                 var reader = command.ExecuteReader();
 
                 if (reader.Read())
-                {
-                    var login = (string)reader["Login"];
-                    var passwordHash = (string)reader["PasswordHash"];
-                    var roleId = reader["RoleId"] is DBNull ? null : (int?)reader["RoleId"];
+                {   
+                    var name = (string)reader["Name"];
 
-                    return new Account
+                    return new Role
                     {
                         Id = id,
-                        Login = login,
-                        PasswordHash = passwordHash,
-                        RoleId = roleId
+                        Name = name
                     };
                 }
 
@@ -152,53 +125,34 @@ namespace EPAM.UsersAndAwards.DAL
             }
         }
 
-        public bool Update(Account account)
+        public bool Update(Role role)
         {
             int res;
 
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = connection.CreateCommand();
-                command.CommandText = "UpdateAccountById";
+                command.CommandText = "UpdateRoleById";
                 command.CommandType = CommandType.StoredProcedure;
 
                 var id = new SqlParameter
                 {
                     ParameterName = "@Id",
-                    Value = account.Id,
+                    Value = role.Id,
                     SqlDbType = SqlDbType.Int,
                     Direction = ParameterDirection.Input
                 };
 
                 var login = new SqlParameter
                 {
-                    ParameterName = "@Login",
-                    Value = account.Login,
+                    ParameterName = "@Name",
+                    Value = role.Name,
                     SqlDbType = SqlDbType.NVarChar,
-                    Direction = ParameterDirection.Input
-                };
-
-                var passwordHash = new SqlParameter
-                {
-                    ParameterName = "@PasswordHash",
-                    Value = account.PasswordHash,
-                    SqlDbType = SqlDbType.NVarChar,
-                    Direction = ParameterDirection.Input
-                };
-
-                var roleId = new SqlParameter
-                {
-                    ParameterName = "@RoleId",
-                    Value = account.RoleId,
-                    SqlDbType = SqlDbType.Int,
-                    IsNullable = true,
                     Direction = ParameterDirection.Input
                 };
 
                 command.Parameters.Add(id);
                 command.Parameters.Add(login);
-                command.Parameters.Add(passwordHash);
-                command.Parameters.Add(roleId);
 
                 connection.Open();
                 res = command.ExecuteNonQuery();

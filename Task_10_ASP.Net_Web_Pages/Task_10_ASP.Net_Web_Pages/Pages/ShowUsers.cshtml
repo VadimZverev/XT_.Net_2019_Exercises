@@ -94,14 +94,14 @@
                             <td class="text-center">
                                 <div class="custom-control-inline">
                                     <form action="" method="post">
-                                        <input type="hidden" name="idUser" value="@user.Id" />
+                                        <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="Mode" value="Update" />
                                         <button type="submit" class="btn btn-warning btn-sm">
                                             Edit
                                         </button>
                                     </form>
                                     <form action="" id="delUser@(user.Id)" method="post">
-                                        <input type="hidden" name="idUser" value="@user.Id" />
+                                        <input type="hidden" name="userId" value="@user.Id" />
                                         <input type="hidden" name="Mode" value="Delete" />
                                         <input type="button" class="btn btn-danger btn-sm delete" value="delete" />
                                     </form>

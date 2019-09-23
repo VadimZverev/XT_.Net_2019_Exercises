@@ -135,6 +135,7 @@
     <Content Include="Scripts\esm\popper-utils.js.map" />
     <Content Include="Pages\ShowAccounts.cshtml" />
     <Content Include="Pages\ChangeRoleAccount.cshtml" />
+    <Content Include="Pages\_UpdateUserAwardsMenuPartial.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -145,6 +146,7 @@
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\toggleAwards.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
@@ -158,6 +160,7 @@
     <Compile Include="Models\AccountModel.cs" />
     <Compile Include="Models\MyCustomRoleProvider.cs" />
     <Compile Include="Models\ProgramModel.cs" />
+    <Compile Include="Models\UserViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -165,9 +168,7 @@
     <Content Include="Pages\Index.cshtml" />
     <Content Include="Pages\AddAward.cshtml" />
     <Content Include="Pages\UpdateUser.cshtml" />
-    <Content Include="Pages\AddAwardToUser.cshtml" />
     <None Include="packages.config" />
-    <Content Include="Pages\RemoveAwardToUser.cshtml" />
     <Content Include="Pages\ShowAwards.cshtml" />
     <Content Include="Pages\ShowUsers.cshtml" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />

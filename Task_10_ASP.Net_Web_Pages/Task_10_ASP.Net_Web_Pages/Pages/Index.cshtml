@@ -2,26 +2,38 @@
     Layout = "_Layout.cshtml";
     Page.Title = "Main Page";
 
-    string role = null;
+    string roleMsg = null;
+    bool isAdmin = false;
 }
 
 @if (User.Identity.IsAuthenticated)
 {
     if (User.IsInRole("Admin"))
     {
-        role = "Admin";
+        isAdmin = true;
+        roleMsg = "Admin";
     }
     else if (User.IsInRole("User"))
     {
-        role = "User";
+        roleMsg = "User";
     }
+    else
+    {
+        roleMsg = "<role not assigned>";
+    }
+
+    <h3 class="p-2 bg-primary text-white text-center">
+        Welcome "<strong>@(User.Identity.Name)</strong>". 
+        Your role is "<strong>@roleMsg</strong>". Please select some action:
+    </h3>
 }
 else
 {
-    role = "Guest";
+    roleMsg = "Guest";
+    <h3 class="p-2 bg-primary text-white text-center">
+        Welcome <strong>Guest</strong>. Please select some action:
+    </h3>
 }
-
-<h3 class="p-2 bg-primary text-white text-center">Welcome @(role). Please select some action:</h3>
 
 <div class="list-group">
 
@@ -29,7 +41,7 @@ else
        class="list-group-item list-group-item-action">
         Show Users
     </a>
-    @if (User.IsInRole("Admin"))
+    @if (isAdmin)
     {
         <a href="~/Pages/ShowAwards"
            class="list-group-item list-group-item-action">
@@ -38,14 +50,6 @@ else
         <a href="~/Pages/ShowAccounts"
            class="list-group-item list-group-item-action">
             Show Accounts
-        </a>
-        <a href="~/Pages/AddAwardToUser"
-           class="list-group-item list-group-item-action">
-            Add Award to User
-        </a>
-        <a href="~/Pages/RemoveAwardToUser"
-           class="list-group-item list-group-item-action">
-            Remove Award to User
         </a>
     }
 </div>

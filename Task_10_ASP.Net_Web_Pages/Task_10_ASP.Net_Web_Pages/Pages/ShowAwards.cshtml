@@ -67,14 +67,14 @@
                     <td class="text-center">
                         <div class="custom-control-inline">
                             <form class="" action="" method="post">
-                                <input type="hidden" name="idAward" value="@award.Id" />
+                                <input type="hidden" name="awardId" value="@award.Id" />
                                 <input type="hidden" name="Mode" value="Update" />
                                 <button type="submit" class="btn btn-warning btn-sm">
                                     Edit
                                 </button>
                             </form>
                             <form id="delUser@(award.Id)" action="" method="post">
-                                <input type="hidden" name="idAward" value="@award.Id" />
+                                <input type="hidden" name="awardId" value="@award.Id" />
                                 <input type="hidden" name="Mode" value="Delete" />
                                 <input type="button" class="btn btn-danger btn-sm delete" value="delete" />
                             </form>

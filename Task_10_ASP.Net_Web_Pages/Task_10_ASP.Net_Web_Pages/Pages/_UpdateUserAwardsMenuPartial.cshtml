@@ -1,0 +1,35 @@
+﻿@using Task_10_ASP.Net_Web_Pages.Models;
+@using EPAM.UsersAndAwards.Entities;
+
+@{
+    User user = Page.User;
+    var awards = ProgramModel.GetAwardsByUserId(user.Id);
+    var awardsIds = awards.Select(a => a.Id);
+}
+
+<div class="main form-row">
+    <div class="available form-group col">
+        <label for="availableAwards">Available</label>
+        <select id="availableAwards" class="form-control" multiple>
+            @foreach (var award in ProgramModel.GetAwards().Where(a => !awardsIds.Contains(a.Id)))
+            {
+                <option value="@award.Id">@award.Title</option>
+            }
+        </select>
+    </div>
+    <div class="control btn-group-vertical">
+        <input type="button" value="&gt;" id="addToSelected" 
+               class="form-control btn-sm btn-primary">
+        <input type="button" value="&lt;" id="addToAvailable" 
+               class="form-control btn-sm btn-secondary">
+    </div>
+    <div class="selected form-group col">
+        <label for="selectedAwards">Selected</label>
+        <select id="selectedAwards" name="awardsSelects" multiple class="form-control">
+            @foreach (var award in awards)
+            {
+                <option value="@award.Id">@award.Title</option>
+            }
+        </select>
+    </div>
+</div>

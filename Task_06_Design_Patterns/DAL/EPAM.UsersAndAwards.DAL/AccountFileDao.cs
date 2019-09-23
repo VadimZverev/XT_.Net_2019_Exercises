@@ -74,11 +74,10 @@ namespace EPAM.UsersAndAwards.DAL
                 {
                     Id = acc.Id,
                     Login = acc.Login,
-                    Password = acc.Password,
-                    Role = acc.Role
+                    PasswordHash = acc.PasswordHash,
+                    RoleId = acc.RoleId
                 };
             }
-
         }
 
         public Account GetById(int id)
@@ -88,8 +87,8 @@ namespace EPAM.UsersAndAwards.DAL
                 {
                     Id = account.Id,
                     Login = account.Login,
-                    Password = account.Password,
-                    Role = account.Role
+                    PasswordHash = account.PasswordHash,
+                    RoleId = account.RoleId
                 }
                 : null;
         }
@@ -104,8 +103,8 @@ namespace EPAM.UsersAndAwards.DAL
                                {
                                    a.Id,
                                    a.Login,
-                                   a.Password,
-                                   a.Role
+                                   a.PasswordHash,
+                                   a.RoleId
                                };
 
                 var db = new { Accounts = accounts };

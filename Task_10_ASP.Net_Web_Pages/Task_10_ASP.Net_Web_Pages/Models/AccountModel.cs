@@ -17,15 +17,16 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             = WebConfigurationManager.AppSettings["StorageMode"];
 
         private static IAccountLogic _accountLogic;
+        private static IRoleLogic _roleLogic;
 
         public static void ChageRole()
         {
             var context = HttpContext.Current;
             string returnUrl = context.Request["returnUrl"] ?? "Pages/Index";
-            string strRole = context.Request["Role"] ?? "1";
+            string strRoleId = context.Request["Role"] ?? "1";
             string accId = context.Request["accId"] ?? null;
 
-            if (int.TryParse(strRole, out int role)
+            if (int.TryParse(strRoleId, out int roleId)
                 && int.TryParse(accId, out int id))
             {
                 var acc = _accountLogic.GetById(id);
@@ -37,7 +38,7 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                 }
                 else
                 {
-                    acc.Role = role;
+                    acc.RoleId = roleId;
 
                     if (_accountLogic.Update(acc))
                     {
@@ -61,11 +62,22 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
             if (account == null)
             {
+                Role role;
+
+                if (!_accountLogic.GetAll().Any())
+                {
+                    role = _roleLogic.GetAll().FirstOrDefault(r => r.Name == "Admin");
+                }
+                else
+                {
+                    role = _roleLogic.GetAll().FirstOrDefault(r => r.Name == "User");
+                }
+
                 account = new Account
                 {
                     Login = login,
-                    Password = Crypto.HashPassword(password),
-                    Role = (int)Roles.User
+                    PasswordHash = Crypto.HashPassword(password),
+                    RoleId = role?.Id
                 };
 
                 return _accountLogic.Add(account);
@@ -79,21 +91,17 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             if (_storageMode == "File")
             {
                 _accountLogic = DependencyResolver.AccountFileLogic;
+                _roleLogic = DependencyResolver.RoleFileLogic;
             }
             else if (_storageMode == "Database")
             {
                 _accountLogic = DependencyResolver.AccountDbLogic;
+                _roleLogic = DependencyResolver.RoleDbLogic;
             }
             else
             {
                 _accountLogic = DependencyResolver.AccountLogic;
-                _accountLogic.Add(new Account
-                {
-                    Id = 1,
-                    Login = "admin",
-                    Password = "AFQ2Ov+xNLDKynXrlVnvza0raj8yG/93udzwdY9pnSXRHStOiFck3oyFqOmzHA1RDA==",
-                    Role = 2
-                });
+                _roleLogic = DependencyResolver.RoleLogic;
             }
         }
 
@@ -103,7 +111,7 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                 .FirstOrDefault(a => a.Login == login);
 
             if (account != null
-                && Crypto.VerifyHashedPassword(account.Password, password))
+                && Crypto.VerifyHashedPassword(account.PasswordHash, password))
             {
                 FormsAuthentication.SetAuthCookie(login, true);
                 return true;
@@ -130,6 +138,22 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         public static Account GetAccount(int accountId)
         {
             return _accountLogic.GetById(accountId);
+        }
+
+        public static string GetRoleName(int? roleId)
+        {
+            if (roleId != null)
+            {
+                var role = _roleLogic.GetById(roleId.Value);
+                return role.Name;
+            }
+
+            return "<No Role>";
+        }
+
+        public static IEnumerable<Role> GetRoles()
+        {
+            return _roleLogic.GetAll();
         }
 
         public static IEnumerable<Account> GetAccounts()

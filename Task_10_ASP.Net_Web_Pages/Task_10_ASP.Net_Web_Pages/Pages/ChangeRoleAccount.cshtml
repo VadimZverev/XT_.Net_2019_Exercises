@@ -1,6 +1,5 @@
 ﻿@using EPAM.UsersAndAwards.Entities;
 @using Task_10_ASP.Net_Web_Pages.Models;
-@using roleEnum = Task_10_ASP.Net_Web_Pages.Models.Roles;
 
 @{
     Layout = "_Layout.cshtml";
@@ -37,7 +36,7 @@
             else if (account.Login == User.Identity.Name)
             {
                 <h3 class="pl-2 bg-danger text-white text-center">
-                    It is impossible to change your role. 
+                    It is impossible to change your role.
                     Contact the DB admin or another admins to change your role.
                 </h3>
                 <a href="~/Pages/ShowAccounts" class="btn btn-primary">Back</a>
@@ -62,15 +61,16 @@
                             <label class="input-group-text" for="inputGroupSelectRole">Role</label>
                         </div>
                         <select name="Role" class="custom-select" id="inputGroupSelectRole">
-                            @if (account.Role == (int)roleEnum.Admin)
+                            @foreach (var role in AccountModel.GetRoles())
                             {
-                                <option value="@((int)roleEnum.User)">User</option>
-                                <option value="@((int)roleEnum.Admin)" selected>Admin</option>
-                            }
-                            else
-                            {
-                                <option value="@((int)roleEnum.User)" selected>User</option>
-                                <option value="@((int)roleEnum.Admin)">Admin</option>
+                                if (account.RoleId == role.Id)
+                                {
+                                    <option value="@role.Id" selected>@role.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@role.Id">@role.Name</option>
+                                }
                             }
                         </select>
                     </div>

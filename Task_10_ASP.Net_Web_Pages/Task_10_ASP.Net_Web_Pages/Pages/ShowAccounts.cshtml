@@ -1,5 +1,4 @@
 ﻿@using Task_10_ASP.Net_Web_Pages.Models;
-@using roleEnum = Task_10_ASP.Net_Web_Pages.Models.Roles;
 
 @{
     Layout = "_Layout.cshtml";
@@ -7,10 +6,8 @@
 
     string errorMsg = null;
     bool isAuth = User.Identity.IsAuthenticated;
-}
 
-@{
-    if (!User.Identity.IsAuthenticated)
+    if (!isAuth)
     {
         Response.Redirect("/Pages/SignIn");
     }
@@ -53,7 +50,9 @@
             {
                 <tr>
                     <td>@account.Login</td>
-                    <td>@((roleEnum)account.Role)</td>
+                    <td>
+                        @AccountModel.GetRoleName(account.RoleId)
+                    </td>
                     <td class="text-center">
                         @if (account.Login == User.Identity.Name)
                         {

@@ -16,11 +16,6 @@ namespace EPAM.UsersAndAwards.BLL
             _userDao = userDao;
         }
 
-        public UserLogic(IUserFileDao userFileDao)
-        {
-            _userDao = userFileDao;
-        }
-
         public bool Add(User user)
         {
             User _user = _userDao.GetById(user.Id);

@@ -19,28 +19,6 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         private static IAwardLogic _awardLogic;
         private static IAwardUserLogic _awardUserLogic;
 
-        public static void InitialLogic()
-        {
-            if (_storageMode == "File")
-            {
-                _userLogic = DependencyResolver.UserFileLogic;
-                _awardLogic = DependencyResolver.AwardFileLogic;
-                _awardUserLogic = DependencyResolver.AwardUserFileLogic;
-            }
-            else if (_storageMode == "Database")
-            {
-                _userLogic = DependencyResolver.UserDbLogic;
-                _awardLogic = DependencyResolver.AwardDbLogic;
-                _awardUserLogic = DependencyResolver.AwardUserDbLogic;
-            }
-            else
-            {
-                _userLogic = DependencyResolver.UserLogic;
-                _awardLogic = DependencyResolver.AwardLogic;
-                _awardUserLogic = DependencyResolver.AwardUserLogic;
-            }
-        }
-
         public static void AddAward()
         {
             var httpContext = HttpContext.Current;
@@ -68,36 +46,6 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             }
 
             httpContext.Response.AppendHeader("ErrorMsg", "Input must be not empty or only white spaces");
-        }
-
-        public static void AddAwardUser()
-        {
-            var httpContext = HttpContext.Current;
-
-            if (int.TryParse(httpContext.Request["User"], out int idUser)
-                && int.TryParse(httpContext.Request["Award"], out int idAward))
-            {
-                Award award = _awardLogic.GetById(idAward);
-                User user = _userLogic.GetById(idUser);
-
-                AwardUser awardUser = new AwardUser
-                {
-                    AwardId = award.Id,
-                    UserId = user.Id
-                };
-
-                if (!_awardUserLogic.Add(awardUser))
-                {
-                    httpContext.Response.AppendHeader("ErrorMsg", $"{award.Title} already added {user.Name}");
-                    return;
-                }
-
-                string redirect =
-                    httpContext.Request?.UrlReferrer?.AbsolutePath ?? "/Pages/Index";
-                httpContext.Response.Redirect(redirect);
-            }
-
-            httpContext.Response.AppendHeader("ErrorMsg", "Incorrect data");
         }
 
         public static void AddUser()
@@ -170,13 +118,35 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             return _userLogic.GetAll();
         }
 
+        public static void InitialLogic()
+        {
+            if (_storageMode == "File")
+            {
+                _userLogic = DependencyResolver.UserFileLogic;
+                _awardLogic = DependencyResolver.AwardFileLogic;
+                _awardUserLogic = DependencyResolver.AwardUserFileLogic;
+            }
+            else if (_storageMode == "Database")
+            {
+                _userLogic = DependencyResolver.UserDbLogic;
+                _awardLogic = DependencyResolver.AwardDbLogic;
+                _awardUserLogic = DependencyResolver.AwardUserDbLogic;
+            }
+            else
+            {
+                _userLogic = DependencyResolver.UserLogic;
+                _awardLogic = DependencyResolver.AwardLogic;
+                _awardUserLogic = DependencyResolver.AwardUserLogic;
+            }
+        }
+
         public static void RemoveAward()
         {
             var httpContext = HttpContext.Current;
 
-            if (int.TryParse(httpContext.Request["idAward"], out int idAward))
+            if (int.TryParse(httpContext.Request["awardId"], out int awardId))
             {
-                Award award = _awardLogic.GetById(idAward);
+                Award award = _awardLogic.GetById(awardId);
 
                 if (award == null)
                 {
@@ -190,36 +160,14 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                                                        .Where(au => au.AwardId == award.Id)
                                                        .ToList();
 
-                    foreach (var awardUser in awardUserList)
+                    if (awardUserList.Count != 0)
                     {
-                        _awardUserLogic.Delete(awardUser.AwardId, awardUser.UserId);
+                        foreach (var awardUser in awardUserList)
+                        {
+                            _awardUserLogic.Delete(awardUser.AwardId, awardUser.UserId);
+                        }
                     }
 
-                    return;
-                }
-            }
-
-            httpContext.Response.AppendHeader("ErrorMsg", $"Incorrect data");
-        }
-
-        public static void RemoveAwardUser()
-        {
-            var httpContext = HttpContext.Current;
-
-            if (int.TryParse(httpContext.Request["User"], out int idUser)
-                && int.TryParse(httpContext.Request["Award"], out int idAward))
-            {
-                Award award = _awardLogic.GetById(idAward);
-                User user = _userLogic.GetById(idUser);
-
-                if (!_awardUserLogic.Delete(award.Id, user.Id))
-                {
-                    httpContext.Response.AppendHeader(
-                        "ErrorMsg", $"The {award.Title} is not found in the {user.Name}");
-                    return;
-                }
-                else
-                {
                     return;
                 }
             }
@@ -231,9 +179,9 @@ namespace Task_10_ASP.Net_Web_Pages.Models
         {
             var httpContext = HttpContext.Current;
 
-            if (int.TryParse(httpContext.Request["idUser"], out int idUser))
+            if (int.TryParse(httpContext.Request["userId"], out int userId))
             {
-                User user = _userLogic.GetById(idUser);
+                User user = _userLogic.GetById(userId);
 
                 if (user != null && _userLogic.Delete(user.Id))
                 {
@@ -241,9 +189,12 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                                                        .Where(au => au.UserId == user.Id)
                                                        .ToList();
 
-                    foreach (var awardUser in awardUserList)
+                    if (awardUserList.Count != 0)
                     {
-                        _awardUserLogic.Delete(awardUser.AwardId, awardUser.UserId);
+                        foreach (var awardUser in awardUserList)
+                        {
+                            _awardUserLogic.Delete(awardUser.AwardId, awardUser.UserId);
+                        }
                     }
 
                     return;
@@ -263,26 +214,20 @@ namespace Task_10_ASP.Net_Web_Pages.Models
                 case "/Pages/AddAward":
                     AddAward();
                     break;
-                case "/Pages/AddAwardToUser":
-                    AddAwardUser();
-                    break;
                 case "/Pages/AddUser":
                     AddUser();
                     break;
                 case "/Pages/ShowAwards" when context.Request["Mode"].Contains("Delete"):
                     RemoveAward();
                     break;
-                case "/Pages/RemoveAwardToUser":
-                    RemoveAwardUser();
-                    break;
                 case "/Pages/ShowUsers" when context.Request["Mode"].Contains("Delete"):
                     RemoveUser();
                     break;
                 case "/Pages/ShowAwards" when context.Request["Mode"].Contains("Update"):
-                    context.Response.Redirect($"/Pages/UpdateAward?idAward={context.Request["idAward"]}");
+                    context.Response.Redirect($"/Pages/UpdateAward?awardId={context.Request["awardId"]}");
                     break;
                 case "/Pages/ShowUsers" when context.Request["Mode"].Contains("Update"):
-                    context.Response.Redirect($"/Pages/UpdateUser?idUser={context.Request["idUser"]}");
+                    context.Response.Redirect($"/Pages/UpdateUser?userId={context.Request["userId"]}");
                     break;
                 case "/Pages/UpdateAward" when context.Request.HttpMethod.Contains("POST"):
                     UpdateAward();
@@ -293,61 +238,16 @@ namespace Task_10_ASP.Net_Web_Pages.Models
             }
         }
 
-        public static void UpdateUser()
-        {
-            var httpContext = HttpContext.Current;
-            string name = httpContext.Request["Name"] ?? null;
-            string strDateOfBirth = httpContext.Request["DateOfBirth"] ?? null;
-            string strIdUser = httpContext.Request["idUser"];
-
-            if (int.TryParse(strIdUser, out int idUser)
-                && DateTime.TryParse(strDateOfBirth, out DateTime dateOfBirth)
-                && !string.IsNullOrWhiteSpace(name))
-            {
-                User user = _userLogic.GetById(idUser);
-
-                if (user != null)
-                {
-                    user = new User
-                    {
-                        Id = user.Id,
-                        Name = name,
-                        DateOfBirth = dateOfBirth,
-                        Image = user.Image
-                    };
-
-                    WebImage photo = WebImage.GetImageFromRequest();
-
-                    if (photo != null)
-                    {
-                        user.Image = photo.GetBytes();
-                    }
-                    else if (httpContext.Request["delImage"] == "on")
-                    {
-                        user.Image = null;
-                    }
-                }
-
-                if (_userLogic.Update(user))
-                {
-                    string redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
-                    httpContext.Response.Redirect(redirect);
-                }
-            }
-
-            httpContext.Response.Headers.Add("ErrorMsg", "Failed to update user");
-        }
-
         public static void UpdateAward()
         {
             var httpContext = HttpContext.Current;
             string returnUrl = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
             string Title = httpContext.Request["Title"];
 
-            if (int.TryParse(httpContext.Request["IdAward"], out int idAward)
+            if (int.TryParse(httpContext.Request["awardId"], out int awardId)
                 && !string.IsNullOrWhiteSpace(Title))
             {
-                Award award = _awardLogic.GetById(idAward);
+                Award award = _awardLogic.GetById(awardId);
 
                 if (award != null)
                 {
@@ -378,6 +278,103 @@ namespace Task_10_ASP.Net_Web_Pages.Models
 
             httpContext.Response.Headers.Add("returnUrl", returnUrl);
             httpContext.Response.Headers.Add("ErrorMsg", "Failed to update award");
+        }
+
+        public static void UpdateUser()
+        {
+            var httpContext = HttpContext.Current;
+            string name = httpContext.Request["Name"] ?? null;
+            string strDateOfBirth = httpContext.Request["DateOfBirth"] ?? null;
+            string strIdUser = httpContext.Request["userId"];
+
+            if (int.TryParse(strIdUser, out int userId)
+                && DateTime.TryParse(strDateOfBirth, out DateTime dateOfBirth)
+                && !string.IsNullOrWhiteSpace(name))
+            {
+                User user = _userLogic.GetById(userId);
+
+                if (user != null)
+                {
+                    user = new User
+                    {
+                        Id = user.Id,
+                        Name = name,
+                        DateOfBirth = dateOfBirth,
+                        Image = user.Image
+                    };
+
+                    WebImage photo = WebImage.GetImageFromRequest();
+
+                    if (photo != null)
+                    {
+                        user.Image = photo.GetBytes();
+                    }
+                    else if (httpContext.Request["delImage"] == "on")
+                    {
+                        user.Image = null;
+                    }
+                }
+
+                if (_userLogic.Update(user))
+                {
+                    var awardsIds = httpContext.Request.Params.GetValues("awardsSelects");
+                    AddDeleteAwardUser(awardsIds, userId);
+
+                    string redirect = httpContext.Request?["returnUrl"] ?? "/Pages/Index";
+                    httpContext.Response.Redirect(redirect);
+                }
+            }
+
+            httpContext.Response.Headers.Add("ErrorMsg", "Failed to update user");
+        }
+
+        private static void AddDeleteAwardUser(string[] awardIds, int userId)
+        {
+            if (awardIds == null)
+            {
+                var userAwardsIdAll = _awardUserLogic.GetAll()
+                                                   .Where(au => au.UserId == userId)
+                                                   .Select(au => au.AwardId)
+                                                   .ToArray();
+
+                foreach (var awardId in userAwardsIdAll)
+                {
+                    _awardUserLogic.Delete(awardId, userId);
+                }
+            }
+            else
+            {
+                List<int> awardIdList = new List<int>();
+
+                foreach (var awardId in awardIds)
+                {
+                    if (int.TryParse(awardId, out int id))
+                    {
+                        awardIdList.Add(id);
+                    }
+                }
+
+                var awardUserList = _awardUserLogic.GetAll()
+                                                   .Where(au => au.UserId == userId)
+                                                   .Select(au => au.AwardId)
+                                                   .ToList();
+
+                var awardIdToDel = awardUserList.Except(awardIdList);
+
+                foreach (var awardId in awardIdToDel)
+                {
+                    _awardUserLogic.Delete(awardId, userId);
+                }
+
+                foreach (var awardId in awardIdList)
+                {
+                    if (!awardUserList.Contains(awardId))
+                    {
+                        var au = new AwardUser() { AwardId = awardId, UserId = userId };
+                        _awardUserLogic.Add(au);
+                    }
+                }
+            }
         }
     }
 }
