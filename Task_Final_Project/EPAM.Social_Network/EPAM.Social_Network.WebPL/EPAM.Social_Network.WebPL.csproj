@@ -8,23 +8,23 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E22A8795-844B-48C9-A930-D5ED774019A1}</ProjectGuid>
+    <ProjectGuid>{CF46E7CB-0C74-4079-B5AB-AFF9E353DFF2}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Task_10_ASP.Net_Web_Pages</RootNamespace>
-    <AssemblyName>Task_10_ASP.Net_Web_Pages</AssemblyName>
+    <RootNamespace>EPAM.Social_Network.WebPL</RootNamespace>
+    <AssemblyName>EPAM.Social_Network.WebPL</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort>44313</IISExpressSSLPort>
+    <IISExpressSSLPort>44385</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <TypeScriptToolsVersion>3.5</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>3.6</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,24 +45,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EPAM.UsersAndAwards.BLL.Interface">
-      <HintPath>..\..\Task_06_Design_Patterns\BLL\EPAM.UsersAndAwards.BLL.Interface\bin\Debug\EPAM.UsersAndAwards.BLL.Interface.dll</HintPath>
-    </Reference>
-    <Reference Include="EPAM.UsersAndAwards.Common">
-      <HintPath>..\..\Task_06_Design_Patterns\Common\EPAM.UsersAndAwards.Common\bin\Debug\EPAM.UsersAndAwards.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="EPAM.UsersAndAwards.Entities">
-      <HintPath>..\..\Task_06_Design_Patterns\Common\EPAM.UsersAndAwards.Entities\bin\Debug\EPAM.UsersAndAwards.Entities.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=2.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -75,6 +63,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
@@ -105,11 +96,11 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Images\noimage.png" />
     <Content Include="Global.asax" />
+    <Content Include="Scripts\Custom\AddFriendRequest.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="Scripts\ConfirmDeleteScript.js" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
     <Content Include="Scripts\bootstrap.bundle.min.js.map" />
@@ -120,11 +111,8 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Pages\AddUser.cshtml" />
-    <Content Include="Pages\UpdateAward.cshtml" />
-    <Content Include="Pages\_ConfirmDeletePartial.cshtml" />
-    <Content Include="Pages\Registration.cshtml" />
-    <Content Include="Pages\SignIn.cshtml" />
+    <Content Include="Scripts\Custom\AddDenyFriendRequest.js" />
+    <Content Include="Scripts\Custom\GetSendMessages.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -133,45 +121,36 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
-    <Content Include="Pages\ShowAccounts.cshtml" />
-    <Content Include="Pages\ChangeRoleAccount.cshtml" />
-    <Content Include="Pages\_UpdateUserAwardsMenuPartial.cshtml" />
+    <Content Include="Pages\Index.cshtml" />
+    <Content Include="Pages\Shared\_Layout.cshtml" />
+    <Content Include="Pages\Registration.cshtml" />
+    <Content Include="Pages\SignIn.cshtml" />
+    <Content Include="Pages\Shared\_NavMenu.cshtml" />
+    <Content Include="Pages\Accounts\UserProfile.cshtml" />
+    <Content Include="Pages\_PageStart.cshtml" />
+    <Content Include="Pages\Accounts\EditProfile.cshtml" />
+    <Content Include="Pages\AjaxPages\AddFriendRequest.cshtml" />
+    <Content Include="Pages\Accounts\Friends.cshtml" />
+    <Content Include="Pages\AjaxPages\ConfirmFriendRequest.cshtml" />
+    <Content Include="Pages\AjaxPages\DenyFriendRequest.cshtml" />
+    <Content Include="Pages\Accounts\Messages.cshtml" />
+    <Content Include="Pages\AjaxPages\GetMessages.cshtml" />
+    <Content Include="Pages\AjaxPages\SendMessage.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.js" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.js" />
-    <Content Include="Scripts\onChangeFileUpload.js" />
+    <Content Include="Scripts\Custom\onChangeFileUpload.js" />
     <Content Include="Scripts\popper-utils.js" />
     <Content Include="Scripts\popper-utils.min.js" />
     <Content Include="Scripts\popper.js" />
     <Content Include="Scripts\popper.min.js" />
-    <Content Include="Scripts\toggleAwards.js" />
     <Content Include="Scripts\umd\popper-utils.js" />
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
     <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Global.asax.cs">
-      <DependentUpon>Global.asax</DependentUpon>
-    </Compile>
-    <Compile Include="Models\AccountModel.cs" />
-    <Compile Include="Models\MyCustomRoleProvider.cs" />
-    <Compile Include="Models\ProgramModel.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Pages\_Layout.cshtml" />
-    <Content Include="Pages\Index.cshtml" />
-    <Content Include="Pages\AddAward.cshtml" />
-    <Content Include="Pages\UpdateUser.cshtml" />
-    <None Include="packages.config" />
-    <Content Include="Pages\ShowAwards.cshtml" />
-    <Content Include="Pages\ShowUsers.cshtml" />
-    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.4.1.min.map" />
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -181,6 +160,19 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountModel.cs" />
+    <Compile Include="Models\DefaultRoleProvider.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.4.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -189,13 +181,27 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EPAM.Social_Network.BLL.Interfaces\EPAM.Social_Network.BLL.Interfaces.csproj">
+      <Project>{6cf1609d-533a-401b-861f-e13836c89ea2}</Project>
+      <Name>EPAM.Social_Network.BLL.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.Social_Network.Dependencies\EPAM.Social_Network.Dependencies.csproj">
+      <Project>{dfb6a9a5-1a5f-4572-b3cb-16533f5b5811}</Project>
+      <Name>EPAM.Social_Network.Dependencies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.Social_Network.Entities\EPAM.Social_Network.Entities.csproj">
+      <Project>{5bc3993b-ac0f-4d34-a593-37ff4aa57371}</Project>
+      <Name>EPAM.Social_Network.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Pages\Admins\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -211,9 +217,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>50967</DevelopmentServerPort>
+          <DevelopmentServerPort>55785</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44313/</IISUrl>
+          <IISUrl>https://localhost:44385/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

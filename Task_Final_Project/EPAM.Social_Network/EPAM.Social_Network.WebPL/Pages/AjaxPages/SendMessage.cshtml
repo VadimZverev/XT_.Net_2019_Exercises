@@ -1,0 +1,37 @@
+﻿@using EPAM.Social_Network.Entities;
+@using EPAM.Social_Network.WebPL.Models;
+
+@{ Layout = null;}
+
+@if (IsAjax)
+{
+    string msgTxt = Request["sendTxt"];
+
+    if (int.TryParse(Request["accId"], out int accId)
+        && int.TryParse(Request["friendId"], out int friendId)
+        && !string.IsNullOrWhiteSpace(msgTxt))
+    {
+        var msg = new Message
+        {
+            AccountFromId = accId,
+            AccountToId = friendId,
+            Text = msgTxt,
+            DateOfCreation = DateTime.Now
+        };
+
+        if (AccountModel.SendMessage(msg))
+        {
+            <div class="m-1 ml-auto w-50 form-group border border-dark rounded">
+                <div class="form-control-range">
+                    <div class="border-bottom border-dark bg-success">
+                        You @msg.DateOfCreation
+                    </div>
+                    <div>
+                        @msg.Text
+                    </div>
+                </div>
+            </div>
+            return;
+        }
+    }
+}

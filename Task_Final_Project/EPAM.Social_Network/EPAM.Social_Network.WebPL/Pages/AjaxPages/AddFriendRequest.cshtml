@@ -1,0 +1,19 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+@{ Layout = null;}
+@if (IsAjax)
+{
+    if (AccountModel.AddFriendRequest())
+    {
+        <p class="text-success">
+            Your friend request has been sent successfully.
+        </p>
+        return;
+    }
+    else
+    {
+        <p class="text-warning">
+            Your friend request has not been sent successfully.
+        </p>
+        return;
+    }
+}

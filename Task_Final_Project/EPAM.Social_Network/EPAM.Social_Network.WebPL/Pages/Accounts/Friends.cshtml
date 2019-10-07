@@ -1,0 +1,125 @@
+﻿@using EPAM.Social_Network.Entities;
+@using EPAM.Social_Network.WebPL.Models;
+
+@{
+    Page.Title = "Friends";
+
+    Account acc = null;
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    Response.Redirect("/Pages/Index");
+}
+else
+{
+    acc = AccountModel.GetAccountByLogin(User.Identity.Name);
+}
+
+@if (acc == null)
+{
+    <h1 class="alert-warning">Not found account</h1>
+}
+else
+{
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="friends-tab" data-toggle="tab"
+               href="#friends" role="tab" aria-controls="friends" aria-selected="true">
+                Friends
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="friendRequest-tab" data-toggle="tab"
+               href="#friendRequest" role="tab" aria-controls="friendRequest" aria-selected="false">
+                Friend requests
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="friends" role="tabpanel" aria-labelledby="friends-tab">
+            @{
+                var friends = AccountModel.GetFriendsAccount(acc.Id);
+            }
+
+            @if (!friends.Any())
+            {
+                <h1>Invite someone to friends.</h1>
+            }
+            else
+            {
+                foreach (var friend in friends)
+                {
+                    var friendProfile = AccountModel.GetProfileById(friend.ProfileId);
+
+                    <div class="form-group text-center">
+                        <a href="~/Pages/Accounts/UserProfile?accountId=@friend.Id">
+                            <div class="form-inline">
+                                @if (friendProfile.ProfilePhoto != null)
+                                {
+                                    var src = Convert.ToBase64String(friendProfile.ProfilePhoto);
+                                    <img style="max-width:150px;max-height:150px" class="ml-auto rounded d-block"
+                                         src="data:image;base64,@src" alt="PhotoProfile" />
+                                }
+                                else
+                                {
+                                    <img style="max-width:150px;max-height:150px" class="ml-auto rounded d-block"
+                                         src="~/Content/Images/noimage.png" alt="PhotoProfile" />
+                                }
+                                <div class="mr-auto text-dark">
+                                    <h6>@friendProfile.FirstName @friendProfile.LastName</h6>
+                                    <p>
+                                        @(friendProfile.Age.HasValue ? friendProfile.Age + " age" : null)
+                                        @friendProfile.City
+                                    </p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+        <div class="tab-pane fade" id="friendRequest" role="tabpanel" aria-labelledby="friendRequest-tab">
+            @{
+                var friendRequest = AccountModel.GetFriendRequests(acc.Id);
+            }
+
+            @foreach (var fRequest in friendRequest)
+            {
+                var friendProfile = AccountModel.GetProfileById(fRequest.ProfileId);
+
+                <div class="form-group text-center">
+                    <a href="~/Pages/Accounts/UserProfile?accountId=@fRequest.Id">
+                        <div class="form-inline">
+                            @if (friendProfile.ProfilePhoto != null)
+                            {
+                                var src = Convert.ToBase64String(friendProfile.ProfilePhoto);
+                                <img style="max-width:150px;max-height:150px" class="ml-auto rounded d-block"
+                                     src="data:image;base64,@src" alt="PhotoProfile" />
+                            }
+                            else
+                            {
+                                <img style="max-width:150px;max-height:150px" class="ml-auto rounded d-block"
+                                     src="~/Content/Images/noimage.png" alt="PhotoProfile" />
+                            }
+                            <div class="mr-auto text-dark">
+                                <h6>@friendProfile.FirstName @friendProfile.LastName</h6>
+                                <p>
+                                    @(friendProfile.Age.HasValue ? friendProfile.Age + " age" : null)
+                                    @friendProfile.City
+                                </p>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="form-inline">
+                        <input type="hidden" name="accId" value="@acc.Id" />
+                        <input type="hidden" name="friendId" value="@fRequest.Id" />
+                        <input type="button" class="ajax-add btn btn-success ml-auto mr-2" value="Add" />
+                        <input type="button" class="ajax-deny btn btn-secondary mr-auto ml-2" value="Deny" />
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+<script src="~/Scripts/Custom/AddDenyFriendRequest.js"></script>

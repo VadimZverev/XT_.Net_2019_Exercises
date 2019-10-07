@@ -1,0 +1,68 @@
+﻿@using EPAM.Social_Network.Entities;
+@using EPAM.Social_Network.WebPL.Models;
+
+@{
+    Page.Title = "Friends";
+
+    Account acc = null;
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    Response.Redirect("/Pages/Index");
+}
+else
+{
+    acc = AccountModel.GetAccountByLogin(User.Identity.Name);
+}
+
+<div class="d-flex">
+    <div id="friends" class="border-right border-dark overflow-auto w-25">
+        @if (acc == null)
+        {
+            <h1 class="alert-warning">Not found account</h1>
+        }
+        else
+        {
+            var friends = AccountModel.GetFriendsAccount(acc.Id);
+
+            if (!friends.Any())
+            {
+                <h6>Invite someone to friends.</h6>
+            }
+            else
+            {
+                var accName = AccountModel.GetProfileById(acc.Id).FirstName;
+
+                foreach (var friend in friends)
+                {
+                    var friendProfile = AccountModel.GetProfileById(friend.ProfileId);
+
+                    <div class="form-group text-center m-2">
+                        <input type="hidden" name="friendId" value="@friend.Id" />
+                        <input name="accName" type="hidden" value="@accName" />
+                        <input name="friendName" type="hidden" value="@friendProfile.FirstName" />
+                        <a class="msgs btn btn-block btn-outline-secondary"
+                           href="~/Pages/AjaxPages/GetMessages?accId=@acc.Id&friendId=@friend.Id">
+                            @friendProfile.FirstName @friendProfile.LastName
+                        </a>
+                    </div>
+                }
+            }
+        }
+    </div>
+    <div class="flex-fill form-group">
+        <div id="messages" class="form-control-range mb-3"></div>
+        <div id="inputMsg" class="form-group border-top d-none">
+            <div class="mt-2">
+                <form id="send" action="~/Pages/AjaxPages/SendMessage" method="post" class="sendMsg form-inline">
+                    <input name="accId" type="hidden" value="@acc.Id" />
+                    <input name="friendId" type="hidden" value="0" />
+                    <textarea class="ml-auto mr-2 w-75 form-control" name="sendTxt" placeholder="Input message..."></textarea>
+                    <button type="submit" class="btn btn-sm btn-outline-success mr-auto">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/Custom/GetSendMessages.js"></script>

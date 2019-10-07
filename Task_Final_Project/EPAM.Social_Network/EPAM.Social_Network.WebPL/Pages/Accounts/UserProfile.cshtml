@@ -1,0 +1,167 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+
+@{
+    Page.Title = "User Profile";
+}
+
+@{
+    if (Request.QueryString.Count != 0 && Request["accountId"] != null)
+    {
+        if (int.TryParse(Request["accountId"], out int accId))
+        {
+            var acc = AccountModel.GetAccount(accId);
+
+            if (acc == null)
+            {
+                <h1 class="text-center bg-warning">Not Found User Profile.</h1>
+            }
+            else
+            {
+                var profile = AccountModel.GetProfileById(acc.ProfileId);
+
+                if (profile != null)
+                {
+                    <div class="container-fluid">
+
+                        <div class="text-center">
+                            <h2>@profile.LastName @profile.FirstName @profile.MiddleName</h2>
+                        </div>
+
+                        <div class="float-left ml-5 mr-5">
+                            @if (profile.ProfilePhoto != null)
+                            {
+                                var src = Convert.ToBase64String(profile.ProfilePhoto);
+                                <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                                     src="data:image;base64,@src" alt="PhotoProfile" />
+                            }
+                            else
+                            {
+                                <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                                     src="~/Content/Images/noimage.png" alt="PhotoProfile" />
+                            }
+
+                            @if (User.Identity.IsAuthenticated && User.Identity.Name != acc.Login)
+                            {
+                                var authAcc = AccountModel.GetAccountByLogin(User.Identity.Name);
+
+                                var friend = AccountModel.GetFriend(authAcc.Id, acc.Id);
+
+                                if (friend != null)
+                                {
+                                    if (friend.IsAccept)
+                                    {
+                                        <p>In your friends.</p>
+                                    }
+                                    else
+                                    {
+                                        <p>You have already sent a friend request.</p>
+                                    }
+                                }
+                                else
+                                {
+                                    <div class="hide">
+                                        <input id="friendId" type="hidden" value="@accId" />
+                                        <input id="authAccId" type="hidden" value="@authAcc.Id" />
+                                    </div>
+                                    <div id="btnFriendContainer">
+                                        <input id="AddFriendRequest" class="btn btn-success" type="button" value="Add Friend" />
+                                    </div>
+                                }
+                            }
+                        </div>
+                        <div>
+                            Date Of Birth:
+                            @(profile.DateOfBirth.HasValue
+                                            ? profile.DateOfBirth.Value.ToShortDateString()
+                                            : "<Missing>")
+                        </div>
+                        <div>
+                            Age:
+                            @(profile.Age.HasValue ? profile.Age.ToString() : "<Missing>")
+                        </div>
+                        <div>
+                            Male:
+                            @(!string.IsNullOrEmpty(profile.Male) ? profile.Male : "<Missing>")
+                        </div>
+                        <div>
+                            City:
+                            @(!string.IsNullOrEmpty(profile.City) ? profile.City : "<Missing>")
+                        </div>
+
+                        <div class="text-success">
+                            TODO: Add more info in future.
+                        </div>
+                    </div>
+                    <script src="~/Scripts/Custom/AddFriendRequest.js"></script>
+                }
+            }
+        }
+        else
+        {
+            <h1 class="text-center bg-warning">Incorrect Id User Profile.</h1>
+        }
+    }
+    else
+    {
+        if (!User.Identity.IsAuthenticated)
+        {
+            Response.Redirect("/Pages/SignIn");
+        }
+
+        var profileId = AccountModel.GetAccountByLogin(User.Identity.Name)?.ProfileId;
+
+        if (profileId != null)
+        {
+            var profile = AccountModel.GetProfileById(profileId.Value);
+
+            if (profile == null)
+            {
+                <h1 class="text-center bg-warning">Not Found User Profile.</h1>
+            }
+            else
+            {
+                <div class="container-fluid">
+                    <div class="text-center">
+                        <h2>@profile.LastName @profile.FirstName @profile.MiddleName</h2>
+                    </div>
+
+                    <div class="float-left ml-5 mr-5">
+                        @if (profile.ProfilePhoto != null)
+                        {
+                            var src = Convert.ToBase64String(profile.ProfilePhoto);
+                            <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                                 src="data:image;base64,@src" alt="PhotoProfile" />
+                        }
+                        else
+                        {
+                            <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                                 src="~/Content/Images/noimage.png" alt="PhotoProfile" />
+                        }
+                    </div>
+                    <div>
+                        Date Of Birth:
+                        @(profile.DateOfBirth.HasValue
+                                ? profile.DateOfBirth.Value.ToShortDateString()
+                                : "<Missing>")
+                    </div>
+                    <div>
+                        Age:
+                        @(profile.Age.HasValue
+                                ? profile.Age.ToString()
+                                : "<Missing>")
+                    </div>
+                    <div>
+                        Male: @(profile.Male ?? "<Missing>")
+                    </div>
+                    <div>
+                        City: @(profile.City ?? "<Missing>")
+                    </div>
+
+                    <div class="text-success">
+                        TODO: Add more info in future.
+                    </div>
+                </div>
+            }
+        }
+    }
+}
