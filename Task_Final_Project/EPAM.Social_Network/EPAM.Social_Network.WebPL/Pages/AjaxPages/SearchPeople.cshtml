@@ -1,0 +1,141 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+
+@{ Layout = null; }
+
+@if (IsAjax || IsPost)
+{
+    var sort = Request["Sort"];
+    var byDesc = Request["byDesc"];
+    var male = Request["Male"];
+    var city = Request["City"];
+    var searchTxt = Request["searchTxt"];
+
+    var words = !string.IsNullOrWhiteSpace(searchTxt)
+                ? searchTxt.Trim()
+                           .ToLower()
+                           .Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+                : new string[0];
+
+    var profiles = AccountModel.GetProfiles();
+
+    if (words.Length != 0)
+    {
+        profiles = profiles.Where(p => words.Contains(p.FirstName.ToLower())
+                            || words.Contains(p.LastName.ToLower())
+                            || words.Contains(p.MiddleName.ToLower()));
+    }
+
+    if (!string.IsNullOrWhiteSpace(male))
+    {
+        switch (male)
+        {
+            case "1":
+                profiles = profiles.Where(p => p.Male.Contains("men"));
+                break;
+            case "2":
+                profiles = profiles.Where(p => p.Male.Contains("women"));
+                break;
+        }
+    }
+
+    if (!string.IsNullOrWhiteSpace(city))
+    {
+        profiles = profiles.Where(p => p.City.Contains(city));
+    }
+
+    if (!string.IsNullOrWhiteSpace(sort))
+    {
+        if (byDesc != null && byDesc == "on")
+        {
+            switch (sort)
+            {
+                case "0":
+                    profiles = profiles.OrderByDescending(f => f.FirstName);
+                    break;
+                case "1":
+                    profiles = profiles.OrderByDescending(f => f.LastName);
+                    break;
+                case "2":
+                    profiles = profiles.OrderByDescending(f => f.MiddleName);
+                    break;
+                case "3":
+                    profiles = profiles.OrderByDescending(f => f.DateOfBirth);
+                    break;
+                case "4":
+                    profiles = profiles.OrderByDescending(f => f.Age);
+                    break;
+                case "5":
+                    profiles = profiles.OrderByDescending(f => f.City);
+                    break;
+            }
+        }
+        else
+        {
+            switch (sort)
+            {
+                case "0":
+                    profiles = profiles.OrderBy(f => f.FirstName);
+                    break;
+                case "1":
+                    profiles = profiles.OrderBy(f => f.LastName);
+                    break;
+                case "2":
+                    profiles = profiles.OrderBy(f => f.MiddleName);
+                    break;
+                case "3":
+                    profiles = profiles.OrderBy(f => f.DateOfBirth);
+                    break;
+                case "4":
+                    profiles = profiles.OrderBy(f => f.Age);
+                    break;
+                case "5":
+                    profiles = profiles.OrderBy(f => f.City);
+                    break;
+            }
+        }
+    }
+
+    <table class="table table-striped table-bordered table-sm text-center">
+        <thead>
+            <tr>
+                <td>First Name</td>
+                <td>Last Name</td>
+                <td>Middle Name</td>
+                <td>Male</td>
+                <td>Date of Birth</td>
+                <td>Age</td>
+                <td>City</td>
+                <td>ProfilePhoto</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var profile in profiles)
+            {
+                <tr>
+                    <td>@profile.FirstName</td>
+                    <td>@profile.LastName</td>
+                    <td>@profile.MiddleName</td>
+                    <td>@profile.Male</td>
+                    <td>@(profile.DateOfBirth?.ToShortDateString())</td>
+                    <td>@profile.Age</td>
+                    <td>@profile.City</td>
+                    <td>
+                        <div class="text-center">
+                            @if (profile.ProfilePhoto != null)
+                            {
+                                var src = Convert.ToBase64String(profile.ProfilePhoto);
+                                <img style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                     src="data:image/png;base64,@src" alt="image" />
+                            }
+                            else
+                            {
+                                <img style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                     src="~/Content/Images/noimage.png" alt="image" />
+                            }
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

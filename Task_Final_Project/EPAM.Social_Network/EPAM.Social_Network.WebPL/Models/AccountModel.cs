@@ -189,6 +189,11 @@ namespace EPAM.Social_Network.WebPL.Models
             return _profileDbLogic.GetById(profileId);
         }
 
+        public static IEnumerable<Profile> GetProfiles()
+        {
+            return _profileDbLogic.GetAll();
+        }
+
         public static string GetRoleName(int? roleId)
         {
             if (roleId != null)

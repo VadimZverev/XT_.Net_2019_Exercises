@@ -11,20 +11,16 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <div class="m-2"></div>
-        <div class="m-auto">
-            <form action="" method="post">
-                <input class="form-control mr-sm-2 mb-1" type="search" placeholder="Find people..." aria-label="Search">
-            </form>
-        </div>
         @if (!User.Identity.IsAuthenticated)
         {
-            <a href="~/Pages/SignIn" class="btn btn-outline-light mr-2">Sign In</a>
-            <a href="~/Pages/Registration" class="btn btn-outline-light ml-2">Registration</a>
+            <div class="ml-auto">
+                <a href="~/Pages/SignIn" class="btn btn-outline-light mr-2">Sign In</a>
+                <a href="~/Pages/Registration" class="btn btn-outline-light ml-2">Registration</a>
+            </div>
         }
         else
         {
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#"
                        id="navbarDropdown" role="button" data-toggle="dropdown"

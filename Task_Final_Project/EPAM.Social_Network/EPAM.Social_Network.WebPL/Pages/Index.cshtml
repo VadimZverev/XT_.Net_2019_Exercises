@@ -6,6 +6,15 @@
     <h2>Welcome to social network on the gaming theme. Find people on your gaming interests.</h2>
 </div>
 
-<div class="text-success">
-    TODO: Make quick search
+<div class="form-group">
+    <form action="~/Pages/Search" method="post" class="form-inline">
+        <label for="search" class="ml-auto">
+            Search:
+        </label>
+        <input id="search" class="form-control w-50 ml-2" name="searchTxt"
+               type="search" placeholder="search people" />
+        <button type="submit" class="btn btn-outline-success ml-2 mr-auto">
+            Search
+        </button>
+    </form>
 </div>

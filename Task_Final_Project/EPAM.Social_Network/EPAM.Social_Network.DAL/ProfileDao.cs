@@ -140,16 +140,16 @@ namespace EPAM.Social_Network.DAL
 
                 var reader = command.ExecuteReader();
 
-                if (reader.Read())
+                while (reader.Read())
                 {
                     var id = (int)reader["Id"];
                     var firstName = (string)reader["FirstName"];
-                    var middleName = (string)reader["MiddleName"];
-                    var lastName = (string)reader["LastName"];
-                    var male = (string)reader["Male"];
-                    var dateOfBirth = (DateTime)reader["DateOfBirth"];
-                    var profilePhoto = reader["ProfilePhoto"] is DBNull ? null : (byte[])reader["Image"];
-                    var city = (string)reader["City"];
+                    var middleName = reader["MiddleName"] is DBNull ? null : (string)reader["MiddleName"];
+                    var lastName = reader["LastName"] is DBNull ? null : (string)reader["LastName"];
+                    var male = reader["Male"] is DBNull ? null : (string)reader["Male"];
+                    var dateOfBirth = reader["DateOfBirth"] is DBNull ? null : (DateTime?)reader["DateOfBirth"];
+                    var profilePhoto = reader["ProfilePhoto"] is DBNull ? null : (byte[])reader["ProfilePhoto"];
+                    var city = reader["City"] is DBNull ? null : (string)reader["City"];
 
                     yield return new Profile
                     {

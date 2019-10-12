@@ -113,6 +113,7 @@
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Scripts\Custom\AddDenyFriendRequest.js" />
     <Content Include="Scripts\Custom\GetSendMessages.js" />
+    <Content Include="Scripts\Custom\searchPeople.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -136,6 +137,8 @@
     <Content Include="Pages\Accounts\Messages.cshtml" />
     <Content Include="Pages\AjaxPages\GetMessages.cshtml" />
     <Content Include="Pages\AjaxPages\SendMessage.cshtml" />
+    <Content Include="Pages\Search.cshtml" />
+    <Content Include="Pages\AjaxPages\SearchPeople.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

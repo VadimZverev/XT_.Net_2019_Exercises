@@ -9,7 +9,9 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
 </head>
 <body>
-    @RenderPage("_NavMenu.cshtml")
+    <div class="sticky-top">
+        @RenderPage("_NavMenu.cshtml")
+    </div>
     @RenderBody()
 </body>
 </html>

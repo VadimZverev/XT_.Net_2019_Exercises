@@ -1,0 +1,61 @@
+﻿@{
+    Page.Title = "Search";
+}
+
+<div class="form-group mt-2">
+    <form id="searchForm" action="~/Pages/AjaxPages/SearchPeople" method="post">
+        <div class="form-inline">
+            <label for="search" class="ml-auto">
+                Search:
+            </label>
+            <input id="search" class="form-control w-50 ml-2" name="searchTxt"
+                   type="search" placeholder="search people" 
+                   value="@(IsPost ? Request["searchTxt"] : "")" />
+            <button type="submit" class="btn btn-outline-success ml-2 mr-auto">
+                Search
+            </button>
+        </div>
+        <div class="mt-2 d-flex justify-content-center">
+            <div class="mr-4">
+                <label for="sort">
+                    Sort:
+                </label>
+                <select id="sort" name="Sort" class="custom-select w-auto ml-2">
+                    <option value="0">First Name</option>
+                    <option value="1">Last Name</option>
+                    <option value="2">Middle Name</option>
+                    <option value="3">Date of Birth</option>
+                    <option value="4">Age</option>
+                    <option value="5">City</option>
+                </select>
+                <input type="checkbox" id="byDesc" />
+                By Descending
+            </div>
+            <div>
+                <label for="male">
+                    Male:
+                </label>
+                <select id="male" name="Male" class="custom-select w-auto ml-2">
+                    <option value="0">None</option>
+                    <option value="1">Men</option>
+                    <option value="2">Women</option>
+                </select>
+            </div>
+            <div class="ml-4 d-flex form-group">
+                <label for="city" class="ml-auto">
+                    City:
+                </label>
+                <input id="city" class="form-control ml-2" name="City"
+                       type="text" placeholder="city" />
+            </div>
+        </div>
+    </form>
+</div>
+
+<div id="people">
+    @if (IsPost)
+    {
+        @RenderPage("~/Pages/AjaxPages/SearchPeople.cshtml")
+    }
+</div>
+<script src="~/Scripts/Custom/searchPeople.js"></script>
