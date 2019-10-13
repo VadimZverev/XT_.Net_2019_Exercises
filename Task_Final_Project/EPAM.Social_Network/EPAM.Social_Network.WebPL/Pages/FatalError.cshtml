@@ -1,0 +1,19 @@
+﻿@{
+    Page.Title = "Unexpected error";
+    var errorMsg = Request["errorMsg"];
+}
+
+<h1 class="text-center bg-danger mt-2">
+    @if (string.IsNullOrWhiteSpace(errorMsg))
+    {
+        @:Unexpected error.
+    }
+    else
+    {
+        @errorMsg
+    }
+</h1>
+
+<div class="d-flex justify-content-center">
+    <img src="~/Content/Images/Error.png" style="width:35%" />
+</div>

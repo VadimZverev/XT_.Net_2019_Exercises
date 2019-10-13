@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3470E259-5607-4B76-8888-AA99469759D6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>EPAM.Social_Network.BLL</RootNamespace>
+    <AssemblyName>EPAM.Social_Network.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FriendLogic.cs" />
+    <Compile Include="MessageLogic.cs" />
+    <Compile Include="ProfileLogic.cs" />
+    <Compile Include="AccountLogic.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RoleLogic.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EPAM.Social_Network.BLL.Interfaces\EPAM.Social_Network.BLL.Interfaces.csproj">
+      <Project>{6cf1609d-533a-401b-861f-e13836c89ea2}</Project>
+      <Name>EPAM.Social_Network.BLL.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.Social_Network.DAL.Interface\EPAM.Social_Network.DAL.Interfaces.csproj">
+      <Project>{fdb275f1-396a-4041-8397-2191d15714b9}</Project>
+      <Name>EPAM.Social_Network.DAL.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.Social_Network.Entities\EPAM.Social_Network.Entities.csproj">
+      <Project>{5bc3993b-ac0f-4d34-a593-37ff4aa57371}</Project>
+      <Name>EPAM.Social_Network.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.Social_Network.Loggers\EPAM.Social_Network.Loggers.csproj">
+      <Project>{77fa9b4a-b663-4c27-aa55-8a192db986fe}</Project>
+      <Name>EPAM.Social_Network.Loggers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

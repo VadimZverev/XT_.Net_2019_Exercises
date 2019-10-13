@@ -1,0 +1,21 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+
+@{ Layout = null;}
+
+@if (IsAjax)
+{
+    if (AccountModel.AddFriend())
+    {
+        <div class="text-success text-center m-auto">
+            You have confirmed friend request.
+        </div>
+        return;
+    }
+    else
+    {
+        <div class="text-warning text-center m-auto">
+            Confirmation error.
+        </div>
+        return;
+    }
+}

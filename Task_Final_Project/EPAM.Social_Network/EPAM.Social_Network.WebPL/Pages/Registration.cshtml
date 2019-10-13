@@ -1,0 +1,59 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+@{
+    Page.Title = "Registration";
+
+    string errorMsg = null;
+    string returnUrl = Request?.UrlReferrer?.AbsolutePath;
+
+    if (returnUrl == null || returnUrl == "/Pages/Registration"
+        || returnUrl == "/Pages/SignIn")
+    {
+        returnUrl = "/Pages/Index";
+    }
+
+    if (IsPost)
+    {
+        var login = Request["login"];
+        var pass = Request["pass"];
+
+        if (!string.IsNullOrWhiteSpace(login) && !string.IsNullOrWhiteSpace(pass))
+        {
+            if (AccountModel.Register(login, pass))
+            {
+                FormsAuthentication.SetAuthCookie(login, true);
+                Response.Redirect(returnUrl);
+            }
+            else
+            {
+                errorMsg = "Failed to register account. Login may already exist.";
+            }
+        }
+        else
+        {
+            errorMsg = "Login or Password must be not empty";
+        }
+    }
+}
+
+<h3 class="p-2 bg-primary text-white text-center">Registration</h3>
+
+@if (errorMsg != null)
+{
+    <div class="alert-danger">@errorMsg</div>
+}
+
+<div class="m-3">
+    <form action="" method="post">
+        <input type="hidden" name="returnUrl" value="@returnUrl" />
+        <div class="form-group">
+            <label for="login">Login:</label>
+            <input id="login" type="text" class="form-control" name="login" required />
+        </div>
+        <div class="form-group">
+            <label for="pass">Password:</label>
+            <input id="pass" type="password" class="form-control" name="pass" required />
+        </div>
+        <button class="btn btn-primary">Register</button>
+        <a href="@returnUrl" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

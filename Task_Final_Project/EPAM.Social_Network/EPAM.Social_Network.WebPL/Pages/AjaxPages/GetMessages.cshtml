@@ -1,0 +1,52 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+
+@{ Layout = null;}
+
+@if (IsAjax && Request.QueryString.Count != 0)
+{
+    if (int.TryParse(Request["accId"], out int accId)
+        && int.TryParse(Request["friendId"], out int friendId))
+    {
+        var correspondence = AccountModel.GetCorrespondence(accId, friendId);
+
+        if (correspondence.Any())
+        {
+
+            foreach (var msg in correspondence)
+            {
+                if (msg.AccountFromId == accId)
+                {
+                    <div class="m-1 ml-auto w-50 form-group border border-dark rounded">
+                        <div class="form-control-range">
+                            <div class="border-bottom border-dark bg-success">
+                                You @msg.DateOfCreation
+                            </div>
+                            <div>
+                                @msg.Text
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="m-1 mr-auto w-50 form-group border border-dark rounded">
+                        <div class="form-control-range">
+                            <div class="border-bottom border-dark bg-primary">
+                                @Request["friendName"]  @msg.DateOfCreation
+                            </div>
+                            <div>
+                                @msg.Text
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        }
+        else
+        {
+            <div class="text-center m-auto">
+                No Messages.
+            </div>
+        }
+    }
+}

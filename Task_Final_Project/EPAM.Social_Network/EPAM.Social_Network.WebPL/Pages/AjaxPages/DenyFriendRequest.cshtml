@@ -1,0 +1,19 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+@{ Layout = null;}
+@if (IsAjax)
+{
+    if (AccountModel.DenyFriendRequest())
+    {
+        <div class="text-dark text-center m-auto">
+            You have deny friend request.
+        </div>
+        return;
+    }
+    else
+    {
+        <div class="text-success text-center m-auto">
+            Deny error.
+        </div>
+        return;
+    }
+}

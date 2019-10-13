@@ -1,0 +1,11 @@
+﻿@using EPAM.Social_Network.WebPL.Models;
+
+@{
+    Layout = "/Pages/Shared/_Layout.cshtml";
+
+    if (IsPost && Request["SignOut"] != null)
+    {
+        AccountModel.SignOut();
+        Response.Redirect("/Pages/Index");
+    }
+}

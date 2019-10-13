@@ -1,0 +1,47 @@
+﻿<nav class="navbar navbar-expand-lg navbar-dark bg-dark justify-content-between">
+    <a class="navbar-brand" href="~/Pages/Index">
+        Social Network
+    </a>
+
+    <button class="navbar-toggler" type="button"
+            data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        @if (!User.Identity.IsAuthenticated)
+        {
+            <div class="ml-auto">
+                <a href="~/Pages/SignIn" class="btn btn-outline-light mr-2">Sign In</a>
+                <a href="~/Pages/Registration" class="btn btn-outline-light ml-2">Registration</a>
+            </div>
+        }
+        else
+        {
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#"
+                       id="navbarDropdown" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Options
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="~/Pages/Accounts/Messages">Messages</a>
+                        <a class="dropdown-item" href="~/Pages/Accounts/Friends">Friends</a>
+                        <a class="dropdown-item" href="~/Pages/Accounts/EditProfile">Edit Profile</a>
+                        <a class="dropdown-item" href="~/Pages/Accounts/UserProfile">View Profile</a>
+                        <a class="dropdown-item" href="~/Pages/Search">Search People</a>
+                        <div class="dropdown-divider"></div>
+                        <form action="" method="post">
+                            <button type="submit" name="SignOut" class="btn btn-link dropdown-item">
+                                Sign Out
+                            </button>
+                        </form>
+                    </div>
+                </li>
+            </ul>
+        }
+    </div>
+</nav>
