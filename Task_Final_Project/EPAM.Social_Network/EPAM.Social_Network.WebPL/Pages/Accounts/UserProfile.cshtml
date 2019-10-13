@@ -22,24 +22,23 @@
                 if (profile != null)
                 {
                     <div class="container-fluid">
-
                         <div class="text-center">
                             <h2>@profile.LastName @profile.FirstName @profile.MiddleName</h2>
                         </div>
-
-                        <div class="float-left ml-5 mr-5">
-                            @if (profile.ProfilePhoto != null)
-                            {
-                                var src = Convert.ToBase64String(profile.ProfilePhoto);
-                                <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
-                                     src="data:image;base64,@src" alt="PhotoProfile" />
-                            }
-                            else
-                            {
-                                <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
-                                     src="~/Content/Images/noimage.png" alt="PhotoProfile" />
-                            }
-
+                        <div class="float-left mx-5">
+                            <div class="mb-2">
+                                @if (profile.ProfilePhoto != null)
+                                {
+                                    var src = Convert.ToBase64String(profile.ProfilePhoto);
+                                    <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                                         src="data:image;base64,@src" alt="PhotoProfile" />
+                                }
+                                else
+                                {
+                                    <img style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                                         src="~/Content/Images/noimage.png" alt="PhotoProfile" />
+                                }
+                            </div>
                             @if (User.Identity.IsAuthenticated && User.Identity.Name != acc.Login)
                             {
                                 var authAcc = AccountModel.GetAccountByLogin(User.Identity.Name);
@@ -50,11 +49,68 @@
                                 {
                                     if (friend.IsAccept)
                                     {
-                                        <p>In your friends.</p>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                Options
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <form action="" id="delFriend@(profile.Id)" method="post">
+                                                    <input type="hidden" name="authAccId" value="@authAcc.Id" />
+                                                    <input type="hidden" name="accFriendId" value="@acc.Id" />
+                                                    <input type="hidden" name="Mode" value="DelFriend" />
+                                                    <input type="button" class="delete btn btn-link dropdown-item"
+                                                           value="Remove from friends" />
+                                                </form>
+                                                @if (User.IsInRole("Admin"))
+                                                {
+                                                    <div class="dropdown-divider"></div>
+                                                    <a class="dropdown-item dropdown-item-text disabled" href="#">
+                                                        Admin action:
+                                                    </a>
+                                                    <a class="dropdown-item"
+                                                       href="~/Pages/Accounts/EditProfile?profileId=@profile.Id">
+                                                        Edit
+                                                    </a>
+                                                    <form action="" id="delAcc@(profile.Id)" method="post">
+                                                        <input type="hidden" name="profId" value="@profile.Id" />
+                                                        <input type="hidden" name="Mode" value="Delete" />
+                                                        <input type="button" class="btn btn-link dropdown-item delete"
+                                                               value="Delete" />
+                                                    </form>
+                                                }
+                                            </div>
+                                        </div>
                                     }
                                     else
                                     {
                                         <p>You have already sent a friend request.</p>
+                                        if (User.IsInRole("Admin"))
+                                        {
+                                            <div class="btn-group">
+                                                <button type="button" class="btn btn-primary dropdown-toggle"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false">
+                                                    Admin Options
+                                                </button>
+                                                <div class="dropdown-menu">
+                                                    <a class="dropdown-item dropdown-item-text disabled" href="#">
+                                                        action:
+                                                    </a>
+                                                    <a class="dropdown-item"
+                                                       href="~/Pages/Accounts/EditProfile?profileId=@profile.Id">
+                                                        Edit
+                                                    </a>
+                                                    <form action="" id="delAcc@(profile.Id)" method="post">
+                                                        <input type="hidden" name="profId" value="@profile.Id" />
+                                                        <input type="hidden" name="Mode" value="Delete" />
+                                                        <input type="button" class="btn btn-link dropdown-item delete"
+                                                               value="Delete" />
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        }
                                     }
                                 }
                                 else
@@ -63,9 +119,32 @@
                                         <input id="friendId" type="hidden" value="@accId" />
                                         <input id="authAccId" type="hidden" value="@authAcc.Id" />
                                     </div>
-                                    <div id="btnFriendContainer">
-                                        <input id="AddFriendRequest" class="btn btn-success" type="button" value="Add Friend" />
+                                    <div id="btnFriendContainer" class="mt-2">
+                                        <input id="AddFriendRequest" class="btn btn-success" type="button"
+                                               value="Add Friend" />
                                     </div>
+                                    if (User.IsInRole("Admin"))
+                                    {
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle"
+                                                    data-toggle="dropdown" aria-haspopup="true"
+                                                    aria-expanded="false">
+                                                Admin Options
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item"
+                                                   href="~/Pages/Accounts/EditProfile?profileId=@profile.Id">
+                                                    Edit
+                                                </a>
+                                                <form action="" id="delAcc@(profile.Id)" method="post">
+                                                    <input type="hidden" name="profId" value="@profile.Id" />
+                                                    <input type="hidden" name="Mode" value="Delete" />
+                                                    <input class="btn btn-link dropdown-item delete"
+                                                           type="button" value="Delete" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
                                 }
                             }
                         </div>
@@ -87,11 +166,9 @@
                             City:
                             @(!string.IsNullOrEmpty(profile.City) ? profile.City : "<Missing>")
                         </div>
-
-                        <div class="text-success">
-                            TODO: Add more info in future.
-                        </div>
                     </div>
+                    @RenderPage("/Pages/Accounts/_ConfirmDeletePartial.cshtml")
+                    <script src="~/Scripts/Custom/ConfirmDeleteScript.js"></script>
                     <script src="~/Scripts/Custom/AddFriendRequest.js"></script>
                 }
             }
@@ -155,10 +232,6 @@
                     </div>
                     <div>
                         City: @(profile.City ?? "<Missing>")
-                    </div>
-
-                    <div class="text-success">
-                        TODO: Add more info in future.
                     </div>
                 </div>
             }

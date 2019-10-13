@@ -2,7 +2,6 @@
 using EPAM.Social_Network.DAL.Interfaces;
 using EPAM.Social_Network.Entities;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EPAM.Social_Network.BLL
 {
@@ -18,6 +17,11 @@ namespace EPAM.Social_Network.BLL
         public bool Add(Message entity)
         {
             return _messageDao.Add(entity);
+        }
+
+        public void Delete(int accountId)
+        {
+            _messageDao.Delete(accountId);
         }
 
         public bool Delete(int accountFromId, int accountToId)

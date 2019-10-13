@@ -23,7 +23,21 @@ namespace EPAM.Social_Network.WebPL
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
+            if (Request.HttpMethod == "POST"
+                && (Request.UrlReferrer.AbsolutePath == "/Pages/Search"
+                    || Request.UrlReferrer.AbsolutePath == "/Pages/Accounts/UserProfile")
+                && Request["Mode"] != null
+                && Request["Mode"].Contains("Delete"))
+            {
+                AccountModel.RemoveAccount();
+            }
+            else if (Request.HttpMethod == "POST"
+                     && Request.UrlReferrer.AbsolutePath == "/Pages/Accounts/UserProfile"
+                     && Request["Mode"] != null
+                     && Request["Mode"].Contains("DelFriend"))
+            {
+                AccountModel.RemoveFromFriends();
+            }
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

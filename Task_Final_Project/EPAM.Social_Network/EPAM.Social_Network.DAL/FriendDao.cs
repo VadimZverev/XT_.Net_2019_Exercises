@@ -63,6 +63,29 @@ namespace EPAM.Social_Network.DAL
             }
         }
 
+        public void Delete(int accountId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = "DeleteFriendsByAccId";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var _accountId = new SqlParameter
+                {
+                    ParameterName = "@AccountId",
+                    Value = accountId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(_accountId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         public bool Delete(int accountId, int friendId)
         {
             using (var connection = new SqlConnection(_connectionString))

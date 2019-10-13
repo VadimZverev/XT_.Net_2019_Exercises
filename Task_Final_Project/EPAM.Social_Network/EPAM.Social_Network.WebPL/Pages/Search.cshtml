@@ -9,7 +9,7 @@
                 Search:
             </label>
             <input id="search" class="form-control w-50 ml-2" name="searchTxt"
-                   type="search" placeholder="search people" 
+                   type="search" placeholder="search people"
                    value="@(IsPost ? Request["searchTxt"] : "")" />
             <button type="submit" class="btn btn-outline-success ml-2 mr-auto">
                 Search
@@ -52,10 +52,17 @@
     </form>
 </div>
 
-<div id="people">
+<div id="people" class="m-2">
     @if (IsPost)
     {
         @RenderPage("~/Pages/AjaxPages/SearchPeople.cshtml")
     }
 </div>
+
+@if (User.IsInRole("Admin"))
+{
+    @RenderPage("/Pages/Accounts/_ConfirmDeletePartial.cshtml")
+    <script src="~/Scripts/Custom/ConfirmDeleteScript.js"></script>
+}
+
 <script src="~/Scripts/Custom/searchPeople.js"></script>

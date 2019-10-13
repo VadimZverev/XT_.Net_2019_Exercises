@@ -112,6 +112,7 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Scripts\Custom\AddDenyFriendRequest.js" />
+    <Content Include="Scripts\Custom\ConfirmDeleteScript.js" />
     <Content Include="Scripts\Custom\GetSendMessages.js" />
     <Content Include="Scripts\Custom\searchPeople.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
@@ -139,6 +140,7 @@
     <Content Include="Pages\AjaxPages\SendMessage.cshtml" />
     <Content Include="Pages\Search.cshtml" />
     <Content Include="Pages\AjaxPages\SearchPeople.cshtml" />
+    <Content Include="Pages\Accounts\_ConfirmDeletePartial.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -203,9 +205,7 @@
       <Name>EPAM.Social_Network.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Pages\Admins\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

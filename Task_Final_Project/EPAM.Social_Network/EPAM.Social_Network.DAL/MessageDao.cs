@@ -73,6 +73,29 @@ namespace EPAM.Social_Network.DAL
             }
         }
 
+        public void Delete(int accountId)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = connection.CreateCommand();
+                command.CommandText = "DeleteMessagesByAccId";
+                command.CommandType = CommandType.StoredProcedure;
+
+                var accId = new SqlParameter
+                {
+                    ParameterName = "@AccountId",
+                    Value = accountId,
+                    SqlDbType = SqlDbType.Int,
+                    Direction = ParameterDirection.Input
+                };
+
+                command.Parameters.Add(accId);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+        }
+
         public bool Delete(int accountFromId, int accountToId)
         {
             using (var connection = new SqlConnection(_connectionString))
@@ -84,7 +107,7 @@ namespace EPAM.Social_Network.DAL
                 var isDelete = new SqlParameter
                 {
                     ParameterName = "@IsDelete",
-                    SqlDbType = SqlDbType.Int,
+                    SqlDbType = SqlDbType.Bit,
                     Direction = ParameterDirection.Output
                 };
 

@@ -1,4 +1,5 @@
 ﻿@using EPAM.Social_Network.WebPL.Models;
+@using EPAM.Social_Network.Entities;
 
 @{ Layout = null; }
 
@@ -106,6 +107,7 @@
                 <td>Age</td>
                 <td>City</td>
                 <td>ProfilePhoto</td>
+                <td>Actions</td>
             </tr>
         </thead>
         <tbody>
@@ -124,15 +126,51 @@
                             @if (profile.ProfilePhoto != null)
                             {
                                 var src = Convert.ToBase64String(profile.ProfilePhoto);
-                                <img style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                <img style="width:64px;height:64px" class="rounded mx-auto d-block"
                                      src="data:image/png;base64,@src" alt="image" />
                             }
                             else
                             {
-                                <img style="width:150px;height:150px" class="rounded mx-auto d-block"
+                                <img style="width:64px;height:64px" class="rounded mx-auto d-block"
                                      src="~/Content/Images/noimage.png" alt="image" />
                             }
                         </div>
+                    </td>
+                    <td class="text-center">
+                        @{
+                            var acc = AccountModel.GetAccounts()
+                                              .FirstOrDefault(a => a.ProfileId == profile.Id);
+                        }
+
+                        @if (acc != null && acc.Login == User.Identity.Name)
+                        {
+                            <h6>Your profile</h6>
+                            <a class="btn btn-sm btn-primary"
+                               href="~/Pages/Accounts/UserProfile?accountId=@acc.Id">
+                                View
+                            </a>
+                        }
+                        else
+                        {
+                            <div class="custom-control-inline">
+                                <a class="btn btn-sm btn-primary"
+                                   href="~/Pages/Accounts/UserProfile?accountId=@acc.Id">
+                                    View
+                                </a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="btn btn-sm btn-warning ml-1"
+                                       href="~/Pages/Accounts/EditProfile?profileId=@profile.Id">
+                                        Edit
+                                    </a>
+                                    <form action="" id="delAcc@(profile.Id)" method="post" class="ml-1">
+                                        <input type="hidden" name="profId" value="@profile.Id" />
+                                        <input type="hidden" name="Mode" value="Delete" />
+                                        <input type="button" class="btn btn-danger btn-sm delete" value="delete" />
+                                    </form>
+                                }
+                            </div>
+                        }
                     </td>
                 </tr>
             }

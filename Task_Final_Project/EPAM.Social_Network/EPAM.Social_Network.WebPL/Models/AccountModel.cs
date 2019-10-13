@@ -207,7 +207,7 @@ namespace EPAM.Social_Network.WebPL.Models
 
         public static IEnumerable<Role> GetRoles()
         {
-            return _roleDbLogic.GetAll().ToArray();
+            return _roleDbLogic.GetAll();
         }
 
         public static bool Register(string login, string password)
@@ -301,25 +301,33 @@ namespace EPAM.Social_Network.WebPL.Models
                 }
             }
 
-            var newPass = ctx.Request["newPass"];
-            var confirmPass = ctx.Request["confirmPass"];
+            var accIdStr = ctx.Request["accId"];
 
-            if (newPass != null && confirmPass != null
-                && !string.IsNullOrWhiteSpace(newPass)
-                && !string.IsNullOrWhiteSpace(confirmPass)
-                && newPass == confirmPass)
+            if (accIdStr != null && int.TryParse(accIdStr, out int accountId))
             {
-                var accIdStr = ctx.Request["accId"];
+                var acc = _accountDbLogic.GetById(accountId);
 
-                if (accIdStr != null && int.TryParse(accIdStr, out int accountId))
+                if (acc != null)
                 {
-                    var acc = _accountDbLogic.GetById(accountId);
+                    var newPass = ctx.Request["newPass"];
+                    var confirmPass = ctx.Request["confirmPass"];
 
-                    if (acc != null)
+                    if (newPass != null && confirmPass != null
+                        && !string.IsNullOrWhiteSpace(newPass)
+                        && !string.IsNullOrWhiteSpace(confirmPass)
+                        && newPass == confirmPass)
                     {
                         acc.PasswordHash = Crypto.HashPassword(newPass);
-                        _accountDbLogic.Update(acc);
                     }
+
+                    var roleStr = ctx.Request["Role"];
+
+                    if (int.TryParse(roleStr, out int roleId))
+                    {
+                        acc.RoleId = roleId;
+                    }
+
+                    _accountDbLogic.Update(acc);
                 }
             }
 
@@ -358,6 +366,48 @@ namespace EPAM.Social_Network.WebPL.Models
             else
             {
                 context.Response.Redirect("/Pages/Index");
+            }
+        }
+
+        public static void RemoveAccount()
+        {
+            var httpContext = HttpContext.Current;
+
+            if (int.TryParse(httpContext.Request["profId"], out int profId))
+            {
+                Account acc = _accountDbLogic.GetAll()
+                                             .FirstOrDefault(a => a.ProfileId == profId);
+
+                if (acc != null && _accountDbLogic.Delete(acc.Id)
+                    && _profileDbLogic.Delete(profId))
+                {
+                    _friendDbLogic.Delete(acc.Id);
+                    _messageDbLogic.Delete(acc.Id);
+
+                    httpContext.Response.Redirect("/Pages/Index");
+                }
+
+                httpContext.Response.AppendHeader("ErrorMsg", $"The User to delete was not found.");
+                return;
+            }
+
+            httpContext.Response.AppendHeader("ErrorMsg", $"Incorrect data");
+        }
+
+        public static void RemoveFromFriends()
+        {
+            var ctx = HttpContext.Current;
+            var authAccidStr = ctx.Request["authAccId"];
+            var accFriendIdStr = ctx.Request["accFriendId"];
+
+            if (int.TryParse(authAccidStr, out int authAccId)
+                && int.TryParse(accFriendIdStr, out int accFriendId))
+            {
+                _friendDbLogic.Delete(authAccId, accFriendId);
+                _friendDbLogic.Delete(accFriendId, authAccId);
+
+                _messageDbLogic.Delete(authAccId, accFriendId);
+                _messageDbLogic.Delete(accFriendId, authAccId);
             }
         }
     }

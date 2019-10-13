@@ -7,6 +7,8 @@ namespace EPAM.Social_Network.BLL.Interfaces
     {
         bool Add(Friend entity);
 
+        void Delete(int accountId);
+
         bool Delete(int accountId, int friendId);
 
         IEnumerable<Friend> GetAll();

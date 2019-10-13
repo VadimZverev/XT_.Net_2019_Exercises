@@ -27,6 +27,11 @@ namespace EPAM.Social_Network.BLL
             return false;
         }
 
+        public void Delete(int accountId)
+        {
+            _friendDao.Delete(accountId);
+        }
+
         public bool Delete(int accountId, int friendId)
         {
             return _friendDao.Delete(accountId, friendId);

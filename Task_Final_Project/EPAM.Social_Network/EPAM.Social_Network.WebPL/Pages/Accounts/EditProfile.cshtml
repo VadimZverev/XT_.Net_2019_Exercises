@@ -1,4 +1,5 @@
 ﻿@using EPAM.Social_Network.WebPL.Models;
+@using EPAM.Social_Network.Entities;
 
 @{
     Page.Title = "Edit Profile";
@@ -15,120 +16,178 @@
 }
 else
 {
-    var acc = AccountModel.GetAccountByLogin(User.Identity.Name);
+    Account acc = null;
+    Profile profile = null;
 
-    var profileId = acc?.ProfileId;
-
-    if (acc == null && profileId == null)
+    if (User.IsInRole("Admin") && Request.QueryString.Count != 0 && Request["profileId"] != null)
     {
-        <h1 class="text-center">Not found data</h1>
+        if (!int.TryParse(Request["profileId"], out int profId))
+        {
+            <h1 class="text-center bg-warning">Incorrect Id User Profile.</h1>
+            return;
+        }
+        else
+        {
+            profile = AccountModel.GetProfileById(profId);
+
+            if (profile != null)
+            {
+                acc = AccountModel.GetAccounts().FirstOrDefault(a => a.ProfileId == profile.Id);
+            }
+            else
+            {
+                <h1 class="text-center bg-warning">Not found account Id.</h1>
+                return;
+            }
+        }
     }
     else
     {
-        var profile = AccountModel.GetProfileById(profileId.Value);
+        acc = AccountModel.GetAccountByLogin(User.Identity.Name);
 
-        <form action="" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="accId" value="@acc.Id" />
-            <input type="hidden" name="profileId" value="@acc.Id" />
-            <div class="container">
-                <div class="row my-2">
-                    <div class="col-lg-4 order-lg-1 text-center">
-                        <input id="customFile" style="display:none" type="file" name="dirImg" accept="image/*">
-                        @if (profile.ProfilePhoto != null)
-                        {
-                            var src = Convert.ToBase64String(profile.ProfilePhoto);
-                            <img id="avatar" style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
-                                 src="data:image;base64,@src" alt="PhotoProfile" />
-                        }
-                        else
-                        {
-                            <img id="avatar" style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
-                                 src="~/Content/Images/noimage.png" alt="PhotoProfile" />
-                        }
+        var profileId = acc?.ProfileId;
 
-                        <h6 class="mt-2">Click to change avatar</h6>
-                        <input id="resetImg" name="resetImg" type="button" value="Reset" />
-                        <input id="delImg" type="button" value="Delete" />
-                        <input id="delImgHidden" type="hidden" name="delImgHidden" value="false" />
-                    </div>
-                    <div class="col-lg-8 order-lg-2">
-                        <div class="py-4">
-                            <div class="tab-pane" id="edit">
+        if (acc == null || profileId == null)
+        {
+            <h1 class="text-center">Not found data</h1>
+            return;
+        }
+        else
+        {
+            profile = AccountModel.GetProfileById(profileId.Value);
+        }
+    }
+
+    <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="accId" value="@acc.Id" />
+        <input type="hidden" name="profileId" value="@acc.Id" />
+        <div class="container">
+            <div class="row my-2">
+                <div class="col-lg-4 order-lg-1 text-center" style="cursor:pointer">
+                    <input id="customFile" style="display:none" type="file" name="dirImg" accept="image/*">
+                    @if (profile.ProfilePhoto != null)
+                    {
+                        var src = Convert.ToBase64String(profile.ProfilePhoto);
+                        <img id="avatar" style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                             src="data:image;base64,@src" alt="PhotoProfile" />
+                    }
+                    else
+                    {
+                        <img id="avatar" style="max-width:150px;max-height:150px" class="rounded mx-auto d-block"
+                             src="~/Content/Images/noimage.png" alt="PhotoProfile" />
+                    }
+
+                    <h6 class="mt-2">Click to change avatar</h6>
+                    <input id="resetImg" name="resetImg" type="button" value="Reset" />
+                    <input id="delImg" type="button" value="Delete" />
+                    <input id="delImgHidden" type="hidden" name="delImgHidden" value="false" />
+                </div>
+                <div class="col-lg-8 order-lg-2">
+                    <div class="py-4">
+                        <div class="tab-pane" id="edit">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    First name<sup style="color:red">*</sup>
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" type="text" required name="FirstName"
+                                           value="@profile.FirstName">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    Middle name
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" type="text" name="MiddleName"
+                                           value="@profile.MiddleName">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    Last name
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" type="text" name="LastName"
+                                           value="@profile.LastName">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    Male
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" type="text" name="Male"
+                                           value="@profile.Male">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    Date of Birth
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" type="date" name="DateOfBirth"
+                                           value="@(profile.DateOfBirth?.ToString("yyyy-MM-dd"))">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    City
+                                </label>
+                                <div class="col-lg-6">
+                                    <input class="form-control" type="text" name="City"
+                                           value="@profile.City" placeholder="City">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    New Password
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" name="NewPass" type="password">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">
+                                    Confirm password
+                                </label>
+                                <div class="col-lg-9">
+                                    <input class="form-control" type="password" name="ConfirmPass">
+                                </div>
+                            </div>
+                            @if (User.IsInRole("Admin"))
+                            {
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label form-control-label">
-                                        First name<sup>*</sup>
+                                        Role
                                     </label>
                                     <div class="col-lg-9">
-                                        <input class="form-control" type="text" required name="FirstName" value="@profile.FirstName">
+                                        <select name="Role" class="custom-select" id="inputGroupSelectRole">
+                                            @foreach (var role in AccountModel.GetRoles())
+                                            {
+                                                if (acc.RoleId == role.Id)
+                                                {
+                                                    <option value="@role.Id" selected>@role.Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@role.Id">@role.Name</option>
+                                                }
+                                            }
+                                        </select>
                                     </div>
                                 </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        Middle name
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input class="form-control" type="text" name="MiddleName" value="@profile.MiddleName">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        Last name
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input class="form-control" type="text" name="LastName" value="@profile.LastName">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        Male
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input class="form-control" type="text" name="Male" value="@profile.Male">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        Date of Birth
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input class="form-control" type="date" name="DateOfBirth" value="@(profile.DateOfBirth?.ToString("yyyy-MM-dd"))">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        City
-                                    </label>
-                                    <div class="col-lg-6">
-                                        <input class="form-control" type="text" name="City" value="@profile.City" placeholder="City">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        New Password
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input class="form-control" name="NewPass" type="password">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-3 col-form-label form-control-label">
-                                        Confirm password
-                                    </label>
-                                    <div class="col-lg-9">
-                                        <input class="form-control" type="password" name="ConfirmPass">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-lg-9">
-                                        <input type="submit" class="btn btn-primary" value="Save Changes">
-                                    </div>
+                            }
+                            <div class="form-group row">
+                                <div class="col-lg-9">
+                                    <input type="submit" class="btn btn-primary" value="Save Changes">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </form>
-        <script src="~/Scripts/Custom/onChangeFileUpload.js"></script>
-    }
+        </div>
+    </form>
+    <script src="~/Scripts/Custom/onChangeFileUpload.js"></script>
 }
