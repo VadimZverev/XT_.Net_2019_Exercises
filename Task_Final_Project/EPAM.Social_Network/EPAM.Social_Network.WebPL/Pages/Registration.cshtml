@@ -5,7 +5,7 @@
     string errorMsg = null;
     string returnUrl = Request?.UrlReferrer?.AbsolutePath;
 
-    if (returnUrl == null || returnUrl == "/Pages/Registration" 
+    if (returnUrl == null || returnUrl == "/Pages/Registration"
         || returnUrl == "/Pages/SignIn")
     {
         returnUrl = "/Pages/Index";
@@ -25,7 +25,7 @@
             }
             else
             {
-                errorMsg = "This login already exists";
+                errorMsg = "Failed to register account. Login may already exist.";
             }
         }
         else
@@ -42,7 +42,7 @@
     <div class="alert-danger">@errorMsg</div>
 }
 
-<div>
+<div class="m-3">
     <form action="" method="post">
         <input type="hidden" name="returnUrl" value="@returnUrl" />
         <div class="form-group">

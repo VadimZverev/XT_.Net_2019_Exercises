@@ -222,26 +222,34 @@ namespace EPAM.Social_Network.WebPL.Models
 
                 int profileId = _profileDbLogic.Add(profile);
 
-                if (!_accountDbLogic.GetAll().Any())
+                if (profileId > 0)
                 {
-                    role = _roleDbLogic.GetAll().FirstOrDefault(r => r.Name == "Admin");
+                    if (!_accountDbLogic.GetAll().Any())
+                    {
+                        role = _roleDbLogic.GetAll().FirstOrDefault(r => r.Name == "Admin");
+                    }
+                    else
+                    {
+                        role = _roleDbLogic.GetAll().FirstOrDefault(r => r.Name == "User");
+                    }
+
+                    account = new Account
+                    {
+                        Login = login,
+                        PasswordHash = Crypto.HashPassword(password),
+                        ProfileId = profileId,
+                        RoleId = role?.Id
+                    };
+
+                    if (_accountDbLogic.Add(account) > 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        _profileDbLogic.Delete(profileId);
+                    }
                 }
-                else
-                {
-                    role = _roleDbLogic.GetAll().FirstOrDefault(r => r.Name == "User");
-                }
-
-                account = new Account
-                {
-                    Login = login,
-                    PasswordHash = Crypto.HashPassword(password),
-                    ProfileId = profileId,
-                    RoleId = role?.Id
-                };
-
-                _accountDbLogic.Add(account);
-
-                return true;
             }
 
             return false;

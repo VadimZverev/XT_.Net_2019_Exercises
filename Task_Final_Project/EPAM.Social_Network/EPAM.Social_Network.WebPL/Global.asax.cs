@@ -1,4 +1,5 @@
-﻿using EPAM.Social_Network.WebPL.Models;
+﻿using EPAM.Social_Network.Loggers;
+using EPAM.Social_Network.WebPL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,8 @@ using System.Web.SessionState;
 
 namespace EPAM.Social_Network.WebPL
 {
-    public class Global : System.Web.HttpApplication
+    public class Global : HttpApplication
     {
-
         protected void Application_Start(object sender, EventArgs e)
         {
 
@@ -47,7 +47,17 @@ namespace EPAM.Social_Network.WebPL
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            Exception exc = Server.GetLastError();
 
+            if (exc is HttpUnhandledException)
+            {
+                Logger.InitLogger();
+                Logger.SendFatalError(exc, string.Empty);
+
+                Server.ClearError();
+
+                Response.Redirect($"/Pages/FatalError?errorMsg={exc.Message}", true);
+            }
         }
 
         protected void Session_End(object sender, EventArgs e)

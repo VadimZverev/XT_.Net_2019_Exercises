@@ -1,6 +1,8 @@
 ﻿using EPAM.Social_Network.BLL.Interfaces;
 using EPAM.Social_Network.DAL.Interfaces;
 using EPAM.Social_Network.Entities;
+using EPAM.Social_Network.Loggers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,13 +19,21 @@ namespace EPAM.Social_Network.BLL
 
         public int Add(Account entity)
         {
-            bool isExist = _accountDao.GetAll()
-                                      .Any(acc => acc.Id == entity.Id
-                                                  || acc.Login == entity.Login);
-
-            if (!isExist)
+            try
             {
-                return _accountDao.Add(entity);
+                bool isExist = _accountDao.GetAll()
+                                          .Any(acc => acc.Id == entity.Id
+                                                      || acc.Login == entity.Login);
+
+                if (!isExist)
+                {
+                    return _accountDao.Add(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to add account to DB.";
+                Logger.SendError(ex, message);
             }
 
             return 0;
@@ -31,22 +41,62 @@ namespace EPAM.Social_Network.BLL
 
         public bool Delete(int id)
         {
-            return _accountDao.Delete(id);
+            try
+            {
+                return _accountDao.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to delete account from DB.";
+                Logger.SendError(ex, message);
+            }
+
+            return false;
         }
 
         public IEnumerable<Account> GetAll()
         {
-            return _accountDao.GetAll();
+            try
+            {
+                return _accountDao.GetAll();
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to get accounts from DB.";
+                Logger.SendError(ex, message);
+            }
+
+            return new Account[0];
         }
 
         public Account GetById(int id)
         {
-            return _accountDao.GetById(id);
+            try
+            {
+                return _accountDao.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to get account from DB.";
+                Logger.SendError(ex, message);
+            }
+
+            return null;
         }
 
         public bool Update(Account entity)
         {
-            return _accountDao.Update(entity);
+            try
+            {
+                return _accountDao.Update(entity);
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to update account.";
+                Logger.SendError(ex, message);
+            }
+
+            return false;
         }
     }
 }

@@ -94,6 +94,7 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\Error.png" />
     <Content Include="Content\Images\noimage.png" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\Custom\AddFriendRequest.js" />
@@ -141,6 +142,7 @@
     <Content Include="Pages\Search.cshtml" />
     <Content Include="Pages\AjaxPages\SearchPeople.cshtml" />
     <Content Include="Pages\Accounts\_ConfirmDeletePartial.cshtml" />
+    <Content Include="Pages\FatalError.cshtml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -203,6 +205,10 @@
     <ProjectReference Include="..\EPAM.Social_Network.Entities\EPAM.Social_Network.Entities.csproj">
       <Project>{5bc3993b-ac0f-4d34-a593-37ff4aa57371}</Project>
       <Name>EPAM.Social_Network.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EPAM.Social_Network.Loggers\EPAM.Social_Network.Loggers.csproj">
+      <Project>{77fa9b4a-b663-4c27-aa55-8a192db986fe}</Project>
+      <Name>EPAM.Social_Network.Loggers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

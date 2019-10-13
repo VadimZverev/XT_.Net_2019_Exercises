@@ -1,8 +1,9 @@
 ﻿using EPAM.Social_Network.BLL.Interfaces;
 using EPAM.Social_Network.DAL.Interfaces;
 using EPAM.Social_Network.Entities;
+using EPAM.Social_Network.Loggers;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace EPAM.Social_Network.BLL
 {
@@ -17,11 +18,19 @@ namespace EPAM.Social_Network.BLL
 
         public int Add(Profile entity)
         {
-            Profile profile = _profileDao.GetById(entity.Id);
-
-            if (profile == null)
+            try
             {
-                return _profileDao.Add(entity);
+                Profile profile = _profileDao.GetById(entity.Id);
+
+                if (profile == null)
+                {
+                    return _profileDao.Add(entity);
+                }
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to add profile to DB.";
+                Logger.SendError(ex, message);
             }
 
             return 0;
@@ -29,22 +38,62 @@ namespace EPAM.Social_Network.BLL
 
         public bool Delete(int id)
         {
-            return _profileDao.Delete(id);
+            try
+            {
+                return _profileDao.Delete(id);
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to delete profile from DB.";
+                Logger.SendError(ex, message);
+            }
+
+            return false;
         }
 
         public IEnumerable<Profile> GetAll()
         {
-            return _profileDao.GetAll();
+            try
+            {
+                return _profileDao.GetAll();
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to get profiles from DB.";
+                Logger.SendError(ex, message);
+            }
+
+            return new Profile[0];
         }
 
         public Profile GetById(int id)
         {
-            return _profileDao.GetById(id);
+            try
+            {
+                return _profileDao.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to get profile from DB.";
+                Logger.SendError(ex, message);
+            }
+
+            return null;
         }
 
         public bool Update(Profile entity)
         {
-            return _profileDao.Update(entity);
+            try
+            {
+                return _profileDao.Update(entity);
+            }
+            catch (Exception ex)
+            {
+                string message = "Failed to update profile.";
+                Logger.SendError(ex, message);
+            }
+
+            return false;
         }
     }
 }
